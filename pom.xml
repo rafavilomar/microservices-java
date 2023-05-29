@@ -15,6 +15,7 @@
     <module>customer</module>
     <module>fraud</module>
     <module>eureka-server</module>
+      <module>email-notification</module>
   </modules>
 
   <properties>
