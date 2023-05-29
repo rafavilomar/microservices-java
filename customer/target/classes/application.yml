@@ -5,14 +5,16 @@ spring:
   application:
     name: customer
   datasource:
-    username: 'rafavilomar'
-    url: jdbc:postgresql://localhost:5432/customer
-    password: 'rafavilomar'
-    jpa:
-      properties:
-        hibernate:
-          dialect: org.hibernate.dialect.PostgreSQLDialect
-          format_sql: true
+    username: rafavilomar
+    url: jdbc:postgresql://localhost:5432/fraud
+    password: rafavilomar
+  jpa:
+    properties:
       hibernate:
-        ddl-auto: update
-      show-sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  zipkin:
+    base-url: http://localhost:9411

@@ -11,6 +11,6 @@ public record CustomerService(CustomerRepository repository) {
                 .email(request.email())
                 .build();
 
-        repository.save(customer);
+        repository.saveAndFlush(customer);
     }
 }
