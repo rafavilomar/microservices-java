@@ -1,4 +1,4 @@
-package com.microservice_level_up;
+package com.microservice_level_up.dto;
 
 public record NotificationRequest(
         String emailTo,

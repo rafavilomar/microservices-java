@@ -1,5 +1,6 @@
-package com.microservice_level_up;
+package com.microservice_level_up.service;
 
+import com.microservice_level_up.dto.NotificationRequest;
 import com.microservice_level_up.kafka.events.Event;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
