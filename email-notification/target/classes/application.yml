@@ -1,0 +1,24 @@
+server:
+  port: 8090
+
+spring:
+  application:
+    name: email-notification
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: rafaelvm2707@gmail.com
+    password: urymavfccuhhxwpf
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    fetch-registry: true
+    register-with-eureka: true
+    enabled: true
