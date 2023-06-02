@@ -1,5 +1,7 @@
-package com.microservice_level_up;
+package com.microservice_level_up.controller;
 
+import com.microservice_level_up.dto.CustomerRegistrationRequest;
+import com.microservice_level_up.service.CustomerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

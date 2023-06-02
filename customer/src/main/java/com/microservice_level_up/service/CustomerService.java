@@ -1,5 +1,8 @@
-package com.microservice_level_up;
+package com.microservice_level_up.service;
 
+import com.microservice_level_up.dto.CustomerRegistrationRequest;
+import com.microservice_level_up.entity.Customer;
+import com.microservice_level_up.entity.CustomerRepository;
 import com.microservice_level_up.kafka.events.Event;
 import com.microservice_level_up.kafka.events.EventType;
 import org.springframework.kafka.core.KafkaTemplate;
