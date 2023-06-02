@@ -7,13 +7,18 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: rafaelvm2707@gmail.com
-    password: urymavfccuhhxwpf
+    username: ${EMAIL_USERNAME}
+    password: ${EMAIL_PASSWORD}
     properties:
       mail:
         smtp:
           starttls:
             enable: true
+  zipkin:
+    base-url: http://localhost:9411
+
+kafka:
+  bootstrap-address: localhost:29092
 
 eureka:
   client:
