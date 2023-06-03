@@ -22,8 +22,8 @@ jobs:
       - name: Build and test microservices
         run: |
           cd customer
-          ./mvnw clean install
+          mvn clean install
           cd ../eureka-server
-          ./mvnw clean install
+          mvn clean install
           cd ../email-notification
-          ./mvnw clean install
+          mvn clean install
