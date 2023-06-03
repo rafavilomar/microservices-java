@@ -1,6 +1,6 @@
 package com.microservice_level_up.service;
 
-import com.microservice_level_up.dto.NotificationRequest;
+import com.microservice_level_up.dto.CustomerRegistrationRequest;
 import com.microservice_level_up.kafka.events.Event;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -12,24 +12,20 @@ import org.springframework.stereotype.Service;
 @Service
 public record EmailNotificationService(JavaMailSender mailSender) {
 
-
-    public void sendEmail(NotificationRequest request) {
-        log.info("Send email {}", request);
-
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(request.emailTo());
-        message.setSubject(request.subject());
-        message.setText(request.message());
-
-        mailSender.send(message);
-    }
-
     @KafkaListener(
             topics = "customers",
             containerFactory = "kafkaListenerContainerFactory",
             groupId = "grupo1"
     )
-    public void consumer(Event<?> event) {
-        log.info("Info from kafka {}", event);
+    public void sendEmail(Event<?> event) {
+        CustomerRegistrationRequest customer = (CustomerRegistrationRequest) event.data();
+        log.info("Send email {}", customer);
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(customer.email());
+        message.setSubject("Registration");
+        message.setText("Welcome " + customer.firstName() + customer.lastName());
+
+        mailSender.send(message);
     }
 }
