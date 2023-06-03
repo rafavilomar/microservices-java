@@ -1,0 +1,9 @@
+/home/rafavilomar/IdeaProjects/personal/microservice-level-up/customer/src/main/java/com/microservice_level_up/controller/CustomerController.java
+/home/rafavilomar/IdeaProjects/personal/microservice-level-up/customer/src/main/java/com/microservice_level_up/service/CustomerService.java
+/home/rafavilomar/IdeaProjects/personal/microservice-level-up/customer/src/main/java/com/microservice_level_up/entity/CustomerRepository.java
+/home/rafavilomar/IdeaProjects/personal/microservice-level-up/customer/src/main/java/com/microservice_level_up/kafka/config/KafkaProducerConfig.java
+/home/rafavilomar/IdeaProjects/personal/microservice-level-up/customer/src/main/java/com/microservice_level_up/kafka/events/Event.java
+/home/rafavilomar/IdeaProjects/personal/microservice-level-up/customer/src/main/java/com/microservice_level_up/CustomerApplication.java
+/home/rafavilomar/IdeaProjects/personal/microservice-level-up/customer/src/main/java/com/microservice_level_up/entity/Customer.java
+/home/rafavilomar/IdeaProjects/personal/microservice-level-up/customer/src/main/java/com/microservice_level_up/dto/CustomerRegistrationRequest.java
+/home/rafavilomar/IdeaProjects/personal/microservice-level-up/customer/src/main/java/com/microservice_level_up/kafka/events/EventType.java
