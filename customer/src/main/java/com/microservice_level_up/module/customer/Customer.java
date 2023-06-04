@@ -1,4 +1,4 @@
-package com.microservice_level_up.entity;
+package com.microservice_level_up.module.customer;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

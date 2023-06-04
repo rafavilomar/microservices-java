@@ -1,4 +1,4 @@
-package com.microservice_level_up.dto;
+package com.microservice_level_up.module.customer.dto;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
