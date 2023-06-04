@@ -15,6 +15,7 @@
         <module>customer</module>
         <module>eureka-server</module>
         <module>email-notification</module>
+        <module>product</module>
     </modules>
 
     <properties>
