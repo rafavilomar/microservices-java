@@ -8,13 +8,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/customers")
+@RequestMapping("/api/v1/customer")
 public record CustomerController(CustomerService customerService) {
 
     @PostMapping
-    public void registerCustomer(@RequestBody CustomerRegistrationRequest request) {
+    public void registerCustomer(@Valid @RequestBody CustomerRegistrationRequest request) {
         log.info("New customer registration {}", request);
         customerService.registerCustomer(request);
     }

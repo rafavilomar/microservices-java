@@ -5,14 +5,12 @@ import com.microservice_level_up.entity.Customer;
 import com.microservice_level_up.kafka.events.Event;
 import com.microservice_level_up.kafka.events.EventType;
 import com.microservice_level_up.repository.CustomerRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Slf4j
 @Service
 public record CustomerService(
         CustomerRepository repository,
@@ -21,8 +19,6 @@ public record CustomerService(
     private static String topicCustomer = "customers";
 
     public void registerCustomer(CustomerRegistrationRequest request) {
-        log.info("Register new customer {}", request);
-
         Customer customer = Customer.builder()
                 .firstName(request.firstName())
                 .lastName(request.lastName())
