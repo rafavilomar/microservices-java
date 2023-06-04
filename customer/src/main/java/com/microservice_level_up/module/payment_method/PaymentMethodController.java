@@ -51,7 +51,7 @@ public record PaymentMethodController(IPaymentMethodService service) {
             @RequestParam("size") int size) {
 
         log.info("Get payment method by customer's id {}", customerId);
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page - 1, size);
         Page<PaymentMethodResponse> payload = service.getByCustomerId(customerId, pageable);
 
         BaseResponse<Page<PaymentMethodResponse>> response = new BaseResponse<>();

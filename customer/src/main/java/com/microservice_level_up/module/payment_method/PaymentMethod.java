@@ -7,8 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.Month;
-import java.time.Year;
 
 @Data
 @Builder
@@ -31,10 +29,10 @@ public class PaymentMethod {
     private String alias;
 
     @Column(nullable = false)
-    private Month expirationMonth;
+    private int expirationMonth;
 
     @Column(nullable = false)
-    private Year expirationYear;
+    private int expirationYear;
 
     @Column(nullable = false)
     private int cvv;

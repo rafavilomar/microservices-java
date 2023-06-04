@@ -1,5 +1,6 @@
 package com.microservice_level_up.module.payment_method;
 
+import com.microservice_level_up.error.invalid_expiration_date.InvalidCardExpirationDateException;
 import com.microservice_level_up.module.customer.Customer;
 import com.microservice_level_up.module.customer.ICustomerService;
 import com.microservice_level_up.module.payment_method.dto.PaymentMethodRegistration;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.YearMonth;
 
 @Service
 public record PaymentMethodService(
@@ -25,6 +27,7 @@ public record PaymentMethodService(
 
     @Override
     public Page<PaymentMethodResponse> getByCustomerId(long idCustomer, Pageable pageable) {
+        customerService.getById(idCustomer);
         return repository
                 .findByCustomer(Customer.builder().id(idCustomer).build(), pageable)
                 .map(this::mapResponse);
@@ -32,7 +35,9 @@ public record PaymentMethodService(
 
     @Override
     public long add(PaymentMethodRegistration request) {
-//        CustomerResponse customer = customerService.getById(request.customerId());
+
+        validateExpirationDate(request.expirationMonth(), request.expirationYear());
+
         PaymentMethod paymentMethod = PaymentMethod.builder()
                 .methodName(request.methodName())
                 .cardNumber(request.cardNumber())
@@ -63,5 +68,15 @@ public record PaymentMethodService(
                 paymentMethod.getExpirationYear(),
                 paymentMethod.getCvv()
         );
+    }
+
+    private void validateExpirationDate(int month, int year) {
+        boolean validExpirationDate = YearMonth
+                .of(year, month)
+                .isAfter(YearMonth.now());
+
+        if (!validExpirationDate)
+            throw new InvalidCardExpirationDateException(month, year);
+
     }
 }

@@ -42,8 +42,8 @@ class PaymentMethodControllerTest {
                 "Payment test",
                 "12345",
                 "David Peterson",
-                Month.APRIL,
-                Year.now(),
+                Month.APRIL.getValue(),
+                Year.now().getValue(),
                 100
         );
 
@@ -70,8 +70,8 @@ class PaymentMethodControllerTest {
                 "Payment test",
                 "12345",
                 "David Peterson",
-                Month.APRIL,
-                Year.now(),
+                Month.APRIL.getValue(),
+                Year.now().getValue(),
                 100
         );
 
@@ -98,7 +98,7 @@ class PaymentMethodControllerTest {
         List<PaymentMethodResponse> paymentMethodResponseList = new ArrayList<>();
         paymentMethodResponseList.add(buildPaymentMethodResponse(1L, customerId));
         paymentMethodResponseList.add(buildPaymentMethodResponse(2L, customerId));
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page - 1, size);
         PageImpl<PaymentMethodResponse> expectedResponse = new PageImpl<>(paymentMethodResponseList, pageable, paymentMethodResponseList.size());
 
         when(service.getByCustomerId(customerId, pageable)).thenReturn(expectedResponse);
@@ -122,8 +122,8 @@ class PaymentMethodControllerTest {
                 "Payment test",
                 "12345",
                 "David Peterson",
-                Month.APRIL,
-                Year.now(),
+                Month.APRIL.getValue(),
+                Year.now().getValue(),
                 100
         );
     }
