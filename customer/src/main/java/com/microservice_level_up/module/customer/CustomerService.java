@@ -1,11 +1,13 @@
 package com.microservice_level_up.module.customer;
 
-import com.microservice_level_up.module.customer.dto.CustomerRegistrationRequest;
 import com.microservice_level_up.kafka.events.Event;
 import com.microservice_level_up.kafka.events.EventType;
+import com.microservice_level_up.module.customer.dto.CustomerRegistrationRequest;
+import com.microservice_level_up.module.customer.dto.CustomerResponseDTO;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -38,5 +40,21 @@ public record CustomerService(
                 customer
         );
         producer.send(topicCustomer, event);
+    }
+
+    public CustomerResponseDTO getById(Integer id) {
+        return repository.findById(id)
+                .map(this::mapResponse)
+                .orElseThrow(() -> new EntityNotFoundException("Customer not found for this id: " + id));
+    }
+
+    private CustomerResponseDTO mapResponse(Customer customer) {
+        return new CustomerResponseDTO(
+                customer.getId(),
+                customer.getFirstName(),
+                customer.getLastName(),
+                customer.getEmail(),
+                customer.getCountry()
+        );
     }
 }

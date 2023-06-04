@@ -14,7 +14,7 @@ import java.util.List;
 public class ValidationExceptionHandlerAdvice {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ValidationExceptionResponse> handleValidationErrors(MethodArgumentNotValidException exception) {
+    public ResponseEntity<ValidationExceptionResponse> handleError(MethodArgumentNotValidException exception) {
         List<String> errors = exception
                 .getFieldErrors()
                 .stream()
