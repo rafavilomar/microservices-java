@@ -18,19 +18,27 @@ public record CustomerController(CustomerService service) {
     @GetMapping("/{id}")
     public ResponseEntity<BaseResponse<CustomerResponseDTO>> getById(@PathVariable("id") Integer id) {
         log.info("Get customer by id {}", id);
-        CustomerResponseDTO payload = service.getById(id);
+        CustomerResponseDTO customer = service.getById(id);
+
         BaseResponse<CustomerResponseDTO> response = new BaseResponse<>();
         return response.buildResponseEntity(
-                payload,
+                customer,
                 HttpStatus.OK,
                 "Customer found"
         );
     }
 
     @PostMapping
-    public void registerCustomer(@Valid @RequestBody CustomerRegistrationRequest request) {
+    public ResponseEntity<BaseResponse<Integer>> registerCustomer(@Valid @RequestBody CustomerRegistrationRequest request) {
         log.info("New customer registration {}", request);
-        service.registerCustomer(request);
+        int customerId = service.registerCustomer(request);
+
+        BaseResponse<Integer> response = new BaseResponse<>();
+        return response.buildResponseEntity(
+                customerId,
+                HttpStatus.OK,
+                "Customer registered successfully"
+        );
     }
 
     @PutMapping

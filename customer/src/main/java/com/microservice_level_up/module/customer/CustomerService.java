@@ -18,7 +18,7 @@ public record CustomerService(
 
     private static String topicCustomer = "customers";
 
-    public void registerCustomer(CustomerRegistrationRequest request) {
+    public int registerCustomer(CustomerRegistrationRequest request) {
         Customer customer = Customer.builder()
                 .firstName(request.firstName())
                 .lastName(request.lastName())
@@ -29,6 +29,7 @@ public record CustomerService(
                 .build();
 
         customer = repository.save(customer);
+        return customer.getId();
 //        publishCustomer(customer);
     }
 
