@@ -14,7 +14,7 @@ import javax.validation.Valid;
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/customer")
-public record CustomerController(CustomerService service) {
+public record CustomerController(ICustomerService service) {
 
     @GetMapping("/{id}")
     public ResponseEntity<BaseResponse<CustomerResponse>> getById(@PathVariable("id") Long id) {
@@ -32,7 +32,7 @@ public record CustomerController(CustomerService service) {
     @PostMapping
     public ResponseEntity<BaseResponse<Long>> registerCustomer(@Valid @RequestBody CustomerRegistrationRequest request) {
         log.info("New customer registration {}", request);
-        long customerId = service.registerCustomer(request);
+        long customerId = service.register(request);
 
         BaseResponse<Long> response = new BaseResponse<>();
         return response.buildResponseEntity(
@@ -45,7 +45,7 @@ public record CustomerController(CustomerService service) {
     @PutMapping
     public ResponseEntity<BaseResponse<Long>> updateCustomer(@Valid @RequestBody CustomerUpdateRequest request) {
         log.info("Update customer {}", request);
-        long customerId = service.updateCustomer(request);
+        long customerId = service.update(request);
 
         BaseResponse<Long> response = new BaseResponse<>();
         return response.buildResponseEntity(

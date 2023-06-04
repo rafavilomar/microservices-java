@@ -15,9 +15,10 @@ import java.util.UUID;
 @Service
 public record CustomerService(
         CustomerRepository repository,
-        KafkaTemplate<String, Event<?>> producer) {
+        KafkaTemplate<String, Event<?>> producer) implements ICustomerService {
 
-    public long registerCustomer(CustomerRegistrationRequest request) {
+    @Override
+    public long register(CustomerRegistrationRequest request) {
         Customer customer = Customer.builder()
                 .firstName(request.firstName())
                 .lastName(request.lastName())
@@ -43,6 +44,7 @@ public record CustomerService(
         producer.send(topicCustomer, event);
     }
 
+    @Override
     public CustomerResponse getById(Long id) {
         return repository.findById(id)
                 .map(this::mapResponse)
@@ -59,7 +61,8 @@ public record CustomerService(
         );
     }
 
-    public long updateCustomer(CustomerUpdateRequest request) {
+    @Override
+    public long update(CustomerUpdateRequest request) {
         Customer customer = repository.findById(request.id())
                 .orElseThrow(() -> new EntityNotFoundException("Customer not found for this id: " + request.id()));
 
