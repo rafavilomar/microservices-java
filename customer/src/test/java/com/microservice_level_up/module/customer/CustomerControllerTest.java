@@ -25,7 +25,7 @@ class CustomerControllerTest {
     private ICustomerService service;
 
     @BeforeEach
-    public void setup() {
+    public void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
