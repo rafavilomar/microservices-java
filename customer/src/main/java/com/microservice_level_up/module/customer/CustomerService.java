@@ -16,8 +16,6 @@ public record CustomerService(
         CustomerRepository repository,
         KafkaTemplate<String, Event<?>> producer) {
 
-    private static String topicCustomer = "customers";
-
     public int registerCustomer(CustomerRegistrationRequest request) {
         Customer customer = Customer.builder()
                 .firstName(request.firstName())
@@ -40,6 +38,7 @@ public record CustomerService(
                 EventType.CREATED,
                 customer
         );
+        String topicCustomer = "customers";
         producer.send(topicCustomer, event);
     }
 
