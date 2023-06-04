@@ -3,7 +3,8 @@ package com.microservice_level_up.module.customer;
 import com.microservice_level_up.kafka.events.Event;
 import com.microservice_level_up.kafka.events.EventType;
 import com.microservice_level_up.module.customer.dto.CustomerRegistrationRequest;
-import com.microservice_level_up.module.customer.dto.CustomerResponseDTO;
+import com.microservice_level_up.module.customer.dto.CustomerResponse;
+import com.microservice_level_up.module.customer.dto.CustomerUpdateRequest;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ public record CustomerService(
         CustomerRepository repository,
         KafkaTemplate<String, Event<?>> producer) {
 
-    public int registerCustomer(CustomerRegistrationRequest request) {
+    public long registerCustomer(CustomerRegistrationRequest request) {
         Customer customer = Customer.builder()
                 .firstName(request.firstName())
                 .lastName(request.lastName())
@@ -42,19 +43,37 @@ public record CustomerService(
         producer.send(topicCustomer, event);
     }
 
-    public CustomerResponseDTO getById(Integer id) {
+    public CustomerResponse getById(Long id) {
         return repository.findById(id)
                 .map(this::mapResponse)
                 .orElseThrow(() -> new EntityNotFoundException("Customer not found for this id: " + id));
     }
 
-    private CustomerResponseDTO mapResponse(Customer customer) {
-        return new CustomerResponseDTO(
+    private CustomerResponse mapResponse(Customer customer) {
+        return new CustomerResponse(
                 customer.getId(),
                 customer.getFirstName(),
                 customer.getLastName(),
                 customer.getEmail(),
                 customer.getCountry()
         );
+    }
+
+    public long updateCustomer(CustomerUpdateRequest request) {
+        Customer customer = repository.findById(request.id())
+                .orElseThrow(() -> new EntityNotFoundException("Customer not found for this id: " + request.id()));
+
+        customer = Customer.builder()
+                .id(customer.getId())
+                .firstName(request.firstName())
+                .lastName(request.lastName())
+                .email(request.email())
+                .country(request.country())
+                .updatedAt(LocalDateTime.now())
+                .createdAt(customer.getCreatedAt())
+                .build();
+
+        repository.save(customer);
+        return customer.getId();
     }
 }

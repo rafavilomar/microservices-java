@@ -1,7 +1,8 @@
 package com.microservice_level_up.module.customer;
 
 import com.microservice_level_up.module.customer.dto.CustomerRegistrationRequest;
-import com.microservice_level_up.module.customer.dto.CustomerResponseDTO;
+import com.microservice_level_up.module.customer.dto.CustomerResponse;
+import com.microservice_level_up.module.customer.dto.CustomerUpdateRequest;
 import com.microservice_level_up.response.BaseResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -16,11 +17,11 @@ import javax.validation.Valid;
 public record CustomerController(CustomerService service) {
 
     @GetMapping("/{id}")
-    public ResponseEntity<BaseResponse<CustomerResponseDTO>> getById(@PathVariable("id") Integer id) {
+    public ResponseEntity<BaseResponse<CustomerResponse>> getById(@PathVariable("id") Long id) {
         log.info("Get customer by id {}", id);
-        CustomerResponseDTO customer = service.getById(id);
+        CustomerResponse customer = service.getById(id);
 
-        BaseResponse<CustomerResponseDTO> response = new BaseResponse<>();
+        BaseResponse<CustomerResponse> response = new BaseResponse<>();
         return response.buildResponseEntity(
                 customer,
                 HttpStatus.OK,
@@ -29,21 +30,28 @@ public record CustomerController(CustomerService service) {
     }
 
     @PostMapping
-    public ResponseEntity<BaseResponse<Integer>> registerCustomer(@Valid @RequestBody CustomerRegistrationRequest request) {
+    public ResponseEntity<BaseResponse<Long>> registerCustomer(@Valid @RequestBody CustomerRegistrationRequest request) {
         log.info("New customer registration {}", request);
-        int customerId = service.registerCustomer(request);
+        long customerId = service.registerCustomer(request);
 
-        BaseResponse<Integer> response = new BaseResponse<>();
+        BaseResponse<Long> response = new BaseResponse<>();
         return response.buildResponseEntity(
                 customerId,
-                HttpStatus.OK,
+                HttpStatus.CREATED,
                 "Customer registered successfully"
         );
     }
 
     @PutMapping
-    public void updateCustomer(@Valid @RequestBody CustomerRegistrationRequest request) {
-        log.info("New customer registration {}", request);
-        service.registerCustomer(request);
+    public ResponseEntity<BaseResponse<Long>> updateCustomer(@Valid @RequestBody CustomerUpdateRequest request) {
+        log.info("Update customer {}", request);
+        long customerId = service.updateCustomer(request);
+
+        BaseResponse<Long> response = new BaseResponse<>();
+        return response.buildResponseEntity(
+                customerId,
+                HttpStatus.OK,
+                "Customer updated successfully"
+        );
     }
 }
