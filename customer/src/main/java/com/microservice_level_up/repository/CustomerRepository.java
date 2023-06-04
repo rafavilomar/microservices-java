@@ -1,4 +1,4 @@
-package com.microservice_level_up.entity;
+package com.microservice_level_up.repository;
 
 import com.microservice_level_up.entity.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;

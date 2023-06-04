@@ -9,9 +9,11 @@
         <outputRelativeToContentRoot value="true" />
         <module name="eureka-server" />
         <module name="email-notification" />
-        <module name="fraud" />
         <module name="customer" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="fraud" target="17" />
+    </bytecodeTargetLevel>
   </component>
 </project>

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -16,8 +17,23 @@ public class Customer {
     @Id
     @SequenceGenerator(name = "customer_id_sequence", sequenceName = "customer_id_sequence")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_id_sequence")
-    private Integer id;
+    private Long id;
+
+    @Column(nullable = false, length = 64)
     private String firstName;
+
+    @Column(nullable = false, length = 64)
     private String lastName;
+
+    @Column(unique = true, nullable = false)
     private String email;
+
+    @Column(nullable = false)
+    private String country;
+
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
+
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
 }
