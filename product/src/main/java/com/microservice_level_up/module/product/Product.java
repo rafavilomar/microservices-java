@@ -32,9 +32,6 @@ public class Product {
     private int stock;
 
     @Column(nullable = false)
-    private String country;
-
-    @Column(nullable = false)
     private LocalDateTime createdAt;
 
     @Column(nullable = false)
