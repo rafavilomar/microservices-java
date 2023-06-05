@@ -8,11 +8,16 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class ProductControllerTest {
@@ -59,6 +64,38 @@ class ProductControllerTest {
         assertEquals("Product found", actualResponse.getBody().getMessage());
 
         verify(service, times(1)).getById(productId);
+        verifyNoMoreInteractions(service);
+    }
+
+    @Test
+    void getAll() {
+        int page = 1;
+        int size = 1;
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        List<ProductResponse> productResponseList = List.of(
+                expectedPayloadTemplate(1L),
+                expectedPayloadTemplate(2L)
+        );
+        Page<ProductResponse> expectedPayload = new PageImpl<>(
+                productResponseList,
+                pageable,
+                productResponseList.size());
+
+        when(service.getAll(pageable)).thenReturn(expectedPayload);
+
+        ResponseEntity<BaseResponse<Page<ProductResponse>>> actualResponse = controller.getAll(page, size);
+
+        assertNotNull(actualResponse.getBody());
+        assertAll(
+                "Product get all controller response",
+                () -> assertEquals(HttpStatus.OK, actualResponse.getStatusCode()),
+                () -> assertNotNull(actualResponse.getBody().getPayload()),
+                () -> assertEquals(expectedPayload, actualResponse.getBody().getPayload()),
+                () -> assertEquals("Products found", actualResponse.getBody().getMessage())
+        );
+
+        verify(service, times(1)).getAll(pageable);
         verifyNoMoreInteractions(service);
     }
 }

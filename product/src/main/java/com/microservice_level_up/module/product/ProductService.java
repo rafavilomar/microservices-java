@@ -2,6 +2,8 @@ package com.microservice_level_up.module.product;
 
 import com.microservice_level_up.module.category.dto.CategoryResponse;
 import com.microservice_level_up.module.product.dto.ProductResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -14,6 +16,13 @@ public record ProductService(ProductRepository repository) implements IProductSe
                 .findById(id)
                 .map(this::mapResponse)
                 .orElseThrow(() -> new EntityNotFoundException("Product not found for this id: " + id));
+    }
+
+    @Override
+    public Page<ProductResponse> getAll(Pageable pageable) {
+        return repository
+                .findAll(pageable)
+                .map(this::mapResponse);
     }
 
     private ProductResponse mapResponse(Product product) {

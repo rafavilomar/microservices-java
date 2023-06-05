@@ -8,13 +8,17 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class ProductServiceTest {
@@ -47,23 +51,27 @@ class ProductServiceTest {
                 .build();
     }
 
-    @Test
-    void getById() {
-        long productId = 1L;
-        Product product = productTemplate(productId);
-
-        ProductResponse expectedResponse = ProductResponse.builder()
+    private ProductResponse productResponseTemplate(long productId) {
+        return ProductResponse.builder()
                 .id(productId)
-                .code(product.getCode())
-                .name(product.getName())
-                .price(product.getPrice())
-                .stock(product.getStock())
+                .code("test")
+                .name("Product test")
+                .price(10)
+                .stock(1)
                 .category(CategoryResponse.builder()
                         .id(1L)
                         .name("Test")
                         .description("Category test")
                         .build())
                 .build();
+    }
+
+    @Test
+    void getById() {
+        long productId = 1L;
+        Product product = productTemplate(productId);
+
+        ProductResponse expectedResponse = productResponseTemplate(productId);
 
         when(repository.findById(productId)).thenReturn(Optional.of(product));
 
@@ -90,4 +98,39 @@ class ProductServiceTest {
         verify(repository, times(1)).findById(productId);
         verifyNoMoreInteractions(repository);
     }
+
+    @Test
+    void getAll() {
+
+        Pageable pageable = PageRequest.of(0, 1);
+
+        List<Product> productList = List.of(
+                productTemplate(1L),
+                productTemplate(2L)
+        );
+        Page<Product> productPage = new PageImpl<>(productList, pageable, productList.size());
+        when(repository.findAll(pageable)).thenReturn(productPage);
+
+        List<ProductResponse> productResponseList = List.of(
+                productResponseTemplate(1L),
+                productResponseTemplate(2L)
+        );
+        Page<ProductResponse> expectedResponse = new PageImpl<>(productResponseList, pageable, productResponseList.size());
+
+        Page<ProductResponse> actualResponse = service.getAll(pageable);
+
+        assertNotNull(actualResponse);
+        assertAll(
+                "Product get all service",
+                () -> assertEquals(expectedResponse, actualResponse),
+                () -> assertFalse(actualResponse.isLast()),
+                () -> assertTrue(actualResponse.isFirst()),
+                () -> assertEquals(2L, actualResponse.getTotalElements()),
+                () -> assertEquals(1, actualResponse.getSize())
+        );
+
+        verify(repository, times(1)).findAll(pageable);
+        verifyNoMoreInteractions(repository);
+    }
+
 }
