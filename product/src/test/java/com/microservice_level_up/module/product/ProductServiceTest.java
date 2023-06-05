@@ -1,7 +1,9 @@
 package com.microservice_level_up.module.product;
 
 import com.microservice_level_up.module.category.Category;
+import com.microservice_level_up.module.category.ICategoryService;
 import com.microservice_level_up.module.category.dto.CategoryResponse;
+import com.microservice_level_up.module.product.dto.ProductRegistrationRequest;
 import com.microservice_level_up.module.product.dto.ProductResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,6 +30,8 @@ class ProductServiceTest {
 
     @Mock
     private ProductRepository repository;
+    @Mock
+    private ICategoryService categoryService;
 
     @BeforeEach
     public void setUp() {
@@ -51,7 +55,23 @@ class ProductServiceTest {
                 .build();
     }
 
-    private ProductResponse productResponseTemplate(long productId) {
+    private Product productTemplateWithoutId() {
+        return Product.builder()
+                .code("test")
+                .name("Product test")
+                .price(10)
+                .stock(1)
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .category(Category.builder()
+                        .id(1L)
+                        .name("Test")
+                        .description("Category test")
+                        .build())
+                .build();
+    }
+
+    private ProductResponse responseTemplate(long productId) {
         return ProductResponse.builder()
                 .id(productId)
                 .code("test")
@@ -66,12 +86,22 @@ class ProductServiceTest {
                 .build();
     }
 
+    private ProductRegistrationRequest registrationTemplate() {
+        return ProductRegistrationRequest.builder()
+                .code("test")
+                .name("Product test")
+                .price(10)
+                .stock(1)
+                .categoryId(1L)
+                .build();
+    }
+
     @Test
     void getById() {
         long productId = 1L;
         Product product = productTemplate(productId);
 
-        ProductResponse expectedResponse = productResponseTemplate(productId);
+        ProductResponse expectedResponse = responseTemplate(productId);
 
         when(repository.findById(productId)).thenReturn(Optional.of(product));
 
@@ -81,6 +111,7 @@ class ProductServiceTest {
 
         verify(repository, times(1)).findById(productId);
         verifyNoMoreInteractions(repository);
+        verifyNoInteractions(categoryService);
     }
 
     @Test
@@ -97,6 +128,7 @@ class ProductServiceTest {
 
         verify(repository, times(1)).findById(productId);
         verifyNoMoreInteractions(repository);
+        verifyNoInteractions(categoryService);
     }
 
     @Test
@@ -112,8 +144,8 @@ class ProductServiceTest {
         when(repository.findAll(pageable)).thenReturn(productPage);
 
         List<ProductResponse> productResponseList = List.of(
-                productResponseTemplate(1L),
-                productResponseTemplate(2L)
+                responseTemplate(1L),
+                responseTemplate(2L)
         );
         Page<ProductResponse> expectedResponse = new PageImpl<>(productResponseList, pageable, productResponseList.size());
 
@@ -133,4 +165,63 @@ class ProductServiceTest {
         verifyNoMoreInteractions(repository);
     }
 
+    @Test
+    void add() {
+        long productId = 1L;
+        ProductRegistrationRequest request = registrationTemplate();
+        Product product = productTemplate(productId);
+
+        when(repository.findByCode(request.code())).thenReturn(Optional.empty());
+        when(categoryService.getById(request.categoryId())).thenReturn(product.getCategory());
+
+        System.out.println(product);
+
+        when(repository.save(any(Product.class))).thenReturn(product);
+
+        long actualResponse = service.add(request);
+        assertEquals(productId, actualResponse);
+
+        verify(repository, times(1)).findByCode(request.code());
+        verify(categoryService, times(1)).getById(request.categoryId());
+        verify(repository, times(1)).save(any(Product.class));
+        verifyNoMoreInteractions(repository, categoryService);
+    }
+
+    @Test
+    void addInvalidCategory() {
+        ProductRegistrationRequest request = registrationTemplate();
+
+        when(repository.findByCode(request.code())).thenReturn(Optional.empty());
+        when(categoryService.getById(request.categoryId()))
+                .thenThrow(new EntityNotFoundException("Category not found for this id: " + request.categoryId()));
+
+        EntityNotFoundException exception = assertThrows(
+                EntityNotFoundException.class,
+                () -> service.add(request)
+        );
+
+        assertEquals("Category not found for this id: " + request.categoryId(), exception.getMessage());
+
+        verify(repository, times(1)).findByCode(request.code());
+        verify(categoryService, times(1)).getById(request.categoryId());
+        verifyNoMoreInteractions(repository, categoryService);
+    }
+
+    @Test
+    void addDuplicatedCode() {
+        ProductRegistrationRequest request = registrationTemplate();
+        Product product = productTemplateWithoutId();
+        when(repository.findByCode(request.code())).thenReturn(Optional.of(product));
+
+        DuplicatedProductCodeException exception = assertThrows(
+                DuplicatedProductCodeException.class,
+                () -> service.add(request)
+        );
+
+        assertEquals("Duplicated code: " + request.code(), exception.getMessage());
+
+        verify(repository, times(1)).findByCode(request.code());
+        verifyNoMoreInteractions(repository);
+        verifyNoInteractions(categoryService);
+    }
 }

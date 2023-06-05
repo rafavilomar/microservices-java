@@ -1,4 +1,5 @@
 /home/rafavilomar/IdeaProjects/personal/microservice-level-up/product/src/main/java/com/microservice_level_up/module/category/Category.java
+/home/rafavilomar/IdeaProjects/personal/microservice-level-up/product/src/main/java/com/microservice_level_up/module/product/DuplicatedProductCodeException.java
 /home/rafavilomar/IdeaProjects/personal/microservice-level-up/product/src/main/java/com/microservice_level_up/response/BaseResponse.java
 /home/rafavilomar/IdeaProjects/personal/microservice-level-up/product/src/main/java/com/microservice_level_up/module/product/ProductService.java
 /home/rafavilomar/IdeaProjects/personal/microservice-level-up/product/src/main/java/com/microservice_level_up/module/product/ProductRepository.java
@@ -12,5 +13,7 @@
 /home/rafavilomar/IdeaProjects/personal/microservice-level-up/product/src/main/java/com/microservice_level_up/module/product/ProductController.java
 /home/rafavilomar/IdeaProjects/personal/microservice-level-up/product/src/main/java/com/microservice_level_up/module/product/Product.java
 /home/rafavilomar/IdeaProjects/personal/microservice-level-up/product/src/main/java/com/microservice_level_up/error/validation/ValidationExceptionHandlerAdvice.java
+/home/rafavilomar/IdeaProjects/personal/microservice-level-up/product/src/main/java/com/microservice_level_up/module/product/dto/ProductRegistrationRequest.java
 /home/rafavilomar/IdeaProjects/personal/microservice-level-up/product/src/main/java/com/microservice_level_up/error/not_found/NotFoundExceptionResponse.java
 /home/rafavilomar/IdeaProjects/personal/microservice-level-up/product/src/main/java/com/microservice_level_up/error/not_readable/NotReadableExceptionHandlerAdvice.java
+/home/rafavilomar/IdeaProjects/personal/microservice-level-up/product/src/main/java/com/microservice_level_up/module/category/ICategoryService.java

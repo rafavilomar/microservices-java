@@ -1,6 +1,7 @@
 package com.microservice_level_up.module.product;
 
 import com.microservice_level_up.module.category.dto.CategoryResponse;
+import com.microservice_level_up.module.product.dto.ProductRegistrationRequest;
 import com.microservice_level_up.module.product.dto.ProductResponse;
 import com.microservice_level_up.response.BaseResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -99,6 +100,34 @@ class ProductControllerTest {
         );
 
         verify(service, times(1)).getAll(pageable);
+        verifyNoMoreInteractions(service);
+    }
+
+    @Test
+    void add() {
+        long productId = 1L;
+        ProductRegistrationRequest request = ProductRegistrationRequest.builder()
+                .name("Product test")
+                .code("Test")
+                .categoryId(20L)
+                .stock(20)
+                .price(15)
+                .build();
+
+        when(service.add(request)).thenReturn(productId);
+
+        ResponseEntity<BaseResponse<Long>> actualResponse = controller.add(request);
+
+        assertNotNull(actualResponse.getBody());
+        assertAll(
+                "Product add controller response",
+                () -> assertEquals(HttpStatus.CREATED, actualResponse.getStatusCode()),
+                () -> assertNotNull(actualResponse.getBody().getPayload()),
+                () -> assertEquals(productId, actualResponse.getBody().getPayload()),
+                () -> assertEquals("Product added successfully", actualResponse.getBody().getMessage())
+        );
+
+        verify(service, times(1)).add(request);
         verifyNoMoreInteractions(service);
     }
 }
