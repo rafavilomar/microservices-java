@@ -57,11 +57,14 @@ class ProductControllerTest {
 
         ResponseEntity<BaseResponse<ProductResponse>> actualResponse = controller.getById(productId);
 
-        assertEquals(HttpStatus.OK, actualResponse.getStatusCode());
         assertNotNull(actualResponse.getBody());
-        assertNotNull(actualResponse.getBody().getPayload());
-        assertEquals(expectedPayload, actualResponse.getBody().getPayload());
-        assertEquals("Product found", actualResponse.getBody().getMessage());
+        assertAll(
+                "Product get by id controller response",
+                () -> assertEquals(HttpStatus.OK, actualResponse.getStatusCode()),
+                () -> assertNotNull(actualResponse.getBody().getPayload()),
+                () -> assertEquals(expectedPayload, actualResponse.getBody().getPayload()),
+                () -> assertEquals("Product found", actualResponse.getBody().getMessage())
+        );
 
         verify(service, times(1)).getById(productId);
         verifyNoMoreInteractions(service);

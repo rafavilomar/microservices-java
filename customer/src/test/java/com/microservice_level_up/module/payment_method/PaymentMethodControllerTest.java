@@ -17,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 
 import java.time.Month;
 import java.time.Year;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -51,11 +50,14 @@ class PaymentMethodControllerTest {
         when(service.add(request)).thenReturn(expectedResponse);
         ResponseEntity<BaseResponse<Long>> actualResponse = controller.add(request);
 
-        assertEquals(HttpStatus.CREATED, actualResponse.getStatusCode());
         assertNotNull(actualResponse.getBody());
-        assertNotNull(actualResponse.getBody().getPayload());
-        assertEquals(expectedResponse, actualResponse.getBody().getPayload());
-        assertEquals("Payment method registered", actualResponse.getBody().getMessage());
+        assertAll(
+                "Payment method add controller response",
+                () -> assertEquals(HttpStatus.CREATED, actualResponse.getStatusCode()),
+                () -> assertNotNull(actualResponse.getBody().getPayload()),
+                () -> assertEquals(expectedResponse, actualResponse.getBody().getPayload()),
+                () -> assertEquals("Payment method registered", actualResponse.getBody().getMessage())
+        );
 
         verify(service, times(1)).add(request);
         verifyNoMoreInteractions(service);
@@ -79,11 +81,14 @@ class PaymentMethodControllerTest {
 
         ResponseEntity<BaseResponse<PaymentMethodResponse>> actualResponse = controller.getById(id);
 
-        assertEquals(HttpStatus.OK, actualResponse.getStatusCode());
         assertNotNull(actualResponse.getBody());
-        assertNotNull(actualResponse.getBody().getPayload());
-        assertEquals(expectedPaymentMethod, actualResponse.getBody().getPayload());
-        assertEquals("Payment method found", actualResponse.getBody().getMessage());
+        assertAll(
+                "Payment method get by id controller response",
+                () -> assertEquals(HttpStatus.OK, actualResponse.getStatusCode()),
+                () -> assertNotNull(actualResponse.getBody().getPayload()),
+                () -> assertEquals(expectedPaymentMethod, actualResponse.getBody().getPayload()),
+                () -> assertEquals("Payment method found", actualResponse.getBody().getMessage())
+        );
 
         verify(service, times(1)).getById(id);
         verifyNoMoreInteractions(service);
@@ -95,21 +100,30 @@ class PaymentMethodControllerTest {
         int page = 1;
         int size = 2;
 
-        List<PaymentMethodResponse> paymentMethodResponseList = new ArrayList<>();
-        paymentMethodResponseList.add(buildPaymentMethodResponse(1L, customerId));
-        paymentMethodResponseList.add(buildPaymentMethodResponse(2L, customerId));
+        List<PaymentMethodResponse> paymentMethodResponseList = List.of(
+                buildPaymentMethodResponse(1L, customerId),
+                buildPaymentMethodResponse(2L, customerId)
+        );
+
         Pageable pageable = PageRequest.of(page - 1, size);
-        PageImpl<PaymentMethodResponse> expectedResponse = new PageImpl<>(paymentMethodResponseList, pageable, paymentMethodResponseList.size());
+        PageImpl<PaymentMethodResponse> expectedResponse = new PageImpl<>(
+                paymentMethodResponseList,
+                pageable,
+                paymentMethodResponseList.size()
+        );
 
         when(service.getByCustomerId(customerId, pageable)).thenReturn(expectedResponse);
 
         ResponseEntity<BaseResponse<Page<PaymentMethodResponse>>> actualResponse = controller.getByCustomerId(customerId, page, size);
 
-        assertEquals(HttpStatus.OK, actualResponse.getStatusCode());
         assertNotNull(actualResponse.getBody());
-        assertNotNull(actualResponse.getBody().getPayload());
-        assertEquals(expectedResponse, actualResponse.getBody().getPayload());
-        assertEquals("Payment methods found for this customer", actualResponse.getBody().getMessage());
+        assertAll(
+                "Payment method get by customer's id controller response",
+                () -> assertEquals(HttpStatus.OK, actualResponse.getStatusCode()),
+                () -> assertNotNull(actualResponse.getBody().getPayload()),
+                () -> assertEquals(expectedResponse, actualResponse.getBody().getPayload()),
+                () -> assertEquals("Payment methods found for this customer", actualResponse.getBody().getMessage())
+        );
 
         verify(service, times(1)).getByCustomerId(customerId, pageable);
         verifyNoMoreInteractions(service);
@@ -131,13 +145,15 @@ class PaymentMethodControllerTest {
     @Test
     void remove() {
         long id = 1L;
-
         ResponseEntity<BaseResponse<Void>> actualResponse = controller.remove(id);
 
-        assertEquals(HttpStatus.NO_CONTENT, actualResponse.getStatusCode());
         assertNotNull(actualResponse.getBody());
-        assertNull(actualResponse.getBody().getPayload());
-        assertEquals("Payment method removed", actualResponse.getBody().getMessage());
+        assertAll(
+                "Payment method remove controller response",
+                () -> assertEquals(HttpStatus.NO_CONTENT, actualResponse.getStatusCode()),
+                () -> assertNull(actualResponse.getBody().getPayload()),
+                () -> assertEquals("Payment method removed", actualResponse.getBody().getMessage())
+        );
 
         verify(service, times(1)).remove(id);
         verifyNoMoreInteractions(service);

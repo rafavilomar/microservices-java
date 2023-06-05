@@ -12,8 +12,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class CustomerControllerTest {
@@ -44,11 +43,14 @@ class CustomerControllerTest {
 
         ResponseEntity<BaseResponse<CustomerResponse>> actualResponse = controller.getById(id);
 
-        assertEquals(HttpStatus.OK, actualResponse.getStatusCode());
         assertNotNull(actualResponse.getBody());
-        assertNotNull(actualResponse.getBody().getPayload());
-        assertEquals(expectedCustomer, actualResponse.getBody().getPayload());
-        assertEquals("Customer found", actualResponse.getBody().getMessage());
+        assertAll(
+                "Customer registration controller response",
+                () -> assertEquals(HttpStatus.OK, actualResponse.getStatusCode()),
+                () -> assertNotNull(actualResponse.getBody().getPayload()),
+                () -> assertEquals(expectedCustomer, actualResponse.getBody().getPayload()),
+                () -> assertEquals("Customer found", actualResponse.getBody().getMessage())
+        );
 
         verify(service, times(1)).getById(id);
         verifyNoMoreInteractions(service);
@@ -68,11 +70,14 @@ class CustomerControllerTest {
 
         ResponseEntity<BaseResponse<Long>> actualResponse = controller.registerCustomer(request);
 
-        assertEquals(HttpStatus.CREATED, actualResponse.getStatusCode());
         assertNotNull(actualResponse.getBody());
-        assertNotNull(actualResponse.getBody().getPayload());
-        assertEquals(customerId, actualResponse.getBody().getPayload());
-        assertEquals("Customer registered successfully", actualResponse.getBody().getMessage());
+        assertAll(
+                "Customer registration controller response",
+                () -> assertEquals(HttpStatus.CREATED, actualResponse.getStatusCode()),
+                () -> assertNotNull(actualResponse.getBody().getPayload()),
+                () -> assertEquals(customerId, actualResponse.getBody().getPayload()),
+                () -> assertEquals("Customer registered successfully", actualResponse.getBody().getMessage())
+        );
 
         verify(service, times(1)).register(request);
         verifyNoMoreInteractions(service);
@@ -92,11 +97,14 @@ class CustomerControllerTest {
 
         ResponseEntity<BaseResponse<Long>> actualResponse = controller.updateCustomer(request);
 
-        assertEquals(HttpStatus.OK, actualResponse.getStatusCode());
         assertNotNull(actualResponse.getBody());
-        assertNotNull(actualResponse.getBody().getPayload());
-        assertEquals(customerId, actualResponse.getBody().getPayload());
-        assertEquals("Customer updated successfully", actualResponse.getBody().getMessage());
+        assertAll(
+                "Customer update controller response",
+                () -> assertEquals(HttpStatus.OK, actualResponse.getStatusCode()),
+                () -> assertNotNull(actualResponse.getBody().getPayload()),
+                () -> assertEquals(customerId, actualResponse.getBody().getPayload()),
+                () -> assertEquals("Customer updated successfully", actualResponse.getBody().getMessage())
+        );
 
         verify(service, times(1)).update(request);
         verifyNoMoreInteractions(service);
