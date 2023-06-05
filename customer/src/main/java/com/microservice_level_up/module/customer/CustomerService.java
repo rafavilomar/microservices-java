@@ -45,7 +45,7 @@ public record CustomerService(
     }
 
     @Override
-    public CustomerResponse getById(Long id) {
+    public CustomerResponse getById(long id) {
         return repository.findById(id)
                 .map(this::mapResponse)
                 .orElseThrow(() -> new EntityNotFoundException("Customer not found for this id: " + id));

@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class BaseResponse<T> {
 
     private LocalDateTime timestamp;
-    private Integer status;
+    private int status;
     private String statusDescription;
     private String message;
     private T payload;

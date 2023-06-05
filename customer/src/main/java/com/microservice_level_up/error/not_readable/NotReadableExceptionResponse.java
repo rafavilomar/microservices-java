@@ -5,7 +5,7 @@ import java.util.List;
 
 public record NotReadableExceptionResponse(
         LocalDateTime timestamp,
-        Integer status,
+        int status,
         String statusDescription,
         List<String> error) {
 }
