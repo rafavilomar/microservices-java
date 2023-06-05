@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="com.microservice_level_up.module.customer.CustomerControllerTest" time="0.932" tests="3" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="com.microservice_level_up.module.customer.CustomerControllerTest" time="0.933" tests="3" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
     <property name="java.vm.version" value="17.0.7+7-Ubuntu-0ubuntu122.04.2"/>
@@ -56,7 +56,7 @@
     <property name="sun.cpu.endian" value="little"/>
     <property name="sun.stdout.encoding" value="UTF-8"/>
   </properties>
-  <testcase name="getById" classname="com.microservice_level_up.module.customer.CustomerControllerTest" time="0.886"/>
-  <testcase name="registerCustomer" classname="com.microservice_level_up.module.customer.CustomerControllerTest" time="0.014"/>
-  <testcase name="updateCustomer" classname="com.microservice_level_up.module.customer.CustomerControllerTest" time="0.015"/>
+  <testcase name="getById" classname="com.microservice_level_up.module.customer.CustomerControllerTest" time="0.865"/>
+  <testcase name="registerCustomer" classname="com.microservice_level_up.module.customer.CustomerControllerTest" time="0.021"/>
+  <testcase name="updateCustomer" classname="com.microservice_level_up.module.customer.CustomerControllerTest" time="0.016"/>
 </testsuite>

@@ -1,5 +1,7 @@
 package com.microservice_level_up.module.product;
 
+import com.microservice_level_up.module.category.Category;
+import com.microservice_level_up.module.category.dto.CategoryResponse;
 import com.microservice_level_up.module.product.dto.ProductResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,6 +39,11 @@ class ProductServiceTest {
                 .stock(1)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
+                .category(Category.builder()
+                        .id(1L)
+                        .name("Test")
+                        .description("Category test")
+                        .build())
                 .build();
     }
 
@@ -51,6 +58,11 @@ class ProductServiceTest {
                 .name(product.getName())
                 .price(product.getPrice())
                 .stock(product.getStock())
+                .category(CategoryResponse.builder()
+                        .id(1L)
+                        .name("Test")
+                        .description("Category test")
+                        .build())
                 .build();
 
         when(repository.findById(productId)).thenReturn(Optional.of(product));

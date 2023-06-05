@@ -1,5 +1,6 @@
 package com.microservice_level_up.module.product;
 
+import com.microservice_level_up.module.category.dto.CategoryResponse;
 import com.microservice_level_up.module.product.dto.ProductResponse;
 import com.microservice_level_up.response.BaseResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,10 +31,15 @@ class ProductControllerTest {
     private ProductResponse expectedPayloadTemplate(long productId) {
         return ProductResponse.builder()
                 .id(productId)
-                .code("test")
+                .code("Test")
                 .name("Product test")
                 .price(10)
                 .stock(1)
+                .category(CategoryResponse.builder()
+                        .id(1L)
+                        .name("Test")
+                        .description("Category test")
+                        .build())
                 .build();
     }
 

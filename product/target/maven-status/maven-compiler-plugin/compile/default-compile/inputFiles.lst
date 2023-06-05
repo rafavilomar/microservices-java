@@ -1,6 +1,8 @@
+/home/rafavilomar/IdeaProjects/personal/microservice-level-up/product/src/main/java/com/microservice_level_up/module/category/Category.java
 /home/rafavilomar/IdeaProjects/personal/microservice-level-up/product/src/main/java/com/microservice_level_up/response/BaseResponse.java
 /home/rafavilomar/IdeaProjects/personal/microservice-level-up/product/src/main/java/com/microservice_level_up/module/product/ProductService.java
 /home/rafavilomar/IdeaProjects/personal/microservice-level-up/product/src/main/java/com/microservice_level_up/module/product/ProductRepository.java
+/home/rafavilomar/IdeaProjects/personal/microservice-level-up/product/src/main/java/com/microservice_level_up/module/category/dto/CategoryResponse.java
 /home/rafavilomar/IdeaProjects/personal/microservice-level-up/product/src/main/java/com/microservice_level_up/module/product/dto/ProductResponse.java
 /home/rafavilomar/IdeaProjects/personal/microservice-level-up/product/src/main/java/com/microservice_level_up/error/validation/ValidationExceptionResponse.java
 /home/rafavilomar/IdeaProjects/personal/microservice-level-up/product/src/main/java/com/microservice_level_up/module/product/IProductService.java

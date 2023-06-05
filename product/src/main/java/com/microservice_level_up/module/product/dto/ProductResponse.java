@@ -1,5 +1,6 @@
 package com.microservice_level_up.module.product.dto;
 
+import com.microservice_level_up.module.category.dto.CategoryResponse;
 import lombok.Builder;
 
 @Builder
@@ -8,6 +9,7 @@ public record ProductResponse(
         String code,
         double price,
         String name,
-        int stock
+        int stock,
+        CategoryResponse category
 ) {
 }

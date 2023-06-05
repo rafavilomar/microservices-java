@@ -1,5 +1,6 @@
 package com.microservice_level_up.module.product;
 
+import com.microservice_level_up.module.category.dto.CategoryResponse;
 import com.microservice_level_up.module.product.dto.ProductResponse;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,11 @@ public record ProductService(ProductRepository repository) implements IProductSe
                 .name(product.getName())
                 .price(product.getPrice())
                 .stock(product.getStock())
+                .category(CategoryResponse.builder()
+                        .id(product.getCategory().getId())
+                        .name(product.getCategory().getName())
+                        .description(product.getCategory().getDescription())
+                        .build())
                 .build();
     }
 }

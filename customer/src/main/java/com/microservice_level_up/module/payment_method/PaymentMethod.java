@@ -38,5 +38,6 @@ public class PaymentMethod {
     private int cvv;
 
     @ManyToOne
+    @Column(nullable = false)
     private Customer customer;
 }
