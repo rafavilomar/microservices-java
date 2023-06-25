@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
 import java.time.YearMonth;
 
 @Service
@@ -44,6 +45,8 @@ public record PaymentMethodService(
                 .alias(request.alias())
                 .expirationMonth(request.expirationMonth())
                 .expirationYear(request.expirationYear())
+                .updatedAt(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
                 .cvv(request.cvv())
                 .customer(Customer.builder().id(request.customerId()).build())
                 .build();
