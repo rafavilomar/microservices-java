@@ -4,6 +4,7 @@ import com.microservice_level_up.error.duplicated_product_code.DuplicatedProduct
 import com.microservice_level_up.module.category.Category;
 import com.microservice_level_up.module.category.ICategoryService;
 import com.microservice_level_up.module.category.dto.CategoryResponse;
+import com.microservice_level_up.module.product.dto.BuyProductRequest;
 import com.microservice_level_up.module.product.dto.ProductRegistrationRequest;
 import com.microservice_level_up.module.product.dto.ProductResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,8 +19,10 @@ import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -222,6 +225,47 @@ class ProductServiceTest {
         assertEquals("Duplicated code: " + request.code(), exception.getMessage());
 
         verify(repository, times(1)).findByCode(request.code());
+        verifyNoMoreInteractions(repository);
+        verifyNoInteractions(categoryService);
+    }
+
+    @Test
+    void buy_ShouldBeOk() {
+        List<BuyProductRequest> buyProducts = List.of(new BuyProductRequest(1, "test"));
+        List<Product> products = List.of(productTemplate(1L));
+
+        when(repository.findAllByCode(buyProducts.stream().map(BuyProductRequest::code).toList())).thenReturn(products);
+
+        service.buy(buyProducts);
+
+        products = products.stream()
+                .peek(product -> product.setStock(product.getStock() - 1))
+                .toList();
+        List<String> codes = buyProducts.stream()
+                .map(BuyProductRequest::code)
+                .collect(Collectors.toList());
+
+        verify(repository, times(1)).findAllByCode(codes);
+        verify(repository, times(1)).saveAll(products);
+        verifyNoMoreInteractions(repository);
+        verifyNoInteractions(categoryService);
+    }
+
+    @Test
+    void buy_NotFound() {
+        List<BuyProductRequest> buyProducts = List.of(new BuyProductRequest(1, "test"));
+
+        when(repository.findAllByCode(buyProducts.stream().map(BuyProductRequest::code).toList()))
+                .thenReturn(new ArrayList<>());
+
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
+                () -> service.buy(buyProducts));
+
+        List<String> codes = buyProducts.stream().map(BuyProductRequest::code).toList();
+
+        assertEquals("Products " + codes + " do not exist", exception.getMessage());
+
+        verify(repository, times(1)).findAllByCode(codes);
         verifyNoMoreInteractions(repository);
         verifyNoInteractions(categoryService);
     }

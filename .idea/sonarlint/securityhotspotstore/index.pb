@@ -1,19 +1,7 @@
 
 ?
 product/pom.xml,c/a/cae8333de7fc3bae59917f00a8cc124140367b26
-B
-docker-compose.yml,3/5/35b8c13cf2eb2a194eada000eb310d65aed53b2a
-w
-Gproduct/src/main/java/com/microservice_level_up/ProductApplication.java,0/d/0d32e9042b43b14fd879ef7e77828ad66e6d223a
-{
-Kproduct/src/main/java/com/microservice_level_up/module/product/Product.java,c/6/c630c2da2cf4e0bfc6d5ddae0fc15066ad50073a
-‚
-Rproduct/src/main/java/com/microservice_level_up/module/product/ProductService.java,5/9/595aef72cd5c1ab28facd8f794dc366a05ef7906
 ‰
 Yproduct/src/main/java/com/microservice_level_up/module/category/dto/CategoryResponse.java,6/e/6e97d3dd0cfb634f20ba6d197daf7188c9526780
-’
-bproduct/src/main/java/com/microservice_level_up/module/product/dto/ProductRegistrationRequest.java,8/4/8470b0d53a947d7a26f48945396f24bd9ff21ec7
 ¡
 qproduct/src/main/java/com/microservice_level_up/error/duplicated_product_code/DuplicatedProductCodeException.java,d/3/d377c91e8d7ebccdf7351f5ee8872114e2a08be1
-ƒ
-Sproduct/src/main/java/com/microservice_level_up/module/product/IProductService.java,f/8/f8ad6f0a0464590d1b67a3b59b32e772225c1704

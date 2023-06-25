@@ -4,6 +4,7 @@ import com.microservice_level_up.error.duplicated_product_code.DuplicatedProduct
 import com.microservice_level_up.module.category.Category;
 import com.microservice_level_up.module.category.ICategoryService;
 import com.microservice_level_up.module.category.dto.CategoryResponse;
+import com.microservice_level_up.module.product.dto.BuyProductRequest;
 import com.microservice_level_up.module.product.dto.ProductRegistrationRequest;
 import com.microservice_level_up.module.product.dto.ProductResponse;
 import org.springframework.data.domain.Page;
@@ -12,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public record ProductService(
@@ -54,6 +57,30 @@ public record ProductService(
 
         return repository.save(product).getId();
     }
+
+    @Override
+    public void buy(List<BuyProductRequest> buyProducts) {
+        List<String> codes = buyProducts.stream().map(BuyProductRequest::code).toList();
+        List<Product> products = repository.findAllByCode(codes);
+        if (products.size() != buyProducts.size()) validateCodeExistence(codes, products);
+
+        int index = 0;
+        for (Product product : products) {
+            int quantityToSubtract = buyProducts.get(index).quantity();
+            product.setStock(product.getStock() - quantityToSubtract);
+        }
+
+        repository.saveAll(products);
+    }
+
+    private void validateCodeExistence(List<String> codes, List<Product> products) {
+        codes = new ArrayList<>(codes);
+        codes.removeAll(products.stream().map(Product::getCode).toList());
+        if (!codes.isEmpty()) {
+            throw new EntityNotFoundException("Products " + codes + " do not exist");
+        }
+    }
+
 
     private ProductResponse mapResponse(Product product) {
         return ProductResponse.builder()

@@ -38,8 +38,8 @@ public class Product {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
-    @ManyToOne
-    @Column(nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_category", nullable = false)
     private Category category;
 
 }
