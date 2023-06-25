@@ -7,7 +7,7 @@ import com.microservice_level_up.module.customer.dto.CustomerUpdateRequest;
 public interface ICustomerService {
     long register(CustomerRegistrationRequest request);
 
-    CustomerResponse getById(Long id);
+    CustomerResponse getById(long id);
 
     long update(CustomerUpdateRequest request);
 }

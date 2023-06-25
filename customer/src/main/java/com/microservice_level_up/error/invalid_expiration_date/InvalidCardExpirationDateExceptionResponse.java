@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public record InvalidCardExpirationDateExceptionResponse(
         LocalDateTime timestamp,
-        Integer status,
+        int status,
         String statusDescription,
         String error) {
 }

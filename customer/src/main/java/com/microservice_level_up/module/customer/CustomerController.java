@@ -17,7 +17,7 @@ import javax.validation.Valid;
 public record CustomerController(ICustomerService service) {
 
     @GetMapping("/{id}")
-    public ResponseEntity<BaseResponse<CustomerResponse>> getById(@PathVariable("id") Long id) {
+    public ResponseEntity<BaseResponse<CustomerResponse>> getById(@PathVariable("id") long id) {
         log.info("Get customer by id {}", id);
         CustomerResponse customer = service.getById(id);
 

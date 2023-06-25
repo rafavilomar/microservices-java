@@ -1,0 +1,7 @@
+com/microservice_level_up/dto/NotificationRequest.class
+com/microservice_level_up/dto/CustomerRegistrationRequest.class
+com/microservice_level_up/service/EmailNotificationService.class
+com/microservice_level_up/kafka/events/EventType.class
+com/microservice_level_up/kafka/events/Event.class
+com/microservice_level_up/EmailNotificationApplication.class
+com/microservice_level_up/kafka/config/KafkaConsumerConfig.class
