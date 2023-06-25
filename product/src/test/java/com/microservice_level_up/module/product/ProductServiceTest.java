@@ -5,6 +5,7 @@ import com.microservice_level_up.module.category.Category;
 import com.microservice_level_up.module.category.ICategoryService;
 import com.microservice_level_up.module.category.dto.CategoryResponse;
 import com.microservice_level_up.module.product.dto.BuyProductRequest;
+import com.microservice_level_up.module.product.dto.FilterProductRequest;
 import com.microservice_level_up.module.product.dto.ProductRegistrationRequest;
 import com.microservice_level_up.module.product.dto.ProductResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -266,6 +267,46 @@ class ProductServiceTest {
         assertEquals("Products " + codes + " do not exist", exception.getMessage());
 
         verify(repository, times(1)).findAllByCode(codes);
+        verifyNoMoreInteractions(repository);
+        verifyNoInteractions(categoryService);
+    }
+
+    @Test
+    void filter_ShouldBeOk() {
+        FilterProductRequest request = FilterProductRequest.builder()
+                .productCode("test")
+                .productName("Product test")
+                .categoryName("category")
+                .page(1)
+                .size(1)
+                .build();
+        Pageable pageable = PageRequest.of(request.page() - 1, request.size());
+
+        List<Product> productList = List.of(productTemplate(1L));
+        Page<Product> productPage = new PageImpl<>(productList, pageable, productList.size());
+
+        when(repository.findAllByNameOrCodeOrCategory_Name(
+                request.productName(),
+                request.productCode(),
+                request.categoryName(),
+                pageable))
+                .thenReturn(productPage);
+
+        Page<ProductResponse> actualResponse = service.filter(request);
+
+        assertAll(
+                "Filter products",
+                () -> assertTrue(actualResponse.isLast()),
+                () -> assertTrue(actualResponse.isFirst()),
+                () -> assertEquals(1, actualResponse.getContent().size()),
+                () -> assertEquals(request.productCode(), actualResponse.getContent().get(0).code())
+        );
+
+        verify(repository, times(1)).findAllByNameOrCodeOrCategory_Name(
+                request.productName(),
+                request.productCode(),
+                request.categoryName(),
+                pageable);
         verifyNoMoreInteractions(repository);
         verifyNoInteractions(categoryService);
     }

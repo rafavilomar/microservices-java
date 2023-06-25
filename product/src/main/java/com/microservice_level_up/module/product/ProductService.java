@@ -5,9 +5,11 @@ import com.microservice_level_up.module.category.Category;
 import com.microservice_level_up.module.category.ICategoryService;
 import com.microservice_level_up.module.category.dto.CategoryResponse;
 import com.microservice_level_up.module.product.dto.BuyProductRequest;
+import com.microservice_level_up.module.product.dto.FilterProductRequest;
 import com.microservice_level_up.module.product.dto.ProductRegistrationRequest;
 import com.microservice_level_up.module.product.dto.ProductResponse;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -71,6 +73,17 @@ public record ProductService(
         }
 
         repository.saveAll(products);
+    }
+
+    @Override
+    public Page<ProductResponse> filter(FilterProductRequest request) {
+        Pageable pageable = PageRequest.of(request.page() - 1, request.size());
+        return repository.findAllByNameOrCodeOrCategory_Name(
+                        request.productName(),
+                        request.productCode(),
+                        request.categoryName(),
+                        pageable)
+                .map(this::mapResponse);
     }
 
     private void validateCodeExistence(List<String> codes, List<Product> products) {

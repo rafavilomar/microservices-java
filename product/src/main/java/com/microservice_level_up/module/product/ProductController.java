@@ -1,6 +1,7 @@
 package com.microservice_level_up.module.product;
 
 import com.microservice_level_up.module.product.dto.BuyProductRequest;
+import com.microservice_level_up.module.product.dto.FilterProductRequest;
 import com.microservice_level_up.module.product.dto.ProductRegistrationRequest;
 import com.microservice_level_up.module.product.dto.ProductResponse;
 import com.microservice_level_up.response.BaseResponse;
@@ -73,6 +74,20 @@ public record ProductController(IProductService service) {
                 null,
                 HttpStatus.OK,
                 ""
+        );
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<BaseResponse<Page<ProductResponse>>> filter(@RequestBody FilterProductRequest request) {
+
+        log.info("Filter products {}", request);
+        Page<ProductResponse> payload = service.filter(request);
+
+        BaseResponse<Page<ProductResponse>> response = new BaseResponse<>();
+        return response.buildResponseEntity(
+                payload,
+                HttpStatus.OK,
+                "Products found"
         );
     }
 
