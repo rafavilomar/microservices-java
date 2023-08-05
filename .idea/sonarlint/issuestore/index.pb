@@ -49,8 +49,6 @@ Vproduct/src/test/java/com/microservice_level_up/module/product/ProductServiceTe
 Uproduct/src/main/java/com/microservice_level_up/module/product/ProductRepository.java,0/c/0c3bf4dad06510beeb3e7524c8f4f6dabfb096f0
 É
 Sproduct/src/main/java/com/microservice_level_up/module/product/IProductService.java,f/8/f8ad6f0a0464590d1b67a3b59b32e772225c1704
-{
-Kproduct/src/main/java/com/microservice_level_up/module/product/Product.java,c/6/c630c2da2cf4e0bfc6d5ddae0fc15066ad50073a
 â
 Ycustomer/src/main/java/com/microservice_level_up/module/payment_method/PaymentMethod.java,0/3/03a8e0fc712acb996a63d4740d1ecd3fae8d6cb2
 ê
