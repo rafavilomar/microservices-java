@@ -47,7 +47,7 @@ public class AccumulationPointsRuleService implements IAccumulationPointsRuleSer
     public void activate(long idAccumulationPointsRule) {
         log.info("Activate accumulation points rule {}", idAccumulationPointsRule);
         AccumulationPointsRule ruleToActivate = repository.getById(idAccumulationPointsRule);
-        Optional<AccumulationPointsRule> currentRuleActive = repository.findByStatus(true);
+        Optional<AccumulationPointsRule> currentRuleActive = getActive();
 
         if (currentRuleActive.isPresent()) {
             currentRuleActive.get().setStatus(false);
@@ -73,6 +73,6 @@ public class AccumulationPointsRuleService implements IAccumulationPointsRuleSer
 
     @Override
     public Optional<AccumulationPointsRule> getActive() {
-        return Optional.empty();
+        return repository.findByStatus(true);
     }
 }
