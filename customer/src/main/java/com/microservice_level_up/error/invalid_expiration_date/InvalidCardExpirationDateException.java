@@ -12,16 +12,15 @@ public class InvalidCardExpirationDateException extends RuntimeException {
         this.year = year;
     }
 
+    @Override
     public String getMessage() {
         YearMonth givenDate = YearMonth.of(year, month);
         YearMonth currentDate = YearMonth.now();
 
-        StringBuilder message = new StringBuilder().append("The given expiration date (");
-        message.append(givenDate);
-        message.append(") must be after current date (");
-        message.append(currentDate);
-        message.append(")");
-
-        return message.toString();
+        return "The given expiration date (" +
+                givenDate +
+                ") must be after current date (" +
+                currentDate +
+                ")";
     }
 }

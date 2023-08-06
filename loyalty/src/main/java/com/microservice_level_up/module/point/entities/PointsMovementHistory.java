@@ -23,12 +23,15 @@ public class PointsMovementHistory {
     @Column(nullable = false)
     private int points;
 
+    @Column(nullable = false)
+    private double dollar;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private MovementType type;
 
     @Column(nullable = false)
-    private LocalDateTime createdAt;
+    private LocalDateTime movementDate;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_lot_points", nullable = false)
