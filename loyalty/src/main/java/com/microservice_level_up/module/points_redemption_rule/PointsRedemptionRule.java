@@ -31,6 +31,6 @@ public class PointsRedemptionRule {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(nullable = false)
+    @Column
     private LocalDateTime updatedAt;
 }

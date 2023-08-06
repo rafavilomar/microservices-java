@@ -32,7 +32,7 @@ public class LotPoints {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(nullable = false)
+    @Column
     private LocalDateTime updatedAt;
 
     @Column(nullable = false)
