@@ -12,7 +12,6 @@ import com.microservice_level_up.module.point.repository.LotPointsRepository;
 import com.microservice_level_up.module.point.repository.PointsMovementHistoryRepository;
 import com.microservice_level_up.module.points_redemption_rule.IPointsRedemptionRuleService;
 import com.microservice_level_up.module.points_redemption_rule.PointsRedemptionRule;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -22,13 +21,12 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
-public class PointsService implements IPointsService {
-
-    private final LotPointsRepository lotPointsRepository;
-    private final PointsMovementHistoryRepository pointsMovementHistoryRepository;
-    private final IAccumulationPointsRuleService accumulationPointsRuleService;
-    private final IPointsRedemptionRuleService pointsRedemptionRuleService;
+public record PointsService(
+        LotPointsRepository lotPointsRepository,
+        PointsMovementHistoryRepository pointsMovementHistoryRepository,
+        IAccumulationPointsRuleService accumulationPointsRuleService,
+        IPointsRedemptionRuleService pointsRedemptionRuleService
+) implements IPointsService {
 
     @Override
     public void accumulatePoints(PurchaseRequest purchaseRequest) {

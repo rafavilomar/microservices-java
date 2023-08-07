@@ -1,8 +1,8 @@
 package com.microservice_level_up.module.accumulation_points_rule;
 
+import com.microservice_level_up.module.accumulation_points_rule.dto.AccumulationPointsRuleResponse;
 import com.microservice_level_up.module.accumulation_points_rule.dto.NewAccumulationPointsRule;
 import com.microservice_level_up.module.accumulation_points_rule.dto.UpdateAccumulationPointsRule;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,25 +14,24 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
-public class AccumulationPointsRuleService implements IAccumulationPointsRuleService {
-
-    private final AccumulationPointsRuleRepository repository;
+public record AccumulationPointsRuleService(
+        AccumulationPointsRuleRepository repository
+) implements IAccumulationPointsRuleService {
 
     @Override
-    public void create(NewAccumulationPointsRule newAccumulationPointsRule) {
+    public long create(NewAccumulationPointsRule newAccumulationPointsRule) {
         log.info("Create accumulation points rule {}", newAccumulationPointsRule);
 
-        repository.save(AccumulationPointsRule.builder()
+        return repository.save(AccumulationPointsRule.builder()
                 .pointsToEarn(newAccumulationPointsRule.pointsToEarn())
                 .dollar(newAccumulationPointsRule.dollar())
                 .status(false)
                 .createdAt(LocalDateTime.now())
-                .build());
+                .build()).getId();
     }
 
     @Override
-    public void update(UpdateAccumulationPointsRule updateAccumulationPointsRule) {
+    public long update(UpdateAccumulationPointsRule updateAccumulationPointsRule) {
         log.info("Update accumulation points rule {}", updateAccumulationPointsRule);
         AccumulationPointsRule accumulationPointsRule = getById(updateAccumulationPointsRule.id());
 
@@ -40,7 +39,7 @@ public class AccumulationPointsRuleService implements IAccumulationPointsRuleSer
         accumulationPointsRule.setDollar(updateAccumulationPointsRule.dollar());
         accumulationPointsRule.setUpdatedAt(LocalDateTime.now());
 
-        repository.save(accumulationPointsRule);
+        return repository.save(accumulationPointsRule).getId();
     }
 
     @Override
@@ -61,8 +60,13 @@ public class AccumulationPointsRuleService implements IAccumulationPointsRuleSer
     }
 
     @Override
-    public Page<AccumulationPointsRule> getAll(Pageable pageable) {
-        return repository.findAll(pageable);
+    public Page<AccumulationPointsRuleResponse> getAll(Pageable pageable) {
+        return repository.findAll(pageable).map(rule -> AccumulationPointsRuleResponse.builder()
+                .id(rule.getId())
+                .pointsToEarn(rule.getPointsToEarn())
+                .dollar(rule.getDollar())
+                .status(rule.isStatus())
+                .build());
     }
 
     @Override

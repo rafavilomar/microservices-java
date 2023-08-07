@@ -1,8 +1,8 @@
 package com.microservice_level_up.module.points_redemption_rule;
 
 import com.microservice_level_up.module.points_redemption_rule.dto.NewPointsRedemptionRule;
+import com.microservice_level_up.module.points_redemption_rule.dto.PointsRedemptionRuleResponse;
 import com.microservice_level_up.module.points_redemption_rule.dto.UpdatePointsRedemptionRule;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,25 +14,24 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
-public class PointsRedemptionRuleService implements IPointsRedemptionRuleService {
-
-    private final PointsRedemptionRuleRepository repository;
+public record PointsRedemptionRuleService(
+        PointsRedemptionRuleRepository repository
+) implements IPointsRedemptionRuleService {
 
     @Override
-    public void create(NewPointsRedemptionRule newPointsRedemptionRule) {
+    public long create(NewPointsRedemptionRule newPointsRedemptionRule) {
         log.info("Create points redemption rule {}", newPointsRedemptionRule);
 
-        repository.save(PointsRedemptionRule.builder()
+        return repository.save(PointsRedemptionRule.builder()
                 .pointsToRedeem(newPointsRedemptionRule.pointsToRedeem())
                 .dollar(newPointsRedemptionRule.dollar())
                 .status(false)
                 .createdAt(LocalDateTime.now())
-                .build());
+                .build()).getId();
     }
 
     @Override
-    public void update(UpdatePointsRedemptionRule updatePointsRedemptionRule) {
+    public long update(UpdatePointsRedemptionRule updatePointsRedemptionRule) {
         log.info("Update points redemption rule {}", updatePointsRedemptionRule);
         PointsRedemptionRule pointsRedemptionRule = getById(updatePointsRedemptionRule.id());
 
@@ -40,7 +39,7 @@ public class PointsRedemptionRuleService implements IPointsRedemptionRuleService
         pointsRedemptionRule.setDollar(updatePointsRedemptionRule.dollar());
         pointsRedemptionRule.setUpdatedAt(LocalDateTime.now());
 
-        repository.save(pointsRedemptionRule);
+        return repository.save(pointsRedemptionRule).getId();
     }
 
     @Override
@@ -61,8 +60,13 @@ public class PointsRedemptionRuleService implements IPointsRedemptionRuleService
     }
 
     @Override
-    public Page<PointsRedemptionRule> getAll(Pageable pageable) {
-        return repository.findAll(pageable);
+    public Page<PointsRedemptionRuleResponse> getAll(Pageable pageable) {
+        return repository.findAll(pageable).map(rule -> PointsRedemptionRuleResponse.builder()
+                .id(rule.getId())
+                .pointsToRedeem(rule.getPointsToRedeem())
+                .dollar(rule.getDollar())
+                .status(rule.isStatus())
+                .build());
     }
 
     @Override
