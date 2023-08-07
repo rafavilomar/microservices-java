@@ -1,6 +1,6 @@
 package com.microservice_level_up.module.product;
 
-import com.microservice_level_up.error.duplicated_product_code.DuplicatedProductCodeException;
+import com.microservice_level_up.error.not_enough_points.DuplicatedProductCodeException;
 import com.microservice_level_up.module.category.Category;
 import com.microservice_level_up.module.category.ICategoryService;
 import com.microservice_level_up.module.category.dto.CategoryResponse;

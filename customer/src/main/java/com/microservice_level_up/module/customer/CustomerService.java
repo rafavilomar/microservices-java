@@ -30,7 +30,6 @@ public record CustomerService(
 
         customer = repository.save(customer);
         return customer.getId();
-//        publishCustomer(customer);
     }
 
     private void publishCustomer(Customer customer) {

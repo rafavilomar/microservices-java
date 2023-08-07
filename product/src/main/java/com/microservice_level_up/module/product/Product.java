@@ -35,7 +35,7 @@ public class Product {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(nullable = false)
+    @Column
     private LocalDateTime updatedAt;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)

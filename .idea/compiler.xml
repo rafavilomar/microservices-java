@@ -11,6 +11,7 @@
         <module name="eureka-server" />
         <module name="email-notification" />
         <module name="customer" />
+        <module name="loyalty" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
