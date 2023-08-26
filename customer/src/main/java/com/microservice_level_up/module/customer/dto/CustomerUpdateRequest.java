@@ -20,5 +20,8 @@ public record CustomerUpdateRequest(
         String email,
 
         @NotBlank(message = "country: must not be null or blank")
-        String country) {
+        String country,
+
+        @NotBlank(message = "address: must not be null or blank")
+        String address) {
 }

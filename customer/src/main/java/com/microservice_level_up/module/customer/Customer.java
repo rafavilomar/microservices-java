@@ -32,6 +32,9 @@ public class Customer {
     private String country;
 
     @Column(nullable = false)
+    private String address;
+
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
     @Column
