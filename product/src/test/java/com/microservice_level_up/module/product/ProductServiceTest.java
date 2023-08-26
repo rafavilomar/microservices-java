@@ -235,7 +235,7 @@ class ProductServiceTest {
         List<BuyProductRequest> buyProducts = List.of(new BuyProductRequest(1, "test"));
         List<Product> products = List.of(productTemplate(1L));
 
-        when(repository.findAllByCode(buyProducts.stream().map(BuyProductRequest::code).toList())).thenReturn(products);
+        when(repository.findByCodeIn(buyProducts.stream().map(BuyProductRequest::code).toList())).thenReturn(products);
 
         service.buy(buyProducts);
 
@@ -246,7 +246,7 @@ class ProductServiceTest {
                 .map(BuyProductRequest::code)
                 .collect(Collectors.toList());
 
-        verify(repository, times(1)).findAllByCode(codes);
+        verify(repository, times(1)).findByCodeIn(codes);
         verify(repository, times(1)).saveAll(products);
         verifyNoMoreInteractions(repository);
         verifyNoInteractions(categoryService);
@@ -256,7 +256,7 @@ class ProductServiceTest {
     void buy_NotFound() {
         List<BuyProductRequest> buyProducts = List.of(new BuyProductRequest(1, "test"));
 
-        when(repository.findAllByCode(buyProducts.stream().map(BuyProductRequest::code).toList()))
+        when(repository.findByCodeIn(buyProducts.stream().map(BuyProductRequest::code).toList()))
                 .thenReturn(new ArrayList<>());
 
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
@@ -266,7 +266,7 @@ class ProductServiceTest {
 
         assertEquals("Products " + codes + " do not exist", exception.getMessage());
 
-        verify(repository, times(1)).findAllByCode(codes);
+        verify(repository, times(1)).findByCodeIn(codes);
         verifyNoMoreInteractions(repository);
         verifyNoInteractions(categoryService);
     }

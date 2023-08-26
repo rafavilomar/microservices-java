@@ -63,7 +63,7 @@ public record ProductService(
     @Override
     public void buy(List<BuyProductRequest> buyProducts) {
         List<String> codes = buyProducts.stream().map(BuyProductRequest::code).toList();
-        List<Product> products = repository.findAllByCode(codes);
+        List<Product> products = repository.findByCodeIn(codes);
         if (products.size() != buyProducts.size()) validateCodeExistence(codes, products);
 
         int index = 0;
