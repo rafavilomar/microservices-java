@@ -5,5 +5,6 @@ public record CustomerResponse(
         String firstName,
         String lastName,
         String email,
-        String country) {
+        String country,
+        String address) {
 }

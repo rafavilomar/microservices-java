@@ -25,7 +25,7 @@ public record CustomerService(
                 .email(request.email())
                 .country(request.country())
                 .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
+                .address(request.address())
                 .build();
 
         customer = repository.save(customer);
@@ -56,7 +56,8 @@ public record CustomerService(
                 customer.getFirstName(),
                 customer.getLastName(),
                 customer.getEmail(),
-                customer.getCountry()
+                customer.getCountry(),
+                customer.getAddress()
         );
     }
 
@@ -71,6 +72,7 @@ public record CustomerService(
                 .lastName(request.lastName())
                 .email(request.email())
                 .country(request.country())
+                .address(request.address())
                 .updatedAt(LocalDateTime.now())
                 .createdAt(customer.getCreatedAt())
                 .build();
