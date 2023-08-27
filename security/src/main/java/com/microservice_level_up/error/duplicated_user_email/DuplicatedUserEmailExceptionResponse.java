@@ -1,8 +1,8 @@
-package com.microservice_level_up.error.duplicated_category;
+package com.microservice_level_up.error.duplicated_user_email;
 
 import java.time.LocalDateTime;
 
-public record DuplicatedCategoryExceptionResponse(
+public record DuplicatedUserEmailExceptionResponse(
         LocalDateTime timestamp,
         int status,
         String statusDescription,

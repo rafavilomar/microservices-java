@@ -1,4 +1,4 @@
-package com.microservice_level_up.error.duplicated_category;
+package com.microservice_level_up.error.not_enough_points;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.time.LocalDateTime;
 
 @RestControllerAdvice
-public class DuplicatedCategoryExceptionHandlerAdvice {
+public class DuplicatedProductCodeExceptionHandlerAdvice {
 
-    @ExceptionHandler(DuplicatedCategoryException.class)
-    public ResponseEntity<DuplicatedCategoryExceptionResponse> handleError(DuplicatedCategoryException exception) {
+    @ExceptionHandler(DuplicatedProductCodeException.class)
+    public ResponseEntity<DuplicatedProductCodeExceptionResponse> handleError(DuplicatedProductCodeException exception) {
 
-        DuplicatedCategoryExceptionResponse response = new DuplicatedCategoryExceptionResponse(
+        DuplicatedProductCodeExceptionResponse response = new DuplicatedProductCodeExceptionResponse(
                 LocalDateTime.now(),
                 HttpStatus.BAD_REQUEST.value(),
                 HttpStatus.BAD_REQUEST.getReasonPhrase(),

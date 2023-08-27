@@ -145,8 +145,6 @@ E
 eureka-server/pom.xml,b/3/b39ae52d769ea03b699b5602439afd875433c8a7
 J
 email-notification/pom.xml,6/0/600f904452e409fd5a49b5f823e27e5dd45e687f
-?
-product/pom.xml,c/a/cae8333de7fc3bae59917f00a8cc124140367b26
 à
 Xcustomer/src/main/java/com/microservice_level_up/module/customer/CustomerRepository.java,2/2/22d6e7d7ba8e96f718efbc372a7d25a0c209aaea
 Ü
@@ -157,8 +155,6 @@ B
 _customer/src/main/java/com/microservice_level_up/module/customer/dto/CustomerUpdateRequest.java,e/5/e55f6552be352a083c0f1a686c260c21a28f2e42
 ä
 Zcustomer/src/main/java/com/microservice_level_up/module/customer/dto/CustomerResponse.java,8/a/8aa0f7f4c70b5bfb8440d30f20b2a16f153719a1
-ï
-ecustomer/src/main/java/com/microservice_level_up/module/customer/dto/CustomerRegistrationRequest.java,f/7/f73c6e2e5290a9ec7937d7910d3d0ce093d0587f
 î
 dproduct/src/main/java/com/microservice_level_up/module/category/dto/CategoryRegistrationRequest.java,0/f/0f04aae0df33e29567af430d39d26307e670db15
 ó
@@ -169,8 +165,6 @@ jproduct/src/main/java/com/microservice_level_up/error/duplicated_category/Dupli
 Wproduct/src/main/java/com/microservice_level_up/module/category/CategoryRepository.java,b/c/bc9816be43732015b426944cb636e64f469dc4bf
 Ö
 Uproduct/src/main/java/com/microservice_level_up/module/category/ICategoryService.java,c/e/cec3957d2fa5fbfaa18582c89dabd24b69e532eb
-à
-Xproduct/src/test/java/com/microservice_level_up/module/category/CategoryServiceTest.java,5/e/5e83ba4ff622e9332887f3864b0be1d1fb1a8104
 é
 ^product/src/main/java/com/microservice_level_up/module/category/dto/UpdateCategoryRequest.java,5/9/59205ddc7696f213b6b4cabdd06361f48813e4ba
 â
@@ -301,8 +295,6 @@ Q.idea/sonarlint/securityhotspotstore/0/9/098cccf75dc80edfe84fdb0f009ac4e2efd069
 Q.idea/sonarlint/securityhotspotstore/0/b/0b39c9136dfb4e0a8ba97caac5ce9dec7c11966f,2/5/252eab8dbb46390929e78e2444dd2431d9f2ef5f
 Å
 Q.idea/sonarlint/securityhotspotstore/7/d/7d89be8906eaf8b6534e3fbafe9358c6f5b9a9c8,c/f/cf57eeeabf396f9c7ddb6e27d6f5299743c6ceca
-Ö
-Ucustomer/src/main/java/com/microservice_level_up/module/customer/CustomerService.java,3/9/39e20648a52186dfe363938783854048b5221ab2
 w
 G.idea/sonarlint/issuestore/7/d/7d89be8906eaf8b6534e3fbafe9358c6f5b9a9c8,e/7/e786a91c67488f4e020f3acdc97745137b3ca357
 w
@@ -451,8 +443,6 @@ qloyalty/src/main/java/com/microservice_level_up/module/points_redemption_rule/d
 qloyalty/src/main/java/com/microservice_level_up/module/points_redemption_rule/PointsRedemptionRuleRepository.java,e/0/e0ad023fa6d3bbb5c27cb5250b00279f2cce1d40
 á
 Wproduct/src/main/java/com/microservice_level_up/module/category/CategoryController.java,7/3/73d5a73d3fe020d3f5aab4d79307580f3ed580d1
-Ñ
-Tproduct/src/main/java/com/microservice_level_up/module/category/CategoryService.java,e/3/e3420e5a61dcc6671b730f7062c0a8e4e7a921bb
 â
 Yproduct/src/main/java/com/microservice_level_up/module/category/dto/CategoryResponse.java,6/e/6e97d3dd0cfb634f20ba6d197daf7188c9526780
 õ

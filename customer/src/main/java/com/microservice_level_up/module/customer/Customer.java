@@ -35,6 +35,9 @@ public class Customer {
     private String address;
 
     @Column(nullable = false)
+    private Long idUser;
+
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
     @Column

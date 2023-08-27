@@ -145,8 +145,6 @@ E
 eureka-server/pom.xml,b/3/b39ae52d769ea03b699b5602439afd875433c8a7
 J
 email-notification/pom.xml,6/0/600f904452e409fd5a49b5f823e27e5dd45e687f
-?
-product/pom.xml,c/a/cae8333de7fc3bae59917f00a8cc124140367b26
 ˆ
 Xcustomer/src/main/java/com/microservice_level_up/module/customer/CustomerRepository.java,2/2/22d6e7d7ba8e96f718efbc372a7d25a0c209aaea
 †
@@ -157,8 +155,6 @@ B
 _customer/src/main/java/com/microservice_level_up/module/customer/dto/CustomerUpdateRequest.java,e/5/e55f6552be352a083c0f1a686c260c21a28f2e42
 Š
 Zcustomer/src/main/java/com/microservice_level_up/module/customer/dto/CustomerResponse.java,8/a/8aa0f7f4c70b5bfb8440d30f20b2a16f153719a1
-•
-ecustomer/src/main/java/com/microservice_level_up/module/customer/dto/CustomerRegistrationRequest.java,f/7/f73c6e2e5290a9ec7937d7910d3d0ce093d0587f
 ”
 dproduct/src/main/java/com/microservice_level_up/module/category/dto/CategoryRegistrationRequest.java,0/f/0f04aae0df33e29567af430d39d26307e670db15
 —
@@ -169,8 +165,6 @@ jproduct/src/main/java/com/microservice_level_up/error/duplicated_category/Dupli
 Wproduct/src/main/java/com/microservice_level_up/module/category/CategoryRepository.java,b/c/bc9816be43732015b426944cb636e64f469dc4bf
 …
 Uproduct/src/main/java/com/microservice_level_up/module/category/ICategoryService.java,c/e/cec3957d2fa5fbfaa18582c89dabd24b69e532eb
-ˆ
-Xproduct/src/test/java/com/microservice_level_up/module/category/CategoryServiceTest.java,5/e/5e83ba4ff622e9332887f3864b0be1d1fb1a8104
 Ž
 ^product/src/main/java/com/microservice_level_up/module/category/dto/UpdateCategoryRequest.java,5/9/59205ddc7696f213b6b4cabdd06361f48813e4ba
 ‰
@@ -389,8 +383,6 @@ Q.idea/sonarlint/securityhotspotstore/4/3/43681917a5938ae4b19285e605fec2c4e4a627
 Q.idea/sonarlint/securityhotspotstore/c/7/c71521d9a6a2cd5ecc17e009eab767bc28cbc2ba,7/1/719a966d39fac5206dfc56d7b2df2097376381ac
 w
 G.idea/sonarlint/issuestore/2/8/2874c87c2c00093e6731f43646151c134098f7a6,5/f/5f319fc39a25003cf9634db7c51effa6daccd2d0
-…
-Ucustomer/src/main/java/com/microservice_level_up/module/customer/CustomerService.java,3/9/39e20648a52186dfe363938783854048b5221ab2
 ›
 kproduct/src/main/java/com/microservice_level_up/error/not_enough_points/DuplicatedProductCodeException.java,7/8/780c42b60904522a7d6993c217d222b7de24c3b9
 ¨
@@ -449,8 +441,6 @@ nloyalty/src/main/java/com/microservice_level_up/module/points_redemption_rule/d
 qloyalty/src/main/java/com/microservice_level_up/module/points_redemption_rule/PointsRedemptionRuleRepository.java,e/0/e0ad023fa6d3bbb5c27cb5250b00279f2cce1d40
 ¡
 qloyalty/src/main/java/com/microservice_level_up/module/points_redemption_rule/dto/UpdatePointsRedemptionRule.java,0/2/02327d56975d5ec4bf5cae60ae175c3eaeaa9bdf
-„
-Tproduct/src/main/java/com/microservice_level_up/module/category/CategoryService.java,e/3/e3420e5a61dcc6671b730f7062c0a8e4e7a921bb
 ‰
 Yproduct/src/main/java/com/microservice_level_up/module/category/dto/CategoryResponse.java,6/e/6e97d3dd0cfb634f20ba6d197daf7188c9526780
 ‡
