@@ -1,6 +1,7 @@
 package com.microservice_level_up.module.user;
 
 
+import com.microservice_level_up.module.role.entites.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,5 +35,9 @@ public class User {
 
     @Column
     private LocalDateTime updatedAt;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "id_role", nullable = false)
+    private Role role;
 
 }

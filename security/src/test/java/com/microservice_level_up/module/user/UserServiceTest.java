@@ -1,6 +1,8 @@
 package com.microservice_level_up.module.user;
 
-import com.microservice_level_up.error.duplicated_user_email.DuplicatedUserEmailException;
+import com.microservice_level_up.error.conflict.ConflictException;
+import com.microservice_level_up.module.role.IRoleService;
+import com.microservice_level_up.module.role.entites.Role;
 import com.microservice_level_up.module.user.dto.NewUserDto;
 import com.microservice_level_up.module.user.dto.UserResponseDto;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +26,8 @@ class UserServiceTest {
     private UserRepository repository;
     @Mock
     private BCryptPasswordEncoder passwordEncoder;
+    @Mock
+    private IRoleService roleService;
 
     @BeforeEach
     public void setUp() {
@@ -32,33 +36,35 @@ class UserServiceTest {
 
     @Test
     void create_ShouldBeOk() {
-        NewUserDto newUser = new NewUserDto("test@gmail.com", "fullName", "password");
+        NewUserDto newUser = new NewUserDto("test@gmail.com", "fullName", "password", 1L);
 
         when(passwordEncoder.encode(newUser.password())).thenReturn("password encoded");
+        when(roleService.findByIdEntity(newUser.idRole())).thenReturn(Role.builder().build());
 
         underTest.create(newUser);
 
         verify(repository, times(1)).existsByEmail(newUser.email());
         verify(repository, times(1)).save(any(User.class));
         verify(passwordEncoder, times(1)).encode(newUser.password());
+        verify(roleService, times(1)).findByIdEntity(newUser.idRole());
         verifyNoMoreInteractions(repository);
     }
 
     @Test
     void create_DuplicatedEmail() {
-        NewUserDto newUser = new NewUserDto("test@gmail.com", "fullName", "password");
+        NewUserDto newUser = new NewUserDto("test@gmail.com", "fullName", "password", 1L);
 
         when(repository.existsByEmail(newUser.email())).thenReturn(true);
 
-        DuplicatedUserEmailException exception = assertThrows(
-                DuplicatedUserEmailException.class,
+        ConflictException exception = assertThrows(
+                ConflictException.class,
                 () -> underTest.create(newUser));
 
         assertEquals("There is another account with this email: " + newUser.email(), exception.getMessage());
 
         verify(repository, times(1)).existsByEmail(newUser.email());
         verifyNoMoreInteractions(repository);
-        verifyNoInteractions(passwordEncoder);
+        verifyNoInteractions(passwordEncoder, roleService);
     }
 
     @Test
@@ -68,6 +74,10 @@ class UserServiceTest {
                 .id(1L)
                 .email(email)
                 .fullName("fullName")
+                .role(Role.builder()
+                        .id(1L)
+                        .name("role")
+                        .build())
                 .build();
 
         when(repository.findByEmail(email)).thenReturn(Optional.of(user));

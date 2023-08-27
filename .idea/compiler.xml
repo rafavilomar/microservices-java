@@ -7,22 +7,13 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="security" />
         <module name="product" />
-        <module name="email-notification" />
+        <module name="security" />
         <module name="eureka-server" />
-        <module name="customer" />
+        <module name="email-notification" />
         <module name="loyalty" />
+        <module name="customer" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="customer" target="17" />
-      <module name="email-notification" target="17" />
-      <module name="eureka-server" target="17" />
-      <module name="loyalty" target="17" />
-      <module name="microservice_level_up" target="17" />
-      <module name="product" target="17" />
-      <module name="security" target="17" />
-    </bytecodeTargetLevel>
   </component>
 </project>

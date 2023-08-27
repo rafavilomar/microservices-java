@@ -1,6 +1,6 @@
 package com.microservice_level_up.module.category;
 
-import com.microservice_level_up.error.duplicated_user_email.DuplicatedCategoryException;
+import com.microservice_level_up.error.conflict.DuplicatedCategoryException;
 import com.microservice_level_up.module.category.dto.CategoryRegistrationRequest;
 import com.microservice_level_up.module.category.dto.CategoryResponse;
 import com.microservice_level_up.module.category.dto.UpdateCategoryRequest;

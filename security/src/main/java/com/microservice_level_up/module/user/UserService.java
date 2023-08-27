@@ -1,6 +1,7 @@
 package com.microservice_level_up.module.user;
 
-import com.microservice_level_up.error.duplicated_user_email.DuplicatedUserEmailException;
+import com.microservice_level_up.error.conflict.ConflictException;
+import com.microservice_level_up.module.role.IRoleService;
 import com.microservice_level_up.module.user.dto.NewUserDto;
 import com.microservice_level_up.module.user.dto.UserResponseDto;
 import lombok.extern.slf4j.Slf4j;
@@ -14,17 +15,19 @@ import java.time.LocalDateTime;
 @Service
 public record UserService(
         UserRepository repository,
-        BCryptPasswordEncoder passwordEncoder) implements IUserService {
+        BCryptPasswordEncoder passwordEncoder,
+        IRoleService roleService) implements IUserService {
     @Override
     public void create(NewUserDto newUser) {
         log.info("Create new role user {}", newUser.email());
         if (repository.existsByEmail(newUser.email()))
-            throw new DuplicatedUserEmailException("There is another account with this email: " + newUser.email());
+            throw new ConflictException("There is another account with this email: " + newUser.email());
 
         repository.save(User.builder()
                 .email(newUser.email())
                 .fullName(newUser.fullName())
                 .password(passwordEncoder().encode(newUser.password()))
+                .role(roleService.findByIdEntity(newUser.idRole()))
                 .createdAt(LocalDateTime.now())
                 .build());
     }
@@ -41,7 +44,9 @@ public record UserService(
         return UserResponseDto.builder()
                 .id(user.getId())
                 .email(user.getEmail())
-                .fullName(user.getEmail())
+                .fullName(user.getFullName())
+                .roleName(user.getRole().getName())
+                .idRole(user.getRole().getId())
                 .build();
     }
 }
