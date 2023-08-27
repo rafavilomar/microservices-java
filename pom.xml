@@ -17,6 +17,7 @@
         <module>email-notification</module>
         <module>product</module>
         <module>loyalty</module>
+        <module>security</module>
     </modules>
 
     <properties>
