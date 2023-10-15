@@ -1,10 +1,9 @@
 server:
   port: 8100
-  contextPath: /swagger2-demo
 
 spring:
   application:
-    name: security
+    name: customer
   datasource:
     username: rafavilomar
     url: jdbc:postgresql://localhost:5432/security
@@ -20,17 +19,8 @@ spring:
   zipkin:
     base-url: http://localhost:9411
 
-jwt:
-  secret-key: fewe6rt46321g3w54re5w1f32s
-
 kafka:
   bootstrap-address: localhost:29092
-
-
-springdoc:
-  show-login-endpoint: true
-  api-docs:
-    path: /v2/api-docs
 
 eureka:
   client:
