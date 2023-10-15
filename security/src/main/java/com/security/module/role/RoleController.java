@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/role")
 @SecurityRequirement(name = "bearerAuth")
-public record RoleController(IRoleService roleService) {
+@RequiredArgsConstructor
+public class RoleController {
+
+    private final IRoleService roleService;
 
     @PostMapping
     @Operation(summary = "Create new role")

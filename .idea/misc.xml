@@ -22,6 +22,7 @@
     <option name="ignoredFiles">
       <set>
         <option value="$PROJECT_DIR$/fraud/pom.xml" />
+        <option value="$PROJECT_DIR$/security-ms/pom.xml" />
       </set>
     </option>
   </component>
