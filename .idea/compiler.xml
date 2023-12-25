@@ -7,23 +7,24 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="security-ms" />
         <module name="product" />
         <module name="security" />
         <module name="email-notification" />
         <module name="loyalty" />
+        <module name="customer-ms" />
         <module name="eureka-server" />
         <module name="customer" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="order" target="17" />
-      <module name="security" target="17" />
+      <module name="security-ms" target="17" />
       <module name="security-ms (1) (com.microservice_level_up)" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="customer" options="-parameters" />
       <module name="security" options="-parameters" />
       <module name="security-ms" options="-parameters" />
     </option>

@@ -1,4 +1,4 @@
-package com.security.error;
+package com.customer.error;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

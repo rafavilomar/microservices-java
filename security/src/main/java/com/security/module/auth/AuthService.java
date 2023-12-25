@@ -36,7 +36,7 @@ public class AuthService implements UserDetailsService, IAuthService {
     private String jwtSecretKey;
     private static final int ACCESS_TOKEN_EXPIRATION = 60 * 60 * 1000; // 1 hour
     private static final int REFRESH_TOKEN_EXPIRATION = 12 * 60 * 60 * 1000; //12 hours
-    private static final String TOKEN_ISSUER = "ba";
+    private static final String TOKEN_ISSUER = "rafavilomar";
     private static final String TOKEN_PERMISSION_CLAIM = "permissions";
 
     /**

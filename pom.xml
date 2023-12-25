@@ -12,7 +12,7 @@
     <name>microservice-level-up</name>
     <url>http://www.example.com</url>
     <modules>
-        <module>customer</module>
+        <module>customer-ms</module>
         <module>eureka-server</module>
         <module>email-notification</module>
         <module>product</module>
@@ -62,6 +62,10 @@
         <dependency>
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-sleuth</artifactId>
         </dependency>
     </dependencies>
 
