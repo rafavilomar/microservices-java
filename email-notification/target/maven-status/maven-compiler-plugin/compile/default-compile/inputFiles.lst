@@ -1,7 +1,0 @@
-/home/rafavilomar/IdeaProjects/personal/microservice-level-up/email-notification/src/main/java/com/microservice_level_up/EmailNotificationApplication.java
-/home/rafavilomar/IdeaProjects/personal/microservice-level-up/email-notification/src/main/java/com/microservice_level_up/kafka/events/Event.java
-/home/rafavilomar/IdeaProjects/personal/microservice-level-up/email-notification/src/main/java/com/microservice_level_up/dto/NotificationRequest.java
-/home/rafavilomar/IdeaProjects/personal/microservice-level-up/email-notification/src/main/java/com/microservice_level_up/kafka/events/EventType.java
-/home/rafavilomar/IdeaProjects/personal/microservice-level-up/email-notification/src/main/java/com/microservice_level_up/kafka/config/KafkaConsumerConfig.java
-/home/rafavilomar/IdeaProjects/personal/microservice-level-up/email-notification/src/main/java/com/microservice_level_up/dto/CustomerRegistrationRequest.java
-/home/rafavilomar/IdeaProjects/personal/microservice-level-up/email-notification/src/main/java/com/microservice_level_up/service/EmailNotificationService.java

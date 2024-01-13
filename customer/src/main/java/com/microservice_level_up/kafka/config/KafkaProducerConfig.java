@@ -16,10 +16,10 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 import java.util.HashMap;
 import java.util.Map;
 
-@Configuration
+//@Configuration
 public class KafkaProducerConfig {
 
-    @Value("${kafka.bootstrap-address}")
+//    @Value("${kafka.bootstrap-address}")
     private String bootstrapAddress;
 
     @Bean

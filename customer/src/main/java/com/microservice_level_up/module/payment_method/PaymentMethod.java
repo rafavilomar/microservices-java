@@ -44,7 +44,7 @@ public class PaymentMethod {
     @Column
     private LocalDateTime updatedAt;
 
-    @ManyToOne
-    @Column(nullable = false)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "id_customer", nullable = false)
     private Customer customer;
 }

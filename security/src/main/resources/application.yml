@@ -1,12 +1,12 @@
 server:
-  port: 8085
+  port: 8090
 
 spring:
   application:
-    name: product
+    name: security
   datasource:
     username: rafavilomar
-    url: jdbc:postgresql://localhost:5432/product
+    url: jdbc:postgresql://localhost:5432/security
     password: rafavilomar
   jpa:
     properties:
@@ -21,7 +21,7 @@ spring:
 
 #kafka:
 #  bootstrap-address: localhost:29092
-#
+
 eureka:
   client:
     service-url:

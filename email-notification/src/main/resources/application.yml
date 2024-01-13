@@ -7,8 +7,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ${EMAIL_USERNAME}
-    password: ${EMAIL_PASSWORD}
+    username: ${SMTP_EMAIL_USERNAME}
+    password: ${SMTP_EMAIL_PASSWORD}
     properties:
       mail:
         smtp:
@@ -17,8 +17,8 @@ spring:
   zipkin:
     base-url: http://localhost:9411
 
-kafka:
-  bootstrap-address: localhost:29092
+#kafka:
+#  bootstrap-address: localhost:29092
 
 eureka:
   client:

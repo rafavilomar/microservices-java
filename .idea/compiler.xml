@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="product" />
+        <module name="security" />
         <module name="eureka-server" />
         <module name="email-notification" />
         <module name="customer" />
@@ -17,5 +18,10 @@
     <bytecodeTargetLevel>
       <module name="fraud" target="17" />
     </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="security" options="-parameters" />
+    </option>
   </component>
 </project>

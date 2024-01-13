@@ -12,11 +12,11 @@ import org.springframework.stereotype.Service;
 @Service
 public record EmailNotificationService(JavaMailSender mailSender) {
 
-    @KafkaListener(
-            topics = "customers",
-            containerFactory = "kafkaListenerContainerFactory",
-            groupId = "grupo1"
-    )
+//    @KafkaListener(
+//            topics = "customers",
+//            containerFactory = "kafkaListenerContainerFactory",
+//            groupId = "grupo1"
+//    )
     public void sendEmail(Event<?> event) {
         CustomerRegistrationRequest customer = (CustomerRegistrationRequest) event.data();
         log.info("Send email {}", customer);
