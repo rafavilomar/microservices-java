@@ -17,9 +17,11 @@ public class Permission {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
+    @Column
     private Long id;
 
     @Builder.Default
+    @Column
     private boolean active = true;
 
     @Column(nullable = false, unique = true, length = 100)
