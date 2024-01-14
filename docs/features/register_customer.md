@@ -1,4 +1,4 @@
-# Tile
+# Register new customer
 Author: rafavilomar  
 Status: `Developing` *[Draft, Developing, In review, Finished]*  
 Last updated: 2024-01-14

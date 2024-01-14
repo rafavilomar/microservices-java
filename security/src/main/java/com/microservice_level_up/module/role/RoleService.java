@@ -14,6 +14,9 @@ import java.util.List;
 @Service
 public record RoleService(RoleRepository roleRepository, PermissionRepository permissionRepository) implements IRoleService {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Role findRoleById(long idRole) {
         log.info("Find role by ID {}", idRole);
@@ -22,12 +25,18 @@ public record RoleService(RoleRepository roleRepository, PermissionRepository pe
                 .orElseThrow(() -> new EntityNotFoundException("There is not role for ID: " + idRole));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<String> getPermissionCodeListByRole(long idRole) {
         log.info("Get permission codes by role {}", idRole);
         return findRoleById(idRole).getPermissions().stream().map(Permission::getCode).toList();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Role findByName(String name) {
         log.info("Find role by name {}", name);
