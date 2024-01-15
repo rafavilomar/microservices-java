@@ -5,7 +5,7 @@ import com.microservice_level_up.module.customer.dto.CustomerResponse;
 import com.microservice_level_up.module.customer.dto.CustomerUpdateRequest;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 
 @Service

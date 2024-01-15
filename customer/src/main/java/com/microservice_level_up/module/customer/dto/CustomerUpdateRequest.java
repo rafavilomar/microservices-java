@@ -1,6 +1,6 @@
 package com.microservice_level_up.module.customer.dto;
 
-import javax.validation.constraints.*;
+import jakarta.validation.constraints.*;
 
 public record CustomerUpdateRequest(
         @NotNull(message = "id: must not be null")

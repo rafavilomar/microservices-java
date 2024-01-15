@@ -24,7 +24,13 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="common" options="-parameters" />
+      <module name="customer" options="-parameters" />
+      <module name="email-notification" options="-parameters" />
+      <module name="eureka-server" options="-parameters" />
+      <module name="loyalty" options="-parameters" />
       <module name="microservice_level_up (1)" options="-parameters" />
+      <module name="product" options="-parameters" />
       <module name="security" options="-parameters" />
     </option>
   </component>
