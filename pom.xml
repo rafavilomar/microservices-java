@@ -18,6 +18,7 @@
         <module>loyalty</module>
         <module>security</module>
         <module>common</module>
+        <module>customer</module>
     </modules>
 
     <properties>
