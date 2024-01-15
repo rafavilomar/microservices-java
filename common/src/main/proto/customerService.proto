@@ -18,4 +18,5 @@ message CustomerRegistrationRequest {
   string email = 3;
   string country = 4;
   string address = 5;
+  uint64 idUser = 6;
 }
