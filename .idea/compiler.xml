@@ -19,7 +19,6 @@
     <bytecodeTargetLevel>
       <module name="fraud" target="17" />
       <module name="microservice_level_up (1)" target="17" />
-      <module name="security" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
