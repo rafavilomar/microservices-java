@@ -12,12 +12,12 @@
     <name>microservice-level-up</name>
     <url>http://www.example.com</url>
     <modules>
-        <module>customer</module>
         <module>eureka-server</module>
         <module>email-notification</module>
         <module>product</module>
         <module>loyalty</module>
         <module>security</module>
+        <module>common</module>
     </modules>
 
     <properties>

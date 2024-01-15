@@ -7,20 +7,24 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="microservice_level_up (1)" />
         <module name="product" />
         <module name="security" />
-        <module name="eureka-server" />
+        <module name="common" />
         <module name="email-notification" />
-        <module name="customer" />
         <module name="loyalty" />
+        <module name="eureka-server" />
+        <module name="customer" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="fraud" target="17" />
+      <module name="security" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="microservice_level_up (1)" options="-parameters" />
       <module name="security" options="-parameters" />
     </option>
   </component>
