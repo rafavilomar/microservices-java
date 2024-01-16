@@ -1,7 +1,7 @@
 # Register new customer
 Author: rafavilomar  
 Status: `Developing` *[Draft, Developing, In review, Finished]*  
-Last updated: 2024-01-14
+Last updated: 2024-01-16
 
 ## Contents
 - Goals
@@ -69,5 +69,88 @@ public void registerCustomer(RegisterCustomerRequest newUser) {
   }
 }
 ```
+
 ### Call customer registration
+I could use REST with Eureka and Feign Clients to handle microservices communications.
+But I choose gRPC to have a higher performance, avoid controllers and endpoints for internal communication, 
+and also handle permissions validation just for REST services.
+
+To make this possible is necessary to create the gRPC server **(Customer)** and the client **(Security)**, just like this:   
+![gRPC communication](..%2Fimages%2Fgrpc_communication.png)
+
+#### Common module
+gRPC uses proto files to define services, request and response structures. The server and clients must have access to those 
+files, so it was necessary to create a new module to share common files like this:     
+- **Common module**   
+![Common module](..%2Fimages%2Fcommon_module.png)     
+- **Proto file**
+```protobuf
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package common.grpc.common;
+
+option java_multiple_files = true;
+
+service CustomerService {
+
+  rpc register(CustomerRegistrationRequest) returns (google.protobuf.Empty);
+
+}
+
+message CustomerRegistrationRequest {
+  string firstName = 1;
+  string lastName = 2;
+  string email = 3;
+  string country = 4;
+  string address = 5;
+  uint64 idUser = 6;
+}
+```  
+
+Therefore, Customer and Security need to include common module in their dependencies.
+
+#### Server configuration
+Server side, with gRPC, only needs to define the service and port for gRPC. gRPC services can be defined like this:    
+```java
+@GrpcService
+public class CustomerServiceGrpc extends common.grpc.common.CustomerServiceGrpc.CustomerServiceImplBase {
+
+    private final ICustomerService customerService;
+
+    @Override
+    public void register(CustomerRegistrationRequest request, StreamObserver<Empty> responseObserver) {
+        customerService.register(com.microservice_level_up.module.customer.dto.CustomerRegistrationRequest.builder()
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
+                .email(request.getEmail())
+                .address(request.getAddress())
+                .country(request.getCountry())
+                .idUser(request.getIdUser())
+                .build());
+
+        responseObserver.onNext(null);
+        responseObserver.onCompleted();
+    }
+}
+```
+
+#### Client configuration
+Also, in Security, it's necessary to add the client configuration. As a Bean, this client can be injected in any part of the system.
+```java
+@Configuration
+public class GrpcClientConfiguration {
+
+    @Bean
+    CustomerServiceGrpc.CustomerServiceBlockingStub customerServiceBlockingStub() {
+        Channel channel = ManagedChannelBuilder.forAddress("localhost", 8081)
+                .usePlaintext()
+                .build();
+
+        return CustomerServiceGrpc.newBlockingStub(channel);
+    }
+}
+```
+
 ### Send email

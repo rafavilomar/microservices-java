@@ -1,6 +1,5 @@
 package com.microservice_level_up.module.customer;
 
-import com.microservice_level_up.module.customer.dto.CustomerRegistrationRequest;
 import com.microservice_level_up.module.customer.dto.CustomerResponse;
 import com.microservice_level_up.module.customer.dto.CustomerUpdateRequest;
 import com.microservice_level_up.response.BaseResponse;
@@ -26,19 +25,6 @@ public record CustomerController(ICustomerService service) {
                 customer,
                 HttpStatus.OK,
                 "Customer found"
-        );
-    }
-
-    @PostMapping
-    public ResponseEntity<BaseResponse<Long>> registerCustomer(@Valid @RequestBody CustomerRegistrationRequest request) {
-        log.info("New customer registration {}", request);
-        long customerId = service.register(request);
-
-        BaseResponse<Long> response = new BaseResponse<>();
-        return response.buildResponseEntity(
-                customerId,
-                HttpStatus.CREATED,
-                "Customer registered successfully"
         );
     }
 

@@ -22,6 +22,10 @@ spring:
 #kafka:
 #  bootstrap-address: localhost:29092
 
+grpc:
+  server:
+    port: 8081
+
 eureka:
   client:
     service-url:

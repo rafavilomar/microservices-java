@@ -5,10 +5,12 @@ import com.microservice_level_up.module.customer.ICustomerService;
 import common.grpc.common.CustomerRegistrationRequest;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
-import org.lognet.springboot.grpc.GRpcService;
+import net.devh.boot.grpc.server.service.GrpcService;
+import org.springframework.stereotype.Service;
 
-@GRpcService
 @RequiredArgsConstructor
+@Service
+@GrpcService
 public class CustomerServiceGrpc extends common.grpc.common.CustomerServiceGrpc.CustomerServiceImplBase {
 
     private final ICustomerService customerService;
@@ -24,6 +26,7 @@ public class CustomerServiceGrpc extends common.grpc.common.CustomerServiceGrpc.
                 .idUser(request.getIdUser())
                 .build());
 
+        responseObserver.onNext(null);
         responseObserver.onCompleted();
     }
 }

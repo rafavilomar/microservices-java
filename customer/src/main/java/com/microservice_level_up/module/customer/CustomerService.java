@@ -3,16 +3,19 @@ package com.microservice_level_up.module.customer;
 import com.microservice_level_up.module.customer.dto.CustomerRegistrationRequest;
 import com.microservice_level_up.module.customer.dto.CustomerResponse;
 import com.microservice_level_up.module.customer.dto.CustomerUpdateRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 
+@Slf4j
 @Service
 public record CustomerService(CustomerRepository repository) implements ICustomerService {
 
     @Override
     public long register(CustomerRegistrationRequest request) {
+        log.info("Register new customer {}", request);
         Customer customer = Customer.builder()
                 .firstName(request.firstName())
                 .lastName(request.lastName())

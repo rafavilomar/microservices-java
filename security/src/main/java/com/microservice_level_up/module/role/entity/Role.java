@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static jakarta.persistence.FetchType.EAGER;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Builder
@@ -30,10 +29,6 @@ public class Role {
     @Column
     private boolean active = true;
 
-    @OneToOne(optional = false, fetch = EAGER)
-    @JoinColumn(nullable = false)
-    private User updatedUser;
-
     @Column(nullable = false, unique = true, length = 100)
     private String name;
 
@@ -47,10 +42,6 @@ public class Role {
             joinColumns = @JoinColumn(name = "id_role"),
             inverseJoinColumns = @JoinColumn(name = "id_permission"))
     private List<Permission> permissions = new ArrayList<>();
-
-    @OneToOne(optional = false, fetch = EAGER)
-    @JoinColumn(nullable = false)
-    private User createdUser;
 
     @Builder.Default
     @OneToMany(mappedBy = "role")

@@ -552,3 +552,15 @@ Qsecurity/src/test/java/com/microservice_level_up/module/role/RoleServiceTest.ja
 Nsecurity/src/main/java/com/microservice_level_up/module/user/IUserService.java,1/1/117f6c62991811943b4c5f2fb92fce9c3f38f681
 ë
 asecurity/src/main/java/com/microservice_level_up/module/role/repository/PermissionRepository.java,7/b/7bd38adfd5c018f1eb26550e95762f973f21aaa4
+Ñ
+Tsecurity/src/main/java/com/microservice_level_up/config/GrpcClientConfiguration.java,3/4/344390bd342c727e3b3d22a7724ac1c839b3ab2c
+Ä
+Psecurity/src/main/java/com/microservice_level_up/module/user/UserController.java,6/9/69b98a09a0e9e2b1365d77683902a86cea85a8b7
+Ñ
+Tsecurity/src/main/java/com/microservice_level_up/security/SecurityConfiguration.java,1/1/11cd7a42a74a28b70370f08ce5cbd34efcf1fa3e
+ë
+asecurity/src/main/java/com/microservice_level_up/security/filters/CustomAuthenticationFilter.java,9/d/9d06ed27bb3ee58b77e21389358190f5d8b6bb22
+ê
+`security/src/main/java/com/microservice_level_up/security/filters/CustomAuthorizationFilter.java,2/2/220c08e7774c76225755f896e2e9210f0941ab5f
+Ç
+Rcustomer/src/test/java/com/microservice_level_up/grpc/CustomerServiceGrpcTest.java,1/4/14f237545b095fc1fc44aa1471a744243bafeabd
