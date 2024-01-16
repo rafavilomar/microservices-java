@@ -16,7 +16,8 @@ import org.springframework.stereotype.Service;
 public record UserService(
         UserRepository userRepository,
         IRoleService roleService,
-        BCryptPasswordEncoder passwordEncoder) implements IUserService {
+        BCryptPasswordEncoder passwordEncoder,
+        CustomerServiceGrpc.CustomerServiceBlockingStub customerServiceBlockingStub) implements IUserService {
 
     /**
      * {@inheritDoc}
@@ -43,7 +44,7 @@ public record UserService(
                     .setIdUser(user.getId())
                     .setAddress(newUser.address())
                     .setCountry(newUser.country())
-                    .build()) ;
+                    .build());
 
         } catch (Exception exception) {
             log.error("Error creating customer: {}", exception.getMessage());

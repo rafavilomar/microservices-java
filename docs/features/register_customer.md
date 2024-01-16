@@ -10,8 +10,7 @@ Last updated: 2024-01-16
 - Detailed Design
   - Solution 1
     - Roles and permissions structure
-    - Spring Security implementation
-    - Permissions validation
+    - Allow all requests for Spring Security
     - Save user
     - Call customer registration
     - Send email
@@ -24,12 +23,13 @@ Last updated: 2024-01-16
 ## Objective
 Lately, I've been using Eureka to handle microservices communication and centralizing security stuff in just one microservice.
 
-The principal goal is to distribuite permissions validations across all microservices and use gRPC to handle a faster instant communication between microservices, and also use Kafka for asynchronously event driven communication with email services.
+The principal goal is to distribuite permissions validations across all microservices and use gRPC to handle a faster 
+instant communication between microservices, and also use Kafka for asynchronously event driven communication with email services.
 
 ## Goals
-- Implement Spring Security filters.
+- Allow request with Spring Security.
 - Implement gRPC to communicate Security with Customer.
-- Implement Kafka to communicate Security with Email Notification
+- Implement Kafka to communicate Security with Email Notification.
 
 ## Background
 
@@ -39,12 +39,42 @@ The principal goal is to distribuite permissions validations across all microser
 ## Solution 1
 
 ### Roles and permissions structure
-Roles consist of a list of permissions that define user's access to the system configured in controllers. In this way roles are totally flexible to permissions changes.
+Roles consist of a list of permissions that define user's access to the system configured in controllers. In this way 
+roles are totally flexible to permissions changes.   
 Each user can only have one role assigned.   
 ![Role Structure](..%2Fimages%2Frole_structure.png)
 
-### Spring Security implementation
-### Permissions validation
+### Allow all requests for Spring Security
+Spring Security block all access by default. To avoid that I need to use this configuration to permit request for all services.
+This is a temporal solution, I'll implement filters and permissions validation soon.    
+
+```java
+@Configuration
+@EnableWebSecurity
+@EnableMethodSecurity
+public class SecurityConfiguration {
+
+    @Bean
+    protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        return http
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> {
+                    CorsConfigurationSource source = request -> {
+                        CorsConfiguration configuration = new CorsConfiguration();
+                        configuration.setAllowedOrigins(List.of(CorsConfiguration.ALL));
+                        configuration.setAllowedMethods(List.of(CorsConfiguration.ALL));
+                        configuration.setAllowedHeaders(List.of(CorsConfiguration.ALL));
+                        return configuration;
+                    };
+                    cors.configurationSource(source);
+                })
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+                .build();
+    }
+}
+```
+
 ### Save user
 There is only one entry point to create a new customer validating duplicated email and customer role existence.    
 I'm using `BCryptPasswordEncoder` to encode and secure password before save it.
@@ -154,3 +184,12 @@ public class GrpcClientConfiguration {
 ```
 
 ### Send email
+
+
+## Consideration
+It was necessary to recreate Customer and Security modules because of compilation and integration errors. They weren't 
+recreated at all essentially, but just inherent core configuration and dependencies from principal pom.xml file, and also 
+change groupId and artifactId for module.
+
+On the other hand, at this point Spring Security dependencies are added but not really implemented. Security is the only 
+module with those dependencies, and is not really protected because there is no permission validations.

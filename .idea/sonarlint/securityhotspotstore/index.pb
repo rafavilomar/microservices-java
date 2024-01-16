@@ -564,3 +564,7 @@ asecurity/src/main/java/com/microservice_level_up/security/filters/CustomAuthent
 `security/src/main/java/com/microservice_level_up/security/filters/CustomAuthorizationFilter.java,2/2/220c08e7774c76225755f896e2e9210f0941ab5f
 ‚
 Rcustomer/src/test/java/com/microservice_level_up/grpc/CustomerServiceGrpcTest.java,1/4/14f237545b095fc1fc44aa1471a744243bafeabd
+~
+Nsecurity/src/main/java/com/microservice_level_up/module/auth/IAuthService.java,1/5/1510184f5e2bace442e3422e973d18d9f1947fd0
+‚
+Rsecurity/src/main/java/com/microservice_level_up/config/SecurityConfiguration.java,0/2/028375b217d7f93df914b76c83f1514efaebae91
