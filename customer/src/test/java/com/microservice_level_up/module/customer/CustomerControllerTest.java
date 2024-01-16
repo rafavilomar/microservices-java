@@ -1,6 +1,5 @@
 package com.microservice_level_up.module.customer;
 
-import com.microservice_level_up.module.customer.dto.CustomerRegistrationRequest;
 import com.microservice_level_up.module.customer.dto.CustomerResponse;
 import com.microservice_level_up.module.customer.dto.CustomerUpdateRequest;
 import com.microservice_level_up.response.BaseResponse;
