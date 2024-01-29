@@ -12,6 +12,9 @@
       <item index="7" class="java.lang.String" itemvalue="org.springframework.web.bind.annotation.PutMapping" />
       <item index="8" class="java.lang.String" itemvalue="org.springframework.web.bind.annotation.RestController" />
     </list>
+    <writeAnnotations>
+      <writeAnnotation name="org.springframework.beans.factory.annotation.Value" />
+    </writeAnnotations>
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="MavenProjectsManager">

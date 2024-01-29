@@ -4,7 +4,6 @@ import com.microservice_level_up.module.customer.dto.CustomerResponse;
 import com.microservice_level_up.module.customer.dto.CustomerUpdateRequest;
 import com.microservice_level_up.response.BaseResponse;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -28,7 +27,6 @@ class CustomerControllerTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Disabled
     @Test
     void getById() {
         long id = 1L;
@@ -58,37 +56,6 @@ class CustomerControllerTest {
         verifyNoMoreInteractions(service);
     }
 
-//    @Disabled
-//    @Test
-//    void registerCustomer() {
-//        long customerId = 1L;
-//        CustomerRegistrationRequest request = new CustomerRegistrationRequest(
-//                "David",
-//                "Peterson",
-//                "david@gmail.com",
-//                "USA",
-//                "Address",
-//                2L
-//        );
-//
-//        when(service.register(request)).thenReturn(customerId);
-//
-////        ResponseEntity<BaseResponse<Long>> actualResponse = controller.registerCustomer(request);
-//
-//        assertNotNull(actualResponse.getBody());
-//        assertAll(
-//                "Customer registration controller response",
-//                () -> assertEquals(HttpStatus.CREATED, actualResponse.getStatusCode()),
-//                () -> assertNotNull(actualResponse.getBody().getPayload()),
-//                () -> assertEquals(customerId, actualResponse.getBody().getPayload()),
-//                () -> assertEquals("Customer registered successfully", actualResponse.getBody().getMessage())
-//        );
-//
-//        verify(service, times(1)).register(request);
-//        verifyNoMoreInteractions(service);
-//    }
-
-    @Disabled
     @Test
     void updateCustomer() {
         long customerId = 1L;
