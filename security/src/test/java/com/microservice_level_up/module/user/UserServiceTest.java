@@ -2,16 +2,25 @@ package com.microservice_level_up.module.user;
 
 import com.microservice_level_up.error.http_exeption.BadRequestException;
 import com.microservice_level_up.error.http_exeption.InternalErrorException;
+import com.microservice_level_up.kafka.events.Event;
+import com.microservice_level_up.kafka.events.EventType;
 import com.microservice_level_up.module.role.IRoleService;
 import com.microservice_level_up.module.role.entity.Role;
 import com.microservice_level_up.module.user.dto.RegisterCustomerRequest;
+import com.microservice_level_up.notification.CustomerCreatedNotification;
+import common.grpc.common.CustomerRegistrationRequest;
+import common.grpc.common.CustomerServiceGrpc;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -28,6 +37,10 @@ class UserServiceTest {
     private IRoleService roleService;
     @Mock
     private BCryptPasswordEncoder passwordEncoder;
+    @Mock
+    private CustomerServiceGrpc.CustomerServiceBlockingStub customerServiceBlockingStub;
+    @Mock
+    private KafkaTemplate<String, Event<?>> producer;
 
     @BeforeEach
     void setUp() {
@@ -58,7 +71,6 @@ class UserServiceTest {
         when(passwordEncoder.encode(newUser.password())).thenReturn(passwordEncoded);
         when(roleService.findByName(roleName)).thenReturn(customerRole);
         when(userRepository.save(any(User.class))).thenReturn(user);
-        //todo: add customer and email notification calls
 
         underTest.registerCustomer(newUser);
 
@@ -66,7 +78,16 @@ class UserServiceTest {
         verify(userRepository, times(1)).existsByEmail(newUser.email());
         verify(roleService, times(1)).findByName(roleName);
         verify(userRepository, times(1)).save(any(User.class));
-        verifyNoMoreInteractions(userRepository, roleService, passwordEncoder);
+        verify(customerServiceBlockingStub, times(1)).register(CustomerRegistrationRequest.newBuilder()
+                .setFirstName(newUser.firstName())
+                .setLastName(newUser.lastName())
+                .setEmail(newUser.email())
+                .setIdUser(user.getId())
+                .setAddress(newUser.address())
+                .setCountry(newUser.country())
+                .build());
+        verify(producer, times(1)).send(eq("customer_created"), any(Event.class));
+        verifyNoMoreInteractions(userRepository, roleService, passwordEncoder, customerServiceBlockingStub, producer);
     }
 
     @Test

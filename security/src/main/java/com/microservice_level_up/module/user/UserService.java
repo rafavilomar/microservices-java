@@ -2,14 +2,21 @@ package com.microservice_level_up.module.user;
 
 import com.microservice_level_up.error.http_exeption.BadRequestException;
 import com.microservice_level_up.error.http_exeption.InternalErrorException;
+import com.microservice_level_up.kafka.events.Event;
+import com.microservice_level_up.kafka.events.EventType;
 import com.microservice_level_up.module.role.IRoleService;
 import com.microservice_level_up.module.role.entity.Role;
 import com.microservice_level_up.module.user.dto.RegisterCustomerRequest;
+import com.microservice_level_up.notification.CustomerCreatedNotification;
 import common.grpc.common.CustomerRegistrationRequest;
 import common.grpc.common.CustomerServiceGrpc;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -17,7 +24,8 @@ public record UserService(
         UserRepository userRepository,
         IRoleService roleService,
         BCryptPasswordEncoder passwordEncoder,
-        CustomerServiceGrpc.CustomerServiceBlockingStub customerServiceBlockingStub) implements IUserService {
+        CustomerServiceGrpc.CustomerServiceBlockingStub customerServiceBlockingStub,
+        KafkaTemplate<String, Event<?>> producer) implements IUserService {
 
     /**
      * {@inheritDoc}
@@ -46,9 +54,22 @@ public record UserService(
                     .setCountry(newUser.country())
                     .build());
 
+            publishCustomer(newUser);
+
         } catch (Exception exception) {
             log.error("Error creating customer: {}", exception.getMessage());
             throw new InternalErrorException("Can't register in this moment. Please try later");
         }
+    }
+
+    private void publishCustomer(RegisterCustomerRequest newUser) {
+        Event<CustomerCreatedNotification> event = new Event<>(
+                UUID.randomUUID().toString(),
+                LocalDateTime.now(),
+                EventType.CREATED,
+                new CustomerCreatedNotification(newUser.firstName(), newUser.lastName(), newUser.email())
+        );
+        String topicCustomer = "customer_created";
+        producer.send(topicCustomer, event);
     }
 }

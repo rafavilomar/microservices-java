@@ -1,14 +1,15 @@
 # Register new customer
 Author: rafavilomar  
-Status: `Developing` *[Draft, Developing, In review, Finished]*  
-Last updated: 2024-01-16
+Status: `In review` *[Draft, Developing, In review, Finished]*  
+Last updated: 2024-01-29
 
 ## Contents
+- Links
+- Objective
 - Goals
-- Background
 - Overview
 - Detailed Design
-  - Solution 1
+  - Solution
     - Roles and permissions structure
     - Allow all requests for Spring Security
     - Save user
@@ -31,12 +32,10 @@ instant communication between microservices, and also use Kafka for asynchronous
 - Implement gRPC to communicate Security with Customer.
 - Implement Kafka to communicate Security with Email Notification.
 
-## Background
-
 ## Overview
 ![Customer register flow](..%2Fimages%2Fcustomer_register_flow.png)
 
-## Solution 1
+## Solution
 
 ### Roles and permissions structure
 Roles consist of a list of permissions that define user's access to the system configured in controllers. In this way 
@@ -184,9 +183,135 @@ public class GrpcClientConfiguration {
 ```
 
 ### Send email
+Kafka seems a perfect option to handle all email notifications with users. Email Notification module will be called just 
+for specific scenarios and is not necessary to an instant execution, therefore all of this notifications can be sent 
+synchronously.
 
+![Kafka communication](..%2Fimages%2Fkafka_communication.png)
 
-## Consideration
+This feature use a topic called `customer_created` to handle their kafka events:
+
+#### Security
+
+- **Producer config**
+```java
+@Configuration
+@RequiredArgsConstructor
+public class KafkaProducerConfig {
+    @Value("${kafka.bootstrap-address}")
+    private String bootstrapAddress;
+
+    @Bean
+    public ProducerFactory<String, Event<?>> producerFactory() {
+        Map<String, Object> configProps = new HashMap<>();
+
+        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
+        configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+
+        return new DefaultKafkaProducerFactory<>(configProps);
+    }
+
+    @Bean
+    public KafkaTemplate<String, Event<?>> kafkaTemplate() {
+        return new KafkaTemplate<>(producerFactory());
+    }
+
+    @Bean
+    public NewTopic topic() {
+        return new NewTopic("customer_created", 1, (short) 1);
+    }
+}
+```
+
+- **Publish service**
+```java
+@Slf4j
+@Service
+public record UserService(
+        // other injections...
+        KafkaTemplate<String, Event<?>> producer) implements IUserService {
+    
+    // Other functions...
+    
+    private void publishCustomer(RegisterCustomerRequest newUser) {
+        Event<CustomerCreatedNotification> event = new Event<>(
+            UUID.randomUUID().toString(),
+            LocalDateTime.now(),
+            EventType.CREATED,
+            new CustomerCreatedNotification(newUser.firstName(), newUser.lastName(), newUser.email())
+        );
+        String topicCustomer = "customer_created";
+        producer.send(topicCustomer, event);
+    }
+}
+```
+
+#### Email Notification
+
+- **Consumer config**
+```java
+@Configuration
+@EnableKafka
+@RequiredArgsConstructor
+public class KafkaConsumerConfig {
+    @Value("${kafka.bootstrap-address}")
+    private String bootstrapAddress;
+
+    @Bean
+    public ConsumerFactory<String, Event<?>> consumerFactory() {
+        Map<String, Object> props = new HashMap<>();
+        props.put(
+                ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
+                bootstrapAddress);
+
+        final JsonDeserializer<Event<?>> jsonDeserializer = new JsonDeserializer<>();
+        jsonDeserializer.addTrustedPackages("*");
+
+        return new DefaultKafkaConsumerFactory<>(
+                props,
+                new StringDeserializer(),
+                new ErrorHandlingDeserializer<>(jsonDeserializer));
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, Event<?>> kafkaListenerContainerFactory() {
+
+        ConcurrentKafkaListenerContainerFactory<String, Event<?>> factory =
+                new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(consumerFactory());
+        return factory;
+    }
+}
+```
+
+- **Service listening**
+```java
+@Slf4j
+@Service
+public record EmailNotificationService(JavaMailSender mailSender) {
+
+    @KafkaListener(
+            topics = "customer_created",
+            containerFactory = "kafkaListenerContainerFactory",
+            groupId = "grupo1"
+    )
+    public void sendEmail(Event<?> event) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        CustomerCreatedNotification customer = objectMapper.convertValue(event.data(), CustomerCreatedNotification.class);
+        log.info("Send email {}", customer);
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(customer.email());
+        message.setSubject("Registration");
+        message.setText("Welcome " + customer.firstName() + " " + customer.lastName());
+
+        mailSender.send(message);
+    }
+}
+```
+
+## Considerations
 It was necessary to recreate Customer and Security modules because of compilation and integration errors. They weren't 
 recreated at all essentially, but just inherent core configuration and dependencies from principal pom.xml file, and also 
 change groupId and artifactId for module.

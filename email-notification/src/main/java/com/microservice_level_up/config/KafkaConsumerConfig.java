@@ -1,6 +1,7 @@
-package com.microservice_level_up.kafka.config;
+package com.microservice_level_up.config;
 
 import com.microservice_level_up.kafka.events.Event;
+import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,33 +11,33 @@ import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
+import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
-import org.springframework.kafka.support.serializer.JsonSerializer;
 
 import java.util.HashMap;
 import java.util.Map;
 
-//@Configuration
-//@EnableKafka
+@Configuration
+@EnableKafka
+@RequiredArgsConstructor
 public class KafkaConsumerConfig {
-//    @Value("${kafka.bootstrap-address}")
+    @Value("${kafka.bootstrap-address}")
     private String bootstrapAddress;
 
     @Bean
     public ConsumerFactory<String, Event<?>> consumerFactory() {
-        Map<String, String> props = new HashMap<>();
+        Map<String, Object> props = new HashMap<>();
         props.put(
                 ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
                 bootstrapAddress);
-        props.put(JsonSerializer.TYPE_MAPPINGS, "com.microservice_level_up:com.microservice_level_up.kafka.events.Event");
 
-        final JsonDeserializer<Event<?>> jsonDeserializer = new JsonDeserializer<>(Event.class);
-        jsonDeserializer.addTrustedPackages("com.microservice_level_up.kafka.events");
+        final JsonDeserializer<Event<?>> jsonDeserializer = new JsonDeserializer<>();
+        jsonDeserializer.addTrustedPackages("*");
 
-        return new DefaultKafkaConsumerFactory(
+        return new DefaultKafkaConsumerFactory<>(
                 props,
                 new StringDeserializer(),
-                jsonDeserializer);
+                new ErrorHandlingDeserializer<>(jsonDeserializer));
     }
 
     @Bean
