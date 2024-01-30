@@ -1,6 +1,6 @@
 # Update product microservice
 Author: rafavilomar  
-Status: `Developing` *[Draft, Developing, In review, Finished]*  
+Status: `In review` *[Draft, Developing, In review, Finished]*  
 Last updated: 2024-01-29
 
 ## Contents
@@ -54,5 +54,3 @@ public ResponseEntity<BaseResponse<Page<ProductResponse>>> filter(@RequestBody F
     );
 }
 ```
-
-## Considerations
