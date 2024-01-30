@@ -13,7 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -77,7 +77,7 @@ public record ProductController(IProductService service) {
         );
     }
 
-    @GetMapping("/filter")
+    @PostMapping("/filter")
     public ResponseEntity<BaseResponse<Page<ProductResponse>>> filter(@RequestBody FilterProductRequest request) {
 
         log.info("Filter products {}", request);

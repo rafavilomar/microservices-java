@@ -8,13 +8,12 @@ Last updated: 2024-01-29
 - Objective
 - Goals
 - Overview
-- Detailed Design
-  - Solution
-    - Roles and permissions structure
-    - Allow all requests for Spring Security
-    - Save user
-    - Call customer registration
-    - Send email
+- Solution
+  - Roles and permissions structure
+  - Allow all requests for Spring Security
+  - Save user
+  - Call customer registration
+  - Send email
 - Considerations
 
 ## Links

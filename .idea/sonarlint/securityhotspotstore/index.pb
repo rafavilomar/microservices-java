@@ -580,3 +580,7 @@ v
 Fcommon/src/main/java/com/microservice_level_up/kafka/events/Event.java,4/6/46b2fb008f8cc6298810939a4d9f0e8fa65fd341
 z
 Jcommon/src/main/java/com/microservice_level_up/kafka/events/EventType.java,e/9/e940a945d2b9f35f9ca3ca655cedd142ecceac69
+W
+'docs/chores/product_microservice_update,7/4/74bc249266c01d05c14e04463a6334441bc91a3f
+Z
+*docs/chores/product_microservice_update.md,e/9/e95525e03948dc9d6275f5d7969402ba42bb7dca
