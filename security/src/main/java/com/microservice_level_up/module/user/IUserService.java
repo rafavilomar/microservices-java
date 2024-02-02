@@ -10,10 +10,16 @@ public interface IUserService {
     /**
      * Create a new user as a customer.
      * @param newUser New user's information.
-     * @throws BadRequestException If there is another user for the given email.
-     * @throws InternalErrorException If there is any error consulting customer role, creating customer or sending email.
+     * @throws InternalErrorException If there is any error creating customer or sending email.
+     * @see #registerUser(RegisterUserRequest)
      */
     void registerCustomer(RegisterCustomerRequest newUser);
 
-    void registerUser(RegisterUserRequest newUser);
+    /**
+     * Create a new internal user.
+     * @param newUser New user's information.
+     * @throws BadRequestException If there is another user for the given email.
+     * @throws jakarta.persistence.EntityNotFoundException If the given role name doesn't exist.
+     */
+    User registerUser(RegisterUserRequest newUser);
 }

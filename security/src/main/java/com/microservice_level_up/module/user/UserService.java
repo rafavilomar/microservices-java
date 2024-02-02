@@ -34,18 +34,13 @@ public record UserService(
     @Override
     public void registerCustomer(RegisterCustomerRequest newUser) {
         log.info("Register a new customer {}", newUser.email());
-        if (userRepository.existsByEmail(newUser.email()))
-            throw new BadRequestException("Seems this email is already registered. Try login!");
 
+        User user = registerUser(RegisterUserRequest.builder()
+                .roleName("Customer")
+                .email(newUser.email())
+                .password(newUser.password())
+                .build());
         try {
-            Role customerRole = roleService.findByName("Customer");
-            User user = User.builder()
-                    .email(newUser.email())
-                    .password(passwordEncoder.encode(newUser.password()))
-                    .role(customerRole)
-                    .build();
-            user = userRepository.save(user);
-
             customerServiceBlockingStub.register(CustomerRegistrationRequest.newBuilder()
                     .setFirstName(newUser.firstName())
                     .setLastName(newUser.lastName())
@@ -67,8 +62,17 @@ public record UserService(
      * {@inheritDoc}
      */
     @Override
-    public void registerUser(RegisterUserRequest newUser) {
+    public User registerUser(RegisterUserRequest newUser) {
+        log.info("Register new user {}", newUser);
+        if (userRepository.existsByEmail(newUser.email()))
+            throw new BadRequestException("Seems this email is already registered. Try login!");
 
+        Role role = roleService.findByName(newUser.roleName());
+        return userRepository.save(User.builder()
+                .email(newUser.email())
+                .password(passwordEncoder.encode(newUser.password()))
+                .role(role)
+                .build());
     }
 
     private void publishCustomer(RegisterCustomerRequest newUser) {

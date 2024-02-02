@@ -121,11 +121,7 @@ class UserServiceTest {
 
         when(roleService.findByName(newUser.roleName())).thenThrow(EntityNotFoundException.class);
 
-        InternalErrorException exception = assertThrows(
-                InternalErrorException.class,
-                () -> underTest.registerUser(newUser));
-
-        assertEquals("Can't register in this moment. Please try later", exception.getMessage());
+        assertThrows(EntityNotFoundException.class, () -> underTest.registerUser(newUser));
 
         verify(userRepository, times(1)).existsByEmail(newUser.email());
         verify(roleService, times(1)).findByName(newUser.roleName());
