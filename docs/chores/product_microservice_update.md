@@ -5,7 +5,6 @@ Last updated: 2024-01-29
 
 ## Contents
 - Objective
-- Overview
 - Solution
   - Use jakarta library
   - Use post http method to filter products

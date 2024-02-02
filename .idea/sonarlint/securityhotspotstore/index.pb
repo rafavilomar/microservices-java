@@ -568,3 +568,5 @@ z
 Jcommon/src/main/java/com/microservice_level_up/kafka/events/EventType.java,e/9/e940a945d2b9f35f9ca3ca655cedd142ecceac69
 Z
 *docs/chores/product_microservice_update.md,e/9/e95525e03948dc9d6275f5d7969402ba42bb7dca
+R
+"docs/features/create_admin_user.md,2/3/23a0d041fd7db1ce2ebf1cd00bdc38eb120ca124
