@@ -7,6 +7,7 @@ import com.microservice_level_up.kafka.events.EventType;
 import com.microservice_level_up.module.role.IRoleService;
 import com.microservice_level_up.module.role.entity.Role;
 import com.microservice_level_up.module.user.dto.RegisterCustomerRequest;
+import com.microservice_level_up.module.user.dto.RegisterUserRequest;
 import com.microservice_level_up.notification.CustomerCreatedNotification;
 import common.grpc.common.CustomerRegistrationRequest;
 import common.grpc.common.CustomerServiceGrpc;
@@ -33,18 +34,13 @@ public record UserService(
     @Override
     public void registerCustomer(RegisterCustomerRequest newUser) {
         log.info("Register a new customer {}", newUser.email());
-        if (userRepository.existsByEmail(newUser.email()))
-            throw new BadRequestException("Seems this email is already registered. Try login!");
 
+        User user = registerUser(RegisterUserRequest.builder()
+                .roleName("Customer")
+                .email(newUser.email())
+                .password(newUser.password())
+                .build());
         try {
-            Role customerRole = roleService.findByName("Customer");
-            User user = User.builder()
-                    .email(newUser.email())
-                    .password(passwordEncoder.encode(newUser.password()))
-                    .role(customerRole)
-                    .build();
-            user = userRepository.save(user);
-
             customerServiceBlockingStub.register(CustomerRegistrationRequest.newBuilder()
                     .setFirstName(newUser.firstName())
                     .setLastName(newUser.lastName())
@@ -60,6 +56,23 @@ public record UserService(
             log.error("Error creating customer: {}", exception.getMessage());
             throw new InternalErrorException("Can't register in this moment. Please try later");
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public User registerUser(RegisterUserRequest newUser) {
+        log.info("Register new user {}", newUser);
+        if (userRepository.existsByEmail(newUser.email()))
+            throw new BadRequestException("Seems this email is already registered. Try login!");
+
+        Role role = roleService.findByName(newUser.roleName());
+        return userRepository.save(User.builder()
+                .email(newUser.email())
+                .password(passwordEncoder.encode(newUser.password()))
+                .role(role)
+                .build());
     }
 
     private void publishCustomer(RegisterCustomerRequest newUser) {

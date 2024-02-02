@@ -1,6 +1,7 @@
 package com.microservice_level_up.module.user;
 
 import com.microservice_level_up.module.user.dto.RegisterCustomerRequest;
+import com.microservice_level_up.module.user.dto.RegisterUserRequest;
 import com.microservice_level_up.response.BaseResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,18 @@ import org.springframework.web.bind.annotation.RestController;
 public record UserController(IUserService userService) {
 
     @PostMapping()
+    public ResponseEntity<BaseResponse<Void>> registerUser(@Valid @RequestBody RegisterUserRequest request) {
+        userService.registerUser(request);
+
+        BaseResponse<Void> response = new BaseResponse<>();
+        return response.buildResponseEntity(
+                null,
+                HttpStatus.CREATED,
+                "User registered successfully"
+        );
+    }
+
+    @PostMapping("/customer")
     public ResponseEntity<BaseResponse<Void>> registerCustomer(@Valid @RequestBody RegisterCustomerRequest request) {
         userService.registerCustomer(request);
 
