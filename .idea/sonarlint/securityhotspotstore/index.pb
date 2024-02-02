@@ -117,12 +117,8 @@ iproduct/src/main/java/com/microservice_level_up/error/not_readable/NotReadableE
 ecustomer/src/main/java/com/microservice_level_up/error/not_readable/NotReadableExceptionResponse.java,5/7/57fd93842b8c55457c9f48dfefeb955ceb860606
 å
 \customer/src/test/java/com/microservice_level_up/module/customer/CustomerControllerTest.java,f/0/f0c740c02c2b9289785ab4f05b7b870e2d3c63c3
-Ç
-Remail-notification/src/main/java/com/microservice_level_up/kafka/events/Event.java,d/1/d114e3a074aab96172d8ac750a6e5d9f66b2a7a7
 ö
 jcustomer/src/main/java/com/microservice_level_up/error/not_readable/NotReadableExceptionHandlerAdvice.java,6/8/681a1d1c3eb0b32c3098b237b6b68f2c9d0a9876
-Ü
-Vemail-notification/src/main/java/com/microservice_level_up/kafka/events/EventType.java,a/f/af3835aa9ae453f97a6948f987556c0753f237c0
 ¥
 Écustomer/src/main/java/com/microservice_level_up/error/invalid_expiration_date/InvalidCardExpirationDateExceptionHandlerAdvice.java,d/5/d51cbf2e4a72aa758ecb4f048365a1f140fde4b4
 Æ
@@ -207,8 +203,6 @@ Icustomer/src/main/java/com/microservice_level_up/CustomerApplication.java,7/9/
 \email-notification/src/main/java/com/microservice_level_up/EmailNotificationApplication.java,4/0/403b6dd0ec8b9596354f4b09428e98cad9d8b78f
 Ç
 Reureka-server/src/main/java/com/microservice_level_up/EurekaServerApplication.java,2/8/28d2ba300ad5722d955af46b7e0deea002a26208
-ê
-`email-notification/src/main/java/com/microservice_level_up/kafka/config/KafkaConsumerConfig.java,f/1/f1b75424d87c02b0c77dc7e0d80c47045c1aa31a
 Å
 Q.idea/sonarlint/securityhotspotstore/0/2/022473c89f69ada5634b4ea7fe7541028b2e9dbb,7/b/7b0660b0a770bf805e02ae8c2aeda98e1041f38e
 w
@@ -562,14 +556,6 @@ u
 Ecommon/src/main/java/com/microservice_level_up/CommonApplication.java,4/8/4895958abd0abf478523dd494d7d800f7c4199fe
 å
 \common/src/main/java/com/microservice_level_up/notification/CustomerCreatedNotification.java,f/d/fdf2cc3212baf71c6ad200c3a82f62919c07f59b
-Ü
-Vsecurity/src/main/java/com/microservice_level_up/kafka/config/KafkaProducerConfig.java,2/9/29f69753624d488a1c768b687912c5584c4433c3
-Ü
-Vemail-notification/src/main/java/com/microservice_level_up/kafka/events/Eventtttt.java,7/6/76b0bf52ac9f3d90f8b024e0a39393ccf2aad031
-w
-Gsecurity/src/main/java/com/microservice_level_up/kafka/event/Event.java,c/c/cce0bdd10259e6e34f786a5e286e9bde93b11389
-z
-Jsecurity/src/main/java/com/microservice_level_up/kafka/event/Eventttt.java,2/0/20720878afb82e78f94e12225709431d6e5a0c5a
 î
 demail-notification/src/test/java/com/microservice_level_up/service/EmailNotificationServiceTest.java,c/1/c1d1131781c67e8c967f263f5f160ac02cb33c25
 Ä
@@ -580,7 +566,5 @@ v
 Fcommon/src/main/java/com/microservice_level_up/kafka/events/Event.java,4/6/46b2fb008f8cc6298810939a4d9f0e8fa65fd341
 z
 Jcommon/src/main/java/com/microservice_level_up/kafka/events/EventType.java,e/9/e940a945d2b9f35f9ca3ca655cedd142ecceac69
-W
-'docs/chores/product_microservice_update,7/4/74bc249266c01d05c14e04463a6334441bc91a3f
 Z
 *docs/chores/product_microservice_update.md,e/9/e95525e03948dc9d6275f5d7969402ba42bb7dca
