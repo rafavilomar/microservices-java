@@ -3,6 +3,7 @@ package com.microservice_level_up.module.user;
 import com.microservice_level_up.error.http_exeption.BadRequestException;
 import com.microservice_level_up.error.http_exeption.InternalErrorException;
 import com.microservice_level_up.module.user.dto.RegisterCustomerRequest;
+import com.microservice_level_up.module.user.dto.RegisterUserRequest;
 
 public interface IUserService {
 
@@ -13,4 +14,6 @@ public interface IUserService {
      * @throws InternalErrorException If there is any error consulting customer role, creating customer or sending email.
      */
     void registerCustomer(RegisterCustomerRequest newUser);
+
+    void registerUser(RegisterUserRequest newUser);
 }

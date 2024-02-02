@@ -7,6 +7,7 @@ import com.microservice_level_up.kafka.events.EventType;
 import com.microservice_level_up.module.role.IRoleService;
 import com.microservice_level_up.module.role.entity.Role;
 import com.microservice_level_up.module.user.dto.RegisterCustomerRequest;
+import com.microservice_level_up.module.user.dto.RegisterUserRequest;
 import com.microservice_level_up.notification.CustomerCreatedNotification;
 import common.grpc.common.CustomerRegistrationRequest;
 import common.grpc.common.CustomerServiceGrpc;
@@ -91,21 +92,18 @@ class UserServiceTest {
     }
 
     @Test
-    void registerCustomer_DuplicatedEmail(){
-        RegisterCustomerRequest newUser = RegisterCustomerRequest.builder()
+    void registerUser_DuplicatedEmail(){
+        RegisterUserRequest newUser = RegisterUserRequest.builder()
                 .email("david@gmail.com")
                 .password("PASS")
-                .firstName("David")
-                .lastName("Dunk")
-                .country("Canada")
-                .address("Address")
+                .roleName("Admin")
                 .build();
 
         when(userRepository.existsByEmail(newUser.email())).thenReturn(true);
 
         BadRequestException exception = assertThrows(
                 BadRequestException.class,
-                () -> underTest.registerCustomer(newUser));
+                () -> underTest.registerUser(newUser));
 
         assertEquals("Seems this email is already registered. Try login!", exception.getMessage());
 
@@ -114,28 +112,55 @@ class UserServiceTest {
     }
 
     @Test
-    void registerCustomer_CustomerRoleNotFound(){
-        String roleName = "Customer";
-        RegisterCustomerRequest newUser = RegisterCustomerRequest.builder()
+    void registerUser_RoleNotFound(){
+        RegisterUserRequest newUser = RegisterUserRequest.builder()
                 .email("david@gmail.com")
                 .password("PASS")
-                .firstName("David")
-                .lastName("Dunk")
-                .country("Canada")
-                .address("Address")
+                .roleName("Admin")
                 .build();
 
-        when(roleService.findByName(roleName)).thenThrow(EntityNotFoundException.class);
+        when(roleService.findByName(newUser.roleName())).thenThrow(EntityNotFoundException.class);
 
         InternalErrorException exception = assertThrows(
                 InternalErrorException.class,
-                () -> underTest.registerCustomer(newUser));
+                () -> underTest.registerUser(newUser));
 
         assertEquals("Can't register in this moment. Please try later", exception.getMessage());
 
         verify(userRepository, times(1)).existsByEmail(newUser.email());
-        verify(roleService, times(1)).findByName(roleName);
+        verify(roleService, times(1)).findByName(newUser.roleName());
         verifyNoMoreInteractions(userRepository, roleService);
 
+    }
+
+    @Test
+    void registerUser_ShouldBeOk() {
+        String passwordEncoded = "PASS_ENCODED";
+        RegisterUserRequest newUser = RegisterUserRequest.builder()
+                .email("david@gmail.com")
+                .password("PASS")
+                .roleName("Admin")
+                .build();
+
+        Role customerRole = Role.builder().id(1L).name(newUser.roleName()).build();
+        User user = User.builder()
+                .id(1L)
+                .email(newUser.email())
+                .password(passwordEncoded)
+                .role(customerRole)
+                .build();
+
+        when(passwordEncoder.encode(newUser.password())).thenReturn(passwordEncoded);
+        when(roleService.findByName(newUser.roleName())).thenReturn(customerRole);
+        when(userRepository.save(any(User.class))).thenReturn(user);
+
+        underTest.registerUser(newUser);
+
+        verify(passwordEncoder, times(1)).encode(newUser.password());
+        verify(userRepository, times(1)).existsByEmail(newUser.email());
+        verify(roleService, times(1)).findByName(newUser.roleName());
+        verify(userRepository, times(1)).save(any(User.class));
+        verifyNoMoreInteractions(userRepository, roleService, passwordEncoder);
+        verifyNoInteractions(producer, customerServiceBlockingStub);
     }
 }

@@ -570,3 +570,5 @@ Z
 *docs/chores/product_microservice_update.md,e/9/e95525e03948dc9d6275f5d7969402ba42bb7dca
 R
 "docs/features/create_admin_user.md,2/3/23a0d041fd7db1ce2ebf1cd00bdc38eb120ca124
+‰
+Ysecurity/src/main/java/com/microservice_level_up/module/user/dto/RegisterUserRequest.java,e/9/e9dbceb3c7555db45ccbfc78eca859e052ff0606

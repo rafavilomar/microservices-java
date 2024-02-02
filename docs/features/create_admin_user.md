@@ -1,6 +1,6 @@
 # Update product microservice
 Author: rafavilomar  
-Status: `Draft` *[Draft, Developing, In review, Finished]*  
+Status: `Developing` *[Draft, Developing, In review, Finished]*  
 Last updated: 2024-02-01
 
 ## Contents

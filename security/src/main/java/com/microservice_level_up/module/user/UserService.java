@@ -7,6 +7,7 @@ import com.microservice_level_up.kafka.events.EventType;
 import com.microservice_level_up.module.role.IRoleService;
 import com.microservice_level_up.module.role.entity.Role;
 import com.microservice_level_up.module.user.dto.RegisterCustomerRequest;
+import com.microservice_level_up.module.user.dto.RegisterUserRequest;
 import com.microservice_level_up.notification.CustomerCreatedNotification;
 import common.grpc.common.CustomerRegistrationRequest;
 import common.grpc.common.CustomerServiceGrpc;
@@ -60,6 +61,14 @@ public record UserService(
             log.error("Error creating customer: {}", exception.getMessage());
             throw new InternalErrorException("Can't register in this moment. Please try later");
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void registerUser(RegisterUserRequest newUser) {
+
     }
 
     private void publishCustomer(RegisterCustomerRequest newUser) {
