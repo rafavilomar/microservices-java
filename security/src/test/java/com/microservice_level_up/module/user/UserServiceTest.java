@@ -1,14 +1,11 @@
 package com.microservice_level_up.module.user;
 
 import com.microservice_level_up.error.http_exeption.BadRequestException;
-import com.microservice_level_up.error.http_exeption.InternalErrorException;
 import com.microservice_level_up.kafka.events.Event;
-import com.microservice_level_up.kafka.events.EventType;
 import com.microservice_level_up.module.role.IRoleService;
 import com.microservice_level_up.module.role.entity.Role;
 import com.microservice_level_up.module.user.dto.RegisterCustomerRequest;
 import com.microservice_level_up.module.user.dto.RegisterUserRequest;
-import com.microservice_level_up.notification.CustomerCreatedNotification;
 import common.grpc.common.CustomerRegistrationRequest;
 import common.grpc.common.CustomerServiceGrpc;
 import jakarta.persistence.EntityNotFoundException;
@@ -19,9 +16,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

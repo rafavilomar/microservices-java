@@ -6,7 +6,7 @@ Last updated: 2024-02-02
 ## Contents
 - Objective
 - Solution
-  - Refactor user validation and persistence
+  - Refactor email validation and persistence
   - Add endpoint to create users
 - Considerations
 
@@ -16,7 +16,7 @@ users like admins, assistants, and others. For that, some codes from create cust
 
 ## Solution
 
-### Refactor user validation and persistence
+### Refactor email validation and persistence
 
 To avoid duplicated code, email validation and user persistence were moved to the new `registerUser` function, just like 
 this:
@@ -37,6 +37,23 @@ public User registerUser(RegisterUserRequest newUser) {
 ```
 
 ### Add endpoint to create users
+
+It was necessary to change url for register customer endpoints to `/api/v1/user/customer`. Therefore, `/api/v1/user` is 
+now available to be used for the new register user endpoints:
+
+```java
+@PostMapping("/customer")
+public ResponseEntity<BaseResponse<Void>> registerCustomer(@Valid @RequestBody RegisterCustomerRequest request) {
+    userService.registerCustomer(request);
+
+    BaseResponse<Void> response = new BaseResponse<>();
+    return response.buildResponseEntity(
+            null,
+            HttpStatus.CREATED,
+            "Customer registered successfully"
+    );
+}
+```
 
 ## Considerations
 
