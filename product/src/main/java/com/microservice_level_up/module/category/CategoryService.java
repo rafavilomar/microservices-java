@@ -6,7 +6,7 @@ import com.microservice_level_up.module.category.dto.CategoryResponse;
 import com.microservice_level_up.module.category.dto.UpdateCategoryRequest;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
 

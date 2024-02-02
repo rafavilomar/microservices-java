@@ -2,8 +2,8 @@ package com.microservice_level_up.module.product.dto;
 
 import lombok.Builder;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 @Builder
 public record FilterProductRequest(

@@ -1,7 +1,7 @@
 package com.microservice_level_up.module.category.dto;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 public record CategoryRegistrationRequest(
         @NotBlank(message = "name: must be not null or blank")
