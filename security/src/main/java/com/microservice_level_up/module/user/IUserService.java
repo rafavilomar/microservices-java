@@ -22,4 +22,6 @@ public interface IUserService {
      * @throws jakarta.persistence.EntityNotFoundException If the given role name doesn't exist.
      */
     User registerUser(RegisterUserRequest newUser);
+
+    User getByEmail(String email);
 }

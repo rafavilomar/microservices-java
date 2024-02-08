@@ -1,6 +1,7 @@
 package com.microservice_level_up.error;
 
 import com.microservice_level_up.error.http_exeption.BadRequestException;
+import com.microservice_level_up.error.http_exeption.UnauthorizedException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -77,6 +78,19 @@ public class ExceptionHandlerAdvice {
         );
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ExceptionResponse> handleError(UnauthorizedException exception) {
+
+        ExceptionResponse response = new ExceptionResponse(
+                LocalDateTime.now(),
+                HttpStatus.UNAUTHORIZED.value(),
+                HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                List.of(exception.getMessage())
+        );
+
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(Exception.class)
