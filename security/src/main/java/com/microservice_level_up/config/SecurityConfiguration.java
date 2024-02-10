@@ -1,5 +1,8 @@
 package com.microservice_level_up.config;
 
+import com.microservice_level_up.filters.CustomAuthenticationFilter;
+import com.microservice_level_up.filters.CustomAuthorizationFilter;
+import com.microservice_level_up.module.auth.IAuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +17,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -25,8 +29,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
+    private final AuthenticationConfiguration authConfiguration;
     private final UserDetailsService userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final IAuthService authService;
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
@@ -54,6 +60,11 @@ public class SecurityConfiguration {
                 })
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+                .authenticationProvider(authenticationProvider())
+                .addFilter(new CustomAuthenticationFilter(authenticationManager(authConfiguration), authService))
+                .addFilterBefore(
+                        new CustomAuthorizationFilter(authService),
+                        UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

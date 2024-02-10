@@ -71,34 +71,6 @@ class AuthServiceTest {
     }
 
     @Test
-    void loadUserByUsername_InactiveUser() {
-        String email = "user@gmail.com";
-        User user = getUser(email);
-        user.setActive(false);
-
-        when(userService.getByEmail(email)).thenReturn(user);
-
-        assertThrows(UnauthorizedException.class, () -> underTest.loadUserByUsername(email));
-
-        verify(userService, times(1)).getByEmail(email);
-        verifyNoMoreInteractions(userService);
-    }
-
-    @Test
-    void loadUserByUsername_InactiveRole() {
-        String email = "user@gmail.com";
-        User user = getUser(email);
-        user.getRole().setActive(false);
-
-        when(userService.getByEmail(email)).thenReturn(user);
-
-        assertThrows(UnauthorizedException.class, () -> underTest.loadUserByUsername(email));
-
-        verify(userService, times(1)).getByEmail(email);
-        verifyNoMoreInteractions(userService);
-    }
-
-    @Test
     void generateAccessToken_ShouldBeOk() {
         String email = "user@gmail.com";
 
@@ -191,6 +163,44 @@ class AuthServiceTest {
                 () -> assertEquals(userFromDb.getEmail(), actualResponse.email()),
                 () -> assertEquals(userFromDb.getRole().getName(), actualResponse.roleName())
         );
+
+        verify(userService, times(1)).getByEmail(email);
+        verifyNoMoreInteractions(userService);
+    }
+
+    @Test
+    void login_InactiveUser() {
+        String email = "user@gmail.com";
+        org.springframework.security.core.userdetails.User user = new org.springframework.security.core.userdetails.User(
+                email,
+                "password",
+                new ArrayList<>()
+        );
+        User userFromDb = getUser(email);
+        userFromDb.setActive(false);
+
+        when(userService.getByEmail(email)).thenReturn(userFromDb);
+
+        assertThrows(UnauthorizedException.class, () -> underTest.login(user));
+
+        verify(userService, times(1)).getByEmail(email);
+        verifyNoMoreInteractions(userService);
+    }
+
+    @Test
+    void login_InactiveRole() {
+        String email = "user@gmail.com";
+        org.springframework.security.core.userdetails.User user = new org.springframework.security.core.userdetails.User(
+                email,
+                "password",
+                new ArrayList<>()
+        );
+        User userFromDb = getUser(email);
+        userFromDb.getRole().setActive(false);
+
+        when(userService.getByEmail(email)).thenReturn(userFromDb);
+
+        assertThrows(UnauthorizedException.class, () -> underTest.login(user));
 
         verify(userService, times(1)).getByEmail(email);
         verifyNoMoreInteractions(userService);

@@ -590,3 +590,7 @@ Msecurity/src/main/java/com/microservice_level_up/module/auth/AuthService.java,
 _security/src/main/java/com/microservice_level_up/error/http_exeption/UnauthorizedException.java,f/8/f8109af8df92f0a9bb8830333313502a8000d260
 Å
 Qsecurity/src/test/java/com/microservice_level_up/module/auth/AuthServiceTest.java,3/7/3740511081e5480a41aa04aea5fde3556bf5911e
+à
+Xsecurity/src/main/java/com/microservice_level_up/filters/CustomAuthenticationFilter.java,c/d/cdb0720cb547fe1216e20d783d3945f4419c40e4
+á
+Wsecurity/src/main/java/com/microservice_level_up/filters/CustomAuthorizationFilter.java,f/0/f031c6800352e1ea197591ee85009dabb641607b

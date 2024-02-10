@@ -30,26 +30,34 @@ public class AuthService implements UserDetailsService, IAuthService {
 
     private final IUserService userService;
 
-    @Value("${ClaveSecreta-JWT}")
-    private String jwtSecretKey;
+//    @Value("${ClaveSecreta-JWT}")
+    private String jwtSecretKey = "jwt";
 
     /** 10 minutes */
     private static final int ACCESS_TOKEN_EXPIRATION = 10 * 60 * 1000;
     /** 12 hours */
     private static final int REFRESH_TOKEN_EXPIRATION = 12 * 60 * 60 * 1000;
     private static final String TOKEN_PERMISSION_CLAIM = "permissions";
+    private static final String TOKEN_USER_CLAIM = "user_id";
 
     @Override
     public UserDetails loadUserByUsername(String email) {
         log.info("User {} is trying to access the system", email);
-        User user = userService.getByEmail(email);
+        return mapUserDetails(userService.getByEmail(email));
+    }
 
-        if (!user.isActive() || !user.getRole().isActive()) {
-            log.error("This user can't login: {}", user);
-            throw new UnauthorizedException("Can't login in this moment :( Please contact assistance department.");
-        }
+    private org.springframework.security.core.userdetails.User mapUserDetails(User user) {
+        List<SimpleGrantedAuthority> authorities = user.getRole()
+                .getPermissions()
+                .stream()
+                .map(permission -> new SimpleGrantedAuthority(permission.getCode()))
+                .toList();
 
-        return mapUserDetails(user);
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                user.getPassword(),
+                authorities
+        );
     }
 
     /**
@@ -145,6 +153,7 @@ public class AuthService implements UserDetailsService, IAuthService {
                         .stream()
                         .map(Permission::getCode)
                         .toList())
+                .withClaim(TOKEN_USER_CLAIM, user.getId())
                 .sign(Algorithm.HMAC256(jwtSecretKey.getBytes()));
     }
 
@@ -155,6 +164,11 @@ public class AuthService implements UserDetailsService, IAuthService {
     public LoginResponseDTO login(org.springframework.security.core.userdetails.User user) {
         log.info("Login for user {}", user.getUsername());
         User userFromDb = userService.getByEmail(user.getUsername());
+        if (!userFromDb.isActive() || !userFromDb.getRole().isActive()) {
+            log.error("This user can't login: {}", userFromDb);
+            throw new UnauthorizedException("Can't login in this moment :( Please contact assistance department.");
+        }
+
         return LoginResponseDTO.builder()
                 .accessToken(generateAccessToken(user))
                 .refreshToken(generateRefreshToken(user))
@@ -169,19 +183,5 @@ public class AuthService implements UserDetailsService, IAuthService {
                 .require(Algorithm.HMAC256(jwtSecretKey.getBytes()))
                 .build();
         return verifier.verify(token);
-    }
-
-    private org.springframework.security.core.userdetails.User mapUserDetails(User user) {
-        List<SimpleGrantedAuthority> authorities = user.getRole()
-                .getPermissions()
-                .stream()
-                .map(permission -> new SimpleGrantedAuthority(permission.getCode()))
-                .toList();
-
-        return new org.springframework.security.core.userdetails.User(
-                user.getEmail(),
-                user.getPassword(),
-                authorities
-        );
     }
 }
