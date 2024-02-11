@@ -1,13 +1,17 @@
 # Implement JWT
 
 Author: rafavilomar  
-Status: `In review` *[Draft, Developing, In review, Finished]*  
-Last updated: 2024-02-09
+Status: `Finished` *[Draft, Developing, In review, Finished]*  
+Last updated: 2024-02-11
 
 ## Contents
 
 - Objective
 - Goals
+- Overview
+  - Login
+  - Public resource access
+  - Private resource access
 - Solution
     - Add JWT tokens functions
     - Add Spring Security Filters
@@ -29,6 +33,24 @@ request.
 
 - Implement oauth 2.0
 - No implement privilege validation
+
+## Overview
+
+### Login
+Login flow for every registered users.
+
+![Login](..%2Fimages%2Flogin_flow.png)
+---
+
+### Public resource access
+There are some resources that have to be public and don't need any token validation.
+
+![Public resource](..%2Fimages%2Fpublic_resource_flow.png)
+
+### Private resource access
+Most of the resources need specific permissions and conditions to be accessed.
+
+![Private resource](..%2Fimages%2Fprivate_resource_flow.png)
 
 ## Solution
 
