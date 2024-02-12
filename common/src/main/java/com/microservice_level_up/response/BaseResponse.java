@@ -4,12 +4,9 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.time.LocalDateTime;
-
 @Getter
 public class BaseResponse<T> {
 
-    private LocalDateTime timestamp;
     private int status;
     private String statusDescription;
     private String message;
@@ -20,7 +17,6 @@ public class BaseResponse<T> {
             HttpStatus httpStatus,
             String message
     ) {
-        this.timestamp = LocalDateTime.now();
         this.status = httpStatus.value();
         this.statusDescription = httpStatus.getReasonPhrase();
         this.message = message;

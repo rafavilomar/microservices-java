@@ -11,6 +11,7 @@ import com.microservice_level_up.module.user.dto.RegisterUserRequest;
 import com.microservice_level_up.notification.CustomerCreatedNotification;
 import common.grpc.common.CustomerRegistrationRequest;
 import common.grpc.common.CustomerServiceGrpc;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -73,6 +74,13 @@ public record UserService(
                 .password(passwordEncoder.encode(newUser.password()))
                 .role(role)
                 .build());
+    }
+
+    @Override
+    public User getByEmail(String email) {
+        return userRepository
+                .findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("There is not user for email: " + email));
     }
 
     private void publishCustomer(RegisterCustomerRequest newUser) {
