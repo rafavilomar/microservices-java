@@ -594,3 +594,5 @@ Qsecurity/src/test/java/com/microservice_level_up/module/auth/AuthServiceTest.ja
 Xsecurity/src/main/java/com/microservice_level_up/filters/CustomAuthenticationFilter.java,c/d/cdb0720cb547fe1216e20d783d3945f4419c40e4
 ‡
 Wsecurity/src/main/java/com/microservice_level_up/filters/CustomAuthorizationFilter.java,f/0/f031c6800352e1ea197591ee85009dabb641607b
+d
+4docs/features/token_validation_from_common_module.md,f/d/fdff6e1efd2a7e84d57ac9b7b878b31be4be7194
