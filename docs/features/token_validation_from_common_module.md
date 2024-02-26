@@ -1,7 +1,7 @@
 # Token validation from Common module
 
 Author: rafavilomar  
-Status: `Developing` *[Draft, Developing, In review, Finished]*  
+Status: `Finished` *[Draft, Developing, In review, Finished]*  
 Last updated: 2024-02-25
 
 ## Contents
