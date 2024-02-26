@@ -594,3 +594,5 @@ Qsecurity/src/test/java/com/microservice_level_up/module/auth/AuthServiceTest.ja
 Xsecurity/src/main/java/com/microservice_level_up/filters/CustomAuthenticationFilter.java,c/d/cdb0720cb547fe1216e20d783d3945f4419c40e4
 ‡
 Wsecurity/src/main/java/com/microservice_level_up/filters/CustomAuthorizationFilter.java,f/0/f031c6800352e1ea197591ee85009dabb641607b
+Z
+*docs/chores/loyalty_microservice_update.md,8/a/8ad7c142d83362cedba0e830ff0c474d7ec8f843
