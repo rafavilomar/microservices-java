@@ -1,5 +1,6 @@
 package com.microservice_level_up.module.auth;
 
+import com.microservice_level_up.auth.TokenValidationService;
 import com.microservice_level_up.error.http_exeption.UnauthorizedException;
 import com.microservice_level_up.module.auth.dtos.LoginResponseDTO;
 import com.microservice_level_up.module.auth.dtos.TokensResponseDTO;
@@ -83,7 +84,7 @@ class AuthServiceTest {
         String accessToken = underTest.generateAccessToken(user);
         assertNotNull(accessToken);
 
-        String tokenEmail = underTest.getEmail(accessToken);
+        String tokenEmail = TokenValidationService.getEmail(accessToken, "TEST_VALUE");
         assertEquals(email, tokenEmail);
 
         verifyNoInteractions(userService);
@@ -121,7 +122,7 @@ class AuthServiceTest {
     void getPermissions_ShouldBeOk() {
         String accessToken = underTest.generateAccessToken(getUser("user@gmail.com"));
 
-        List<SimpleGrantedAuthority> actualResponse = underTest.getPermissions(accessToken);
+        List<SimpleGrantedAuthority> actualResponse = TokenValidationService.getPermissions(accessToken, "TEST_VALUE");
 
         assertEquals(0, actualResponse.size());
 
