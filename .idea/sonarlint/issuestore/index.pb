@@ -596,3 +596,9 @@ Xsecurity/src/main/java/com/microservice_level_up/filters/CustomAuthenticationFi
 Wsecurity/src/main/java/com/microservice_level_up/filters/CustomAuthorizationFilter.java,f/0/f031c6800352e1ea197591ee85009dabb641607b
 d
 4docs/features/token_validation_from_common_module.md,f/d/fdff6e1efd2a7e84d57ac9b7b878b31be4be7194
+t
+Dcommon/src/main/java/com/microservice_level_up/auth/AuthService.java,2/6/2648c56af108b03de3943744b8b2382e98af13dc
+u
+Ecommon/src/main/java/com/microservice_level_up/auth/IAuthService.java,6/5/65db8b1a7a8889bda4dc807dcc30121ef07cb51c
+
+Ocommon/src/main/java/com/microservice_level_up/auth/TokenValidationService.java,1/c/1cb69ec05dd0ff4da9d973bda2227d60d8b20ab0
