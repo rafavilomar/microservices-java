@@ -45,7 +45,7 @@ public record AccumulationPointsRuleService(
     @Override
     public void activate(long idAccumulationPointsRule) {
         log.info("Activate accumulation points rule {}", idAccumulationPointsRule);
-        AccumulationPointsRule ruleToActivate = repository.getById(idAccumulationPointsRule);
+        AccumulationPointsRule ruleToActivate = getById(idAccumulationPointsRule);
         Optional<AccumulationPointsRule> currentRuleActive = getActive();
 
         if (currentRuleActive.isPresent()) {
