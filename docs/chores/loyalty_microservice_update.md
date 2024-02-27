@@ -1,6 +1,6 @@
 # Update loyalty microservice
 Author: rafavilomar  
-Status: `Developing` *[Draft, Developing, In review, Finished]*  
+Status: `In review` *[Draft, Developing, In review, Finished]*  
 Last updated: 2024-02-26
 
 ## Contents
@@ -8,13 +8,12 @@ Last updated: 2024-02-26
 - Solution
   - Use jakarta library
   - Remove deprecated JPA calls
-- Considerations
 
 ## Objective
 
 Modules are now using version 3.2.1 of spring-boot-starter-parent, that means that javax library is no longer available 
-and need to be replaced with jakarta for persistence and validation annotations. So all javax importation on Product needs 
-to be replaced by jakarta.
+and need to be replaced with jakarta for persistence and validation annotations. So all javax importation on Loyalty 
+needs to be replaced by jakarta.
 
 ## Solution
 
