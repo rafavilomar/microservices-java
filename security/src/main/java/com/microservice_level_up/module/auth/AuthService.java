@@ -1,9 +1,8 @@
 package com.microservice_level_up.module.auth;
 
 import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.DecodedJWT;
+import com.microservice_level_up.auth.TokenValidationService;
 import com.microservice_level_up.error.http_exeption.UnauthorizedException;
 import com.microservice_level_up.module.auth.dtos.LoginResponseDTO;
 import com.microservice_level_up.module.auth.dtos.TokensResponseDTO;
@@ -19,7 +18,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -28,17 +26,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AuthService implements UserDetailsService, IAuthService {
 
-    private final IUserService userService;
+    @Value("${jwt.secret-key}")
+    private String jwtSecretKey;
 
-//    @Value("${ClaveSecreta-JWT}")
-    private String jwtSecretKey = "jwt";
+    private final IUserService userService;
 
     /** 10 minutes */
     private static final int ACCESS_TOKEN_EXPIRATION = 10 * 60 * 1000;
     /** 12 hours */
     private static final int REFRESH_TOKEN_EXPIRATION = 12 * 60 * 60 * 1000;
-    private static final String TOKEN_PERMISSION_CLAIM = "permissions";
-    private static final String TOKEN_USER_CLAIM = "user_id";
 
     @Override
     public UserDetails loadUserByUsername(String email) {
@@ -73,7 +69,7 @@ public class AuthService implements UserDetailsService, IAuthService {
         try {
             String refreshToken = authorizationHeader.substring("Bearer ".length());
 
-            String email = getEmail(refreshToken);
+            String email = TokenValidationService.getEmail(refreshToken, jwtSecretKey);
             User user = userService.getByEmail(email);
             String accessToken = generateAccessToken(user);
 
@@ -98,7 +94,7 @@ public class AuthService implements UserDetailsService, IAuthService {
         return JWT.create()
                 .withSubject(user.getUsername()) // User's email is used like username
                 .withExpiresAt(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION))
-                .withClaim(TOKEN_PERMISSION_CLAIM, user.getAuthorities()
+                .withClaim(TokenValidationService.TOKEN_PERMISSION_CLAIM, user.getAuthorities()
                         .stream()
                         .map(GrantedAuthority::getAuthority)
                         .toList())
@@ -121,39 +117,17 @@ public class AuthService implements UserDetailsService, IAuthService {
      * {@inheritDoc}
      */
     @Override
-    public String getEmail(String token) {
-        return decodedJWT(token).getSubject();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<SimpleGrantedAuthority> getPermissions(String token) {
-        String[] permissions = decodedJWT(token)
-                .getClaim(TOKEN_PERMISSION_CLAIM)
-                .asArray(String.class);
-
-        return Arrays.stream(permissions)
-                .map(SimpleGrantedAuthority::new)
-                .toList();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public String generateAccessToken(User user) {
         log.info("Create new access token for user {}", user.getEmail());
         return JWT.create()
                 .withSubject(user.getEmail())
                 .withExpiresAt(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION))
-                .withClaim(TOKEN_PERMISSION_CLAIM, user.getRole()
+                .withClaim(TokenValidationService.TOKEN_PERMISSION_CLAIM, user.getRole()
                         .getPermissions()
                         .stream()
                         .map(Permission::getCode)
                         .toList())
-                .withClaim(TOKEN_USER_CLAIM, user.getId())
+                .withClaim(TokenValidationService.TOKEN_USER_CLAIM, user.getId())
                 .sign(Algorithm.HMAC256(jwtSecretKey.getBytes()));
     }
 
@@ -175,13 +149,5 @@ public class AuthService implements UserDetailsService, IAuthService {
                 .email(userFromDb.getEmail())
                 .roleName(userFromDb.getRole().getName())
                 .build();
-    }
-
-    private DecodedJWT decodedJWT(String token) {
-        log.info("Verify and decode token");
-        JWTVerifier verifier = JWT
-                .require(Algorithm.HMAC256(jwtSecretKey.getBytes()))
-                .build();
-        return verifier.verify(token);
     }
 }

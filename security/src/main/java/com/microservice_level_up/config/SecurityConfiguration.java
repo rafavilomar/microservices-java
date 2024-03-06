@@ -63,7 +63,7 @@ public class SecurityConfiguration {
                 .authenticationProvider(authenticationProvider())
                 .addFilter(new CustomAuthenticationFilter(authenticationManager(authConfiguration), authService))
                 .addFilterBefore(
-                        new CustomAuthorizationFilter(authService),
+                        new CustomAuthorizationFilter(),
                         UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

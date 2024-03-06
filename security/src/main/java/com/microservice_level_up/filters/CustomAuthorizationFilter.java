@@ -2,14 +2,15 @@ package com.microservice_level_up.filters;
 
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.microservice_level_up.auth.TokenValidationService;
 import com.microservice_level_up.error.ExceptionResponse;
-import com.microservice_level_up.module.auth.IAuthService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,7 +27,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
-    private final IAuthService authService;
+    @Value("${jwt.secret-key}")
+    private String jwtSecretKey;
 
     @Override
     protected void doFilterInternal(
@@ -66,11 +68,11 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
              * and go ahead with the original request
              */
             String token = authorizationHeader.substring("Bearer ".length());
-            String email = authService.getEmail(token);
+            String email = TokenValidationService.getEmail(token, jwtSecretKey);
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                     email,
                     null,
-                    authService.getPermissions(token));
+                    TokenValidationService.getPermissions(token, jwtSecretKey));
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             log.info("Logged user {} trying to access: {}", email, request.getServletPath());
             filterChain.doFilter(request, response);

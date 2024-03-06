@@ -4,9 +4,6 @@ import com.microservice_level_up.error.http_exeption.UnauthorizedException;
 import com.microservice_level_up.module.auth.dtos.LoginResponseDTO;
 import com.microservice_level_up.module.auth.dtos.TokensResponseDTO;
 import com.microservice_level_up.module.user.User;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
-import java.util.List;
 
 public interface IAuthService {
 
@@ -37,22 +34,6 @@ public interface IAuthService {
      * @return a new refresh token
      */
     String generateRefreshToken(org.springframework.security.core.userdetails.User user);
-
-    /**
-     * Verify and decode the given token to get the email from it.
-     *
-     * @param token The access or refresh token
-     * @return the email
-     */
-    String getEmail(String token);
-
-    /**
-     * Verify and decode the given token to get all user's permissions code from it.
-     *
-     * @param token The access token
-     * @return a list of user's permissions
-     */
-    List<SimpleGrantedAuthority> getPermissions(String token);
 
     /**
      * Generate a new access token for the given user. This token contains the email and permissions code list from
