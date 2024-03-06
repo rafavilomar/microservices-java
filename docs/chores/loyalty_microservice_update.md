@@ -1,6 +1,6 @@
 # Update loyalty microservice
 Author: rafavilomar  
-Status: `In review` *[Draft, Developing, In review, Finished]*  
+Status: `Finished` *[Draft, Developing, In review, Finished]*  
 Last updated: 2024-02-26
 
 ## Contents

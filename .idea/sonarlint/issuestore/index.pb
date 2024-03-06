@@ -596,3 +596,9 @@ Xsecurity/src/main/java/com/microservice_level_up/filters/CustomAuthenticationFi
 Wsecurity/src/main/java/com/microservice_level_up/filters/CustomAuthorizationFilter.java,f/0/f031c6800352e1ea197591ee85009dabb641607b
 Z
 *docs/chores/loyalty_microservice_update.md,8/a/8ad7c142d83362cedba0e830ff0c474d7ec8f843
+¦
+vloyalty/src/test/java/com/microservice_level_up/module/accumulation_points_rule/AccumulationPointsRuleServiceTest.java,e/a/eafba4082e25eb35d6924e1b198c9048aec734a5
+¢
+rloyalty/src/test/java/com/microservice_level_up/module/points_redemption_rule/PointsRedemptionRuleServiceTest.java,5/a/5a0701ea5cd378f526d5e2f35d534b0f0dc58f19
+ƒ
+Sloyalty/src/test/java/com/microservice_level_up/module/point/PointsServiceTest.java,9/2/92b7ca7f0e55ae286dc59942f6d447463d4759c3
