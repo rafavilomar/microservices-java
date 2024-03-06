@@ -8,7 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -45,7 +45,7 @@ public record PointsRedemptionRuleService(
     @Override
     public void activate(long idAccumulationPointsRule) {
         log.info("Activate points redemption rule {}", idAccumulationPointsRule);
-        PointsRedemptionRule ruleToActivate = repository.getById(idAccumulationPointsRule);
+        PointsRedemptionRule ruleToActivate = getById(idAccumulationPointsRule);
         Optional<PointsRedemptionRule> currentRuleActive = getActive();
 
         if (currentRuleActive.isPresent()) {
