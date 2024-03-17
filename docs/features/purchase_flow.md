@@ -1,7 +1,7 @@
 # Purchase Flow
 
 Author: rafavilomar  
-Status: `Draft` *[Draft, Developing, In review, Finished]*  
+Status: `Developing` *[Draft, Developing, In review, Finished]*  
 Last updated: 2024-03-17
 
 ## Contents
@@ -10,6 +10,8 @@ Last updated: 2024-03-17
 - Goals
 - No goals
 - Overview
+- Solution
+  - Create Shopping microservice
 
 ## Objective
 
@@ -30,3 +32,8 @@ to use Grpc and Kafka to microservices interactions from a new microservice call
 
 ## Overview
 
+![Purchase flow](../images/purchase_flow.png)
+
+## Solution
+
+### Create Shopping microservice
