@@ -1,5 +1,6 @@
 package com.microservice_level_up.module.point;
 
+import com.microservice_level_up.enums.MovementType;
 import com.microservice_level_up.error.not_active_points_redemption_rule.NotActivePointsRedemptionRuleException;
 import com.microservice_level_up.error.not_enough_points.NotEnoughPointsException;
 import com.microservice_level_up.module.accumulation_points_rule.AccumulationPointsRule;

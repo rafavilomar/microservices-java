@@ -1,4 +1,4 @@
-package com.microservice_level_up.module.product.dto;
+package com.microservice_level_up.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -13,6 +13,9 @@ public record BuyProductRequest(
 
         @NotBlank(message = "code: must be not null or blank")
         @Size(max = 12, message = "code: must be max 12 characters")
-        String code
+        String code,
+
+        @NotNull(message = "price: must be not null")
+        double price
 ) {
 }

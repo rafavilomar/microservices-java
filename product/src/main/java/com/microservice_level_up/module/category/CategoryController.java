@@ -1,7 +1,7 @@
 package com.microservice_level_up.module.category;
 
 import com.microservice_level_up.module.category.dto.CategoryRegistrationRequest;
-import com.microservice_level_up.module.category.dto.CategoryResponse;
+import com.microservice_level_up.dto.CategoryResponse;
 import com.microservice_level_up.module.category.dto.UpdateCategoryRequest;
 import com.microservice_level_up.response.BaseResponse;
 import lombok.extern.slf4j.Slf4j;

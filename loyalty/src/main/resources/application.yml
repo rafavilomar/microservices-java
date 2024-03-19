@@ -19,6 +19,10 @@ spring:
   zipkin:
     base-url: http://localhost:9411
 
+grpc:
+  server:
+    port: 8081
+
 #kafka:
 #  bootstrap-address: localhost:29092
 #

@@ -2,7 +2,9 @@ package com.microservice_level_up.grpc;
 
 import com.google.protobuf.Empty;
 import com.microservice_level_up.module.customer.ICustomerService;
+import com.microservice_level_up.module.customer.dto.CustomerResponse;
 import common.grpc.common.CustomerRegistrationRequest;
+import common.grpc.common.CustomerRequest;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.server.service.GrpcService;
@@ -27,6 +29,18 @@ public class CustomerServiceGrpc extends common.grpc.common.CustomerServiceGrpc.
                 .build());
 
         responseObserver.onNext(null);
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void getById(CustomerRequest request, StreamObserver<common.grpc.common.CustomerResponse> responseObserver) {
+        CustomerResponse customer = customerService.getById(request.getId());
+        responseObserver.onNext(common.grpc.common.CustomerResponse.newBuilder()
+                .setId(customer.id())
+                .setFirstName(customer.firstName())
+                .setLastName(customer.lastName())
+                .setEmail(customer.email())
+                .build());
         responseObserver.onCompleted();
     }
 }

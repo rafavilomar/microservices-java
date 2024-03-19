@@ -3,11 +3,11 @@ package com.microservice_level_up.module.product;
 import com.microservice_level_up.error.not_enough_points.DuplicatedProductCodeException;
 import com.microservice_level_up.module.category.Category;
 import com.microservice_level_up.module.category.ICategoryService;
-import com.microservice_level_up.module.category.dto.CategoryResponse;
-import com.microservice_level_up.module.product.dto.BuyProductRequest;
+import com.microservice_level_up.dto.CategoryResponse;
+import com.microservice_level_up.dto.BuyProductRequest;
 import com.microservice_level_up.module.product.dto.FilterProductRequest;
 import com.microservice_level_up.module.product.dto.ProductRegistrationRequest;
-import com.microservice_level_up.module.product.dto.ProductResponse;
+import com.microservice_level_up.dto.ProductResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -232,7 +232,7 @@ class ProductServiceTest {
 
     @Test
     void buy_ShouldBeOk() {
-        List<BuyProductRequest> buyProducts = List.of(new BuyProductRequest(1, "test"));
+        List<BuyProductRequest> buyProducts = List.of(new BuyProductRequest(1, "test", 10));
         List<Product> products = List.of(productTemplate(1L));
 
         when(repository.findByCodeIn(buyProducts.stream().map(BuyProductRequest::code).toList())).thenReturn(products);
@@ -254,7 +254,7 @@ class ProductServiceTest {
 
     @Test
     void buy_NotFound() {
-        List<BuyProductRequest> buyProducts = List.of(new BuyProductRequest(1, "test"));
+        List<BuyProductRequest> buyProducts = List.of(new BuyProductRequest(1, "test", 10));
 
         when(repository.findByCodeIn(buyProducts.stream().map(BuyProductRequest::code).toList()))
                 .thenReturn(new ArrayList<>());

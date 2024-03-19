@@ -2,7 +2,7 @@ package com.microservice_level_up.module.category;
 
 import com.microservice_level_up.error.duplicated_category.DuplicatedCategoryException;
 import com.microservice_level_up.module.category.dto.CategoryRegistrationRequest;
-import com.microservice_level_up.module.category.dto.CategoryResponse;
+import com.microservice_level_up.dto.CategoryResponse;
 import com.microservice_level_up.module.category.dto.UpdateCategoryRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

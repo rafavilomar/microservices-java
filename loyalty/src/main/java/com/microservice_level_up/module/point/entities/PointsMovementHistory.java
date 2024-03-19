@@ -1,6 +1,6 @@
 package com.microservice_level_up.module.point.entities;
 
-import com.microservice_level_up.module.point.MovementType;
+import com.microservice_level_up.enums.MovementType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

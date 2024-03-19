@@ -1,4 +1,4 @@
-package com.microservice_level_up.module.category.dto;
+package com.microservice_level_up.dto;
 
 import lombok.Builder;
 

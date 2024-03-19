@@ -1,8 +1,8 @@
 package com.microservice_level_up.module.product;
 
-import com.microservice_level_up.module.category.dto.CategoryResponse;
+import com.microservice_level_up.dto.CategoryResponse;
 import com.microservice_level_up.module.product.dto.ProductRegistrationRequest;
-import com.microservice_level_up.module.product.dto.ProductResponse;
+import com.microservice_level_up.dto.ProductResponse;
 import com.microservice_level_up.response.BaseResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

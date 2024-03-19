@@ -10,6 +10,8 @@ service CustomerService {
 
   rpc register(CustomerRegistrationRequest) returns (google.protobuf.Empty);
 
+  rpc getById(CustomerRequest) returns (CustomerResponse);
+
 }
 
 message CustomerRegistrationRequest {
@@ -19,4 +21,15 @@ message CustomerRegistrationRequest {
   string country = 4;
   string address = 5;
   uint64 idUser = 6;
+}
+
+message CustomerRequest {
+  uint64 id = 1;
+}
+
+message CustomerResponse {
+  uint64 id = 1;
+  string firstName = 2;
+  string lastName = 3;
+  string email = 4;
 }
