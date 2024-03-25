@@ -9,6 +9,7 @@ public record PurchaseRequest(
         long idCustomer,
         double dollar,
         int points,
-        LocalDateTime movementDate
+        LocalDateTime movementDate,
+        String invoiceUuid
 ) {
 }

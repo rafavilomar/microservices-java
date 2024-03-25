@@ -4,7 +4,17 @@ server:
 spring:
   application:
     name: shopping
+  datasource:
+    username: rafavilomar
+    url: jdbc:postgresql://localhost:5432/shopping
+    password: rafavilomar
   jpa:
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      ddl-auto: update
+    show-sql: true
   zipkin:
     base-url: http://localhost:9411
 

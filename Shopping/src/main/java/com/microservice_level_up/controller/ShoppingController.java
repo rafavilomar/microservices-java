@@ -1,9 +1,9 @@
 package com.microservice_level_up.controller;
 
 import com.microservice_level_up.dto.InvoiceResponse;
-import com.microservice_level_up.dto.PurchaseRequest;
+import com.microservice_level_up.module.purchase.PurchaseRequest;
 import com.microservice_level_up.response.BaseResponse;
-import com.microservice_level_up.service.IPurchaseService;
+import com.microservice_level_up.module.purchase.IPurchaseService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

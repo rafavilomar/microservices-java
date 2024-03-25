@@ -1,5 +1,6 @@
-package com.microservice_level_up.dto;
+package com.microservice_level_up.module.purchase;
 
+import com.microservice_level_up.dto.BuyProductRequest;
 import lombok.Builder;
 
 import java.time.LocalDateTime;

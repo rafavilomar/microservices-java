@@ -47,6 +47,7 @@ public record PointsService(
                     .movementDate(purchaseRequest.movementDate())
                     .type(MovementType.ACCUMULATION)
                     .lotPoints(lotPoints)
+                    .invoiceUuid(purchaseRequest.invoiceUuid())
                     .build());
 
             lotPoints.setPoints(lotPoints.getPoints() + pointsAccumulated);
@@ -61,6 +62,7 @@ public record PointsService(
                     .movementDate(purchaseRequest.movementDate())
                     .type(MovementType.ACCUMULATION)
                     .lotPoints(lotPoints)
+                    .invoiceUuid(purchaseRequest.invoiceUuid())
                     .build());
         }
 
@@ -87,6 +89,7 @@ public record PointsService(
                 .movementDate(purchaseRequest.movementDate())
                 .type(MovementType.REDEMPTION)
                 .lotPoints(lotPoints)
+                .invoiceUuid(purchaseRequest.invoiceUuid())
                 .build());
 
         lotPoints.setPoints(lotPoints.getPoints() - purchaseRequest.points());

@@ -19,6 +19,7 @@ message PurchaseRequest {
   double dollar = 2;
   uint32 points = 3;
   string movementDate = 4; // use a text string such as 2007-12-03T10:15:30
+  string invoiceUuid = 5;
 }
 
 message PointsResponse {

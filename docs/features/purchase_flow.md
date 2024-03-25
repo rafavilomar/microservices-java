@@ -2,7 +2,7 @@
 
 Author: rafavilomar  
 Status: `Developing` *[Draft, Developing, In review, Finished]*  
-Last updated: 2024-03-18
+Last updated: 2024-03-24
 
 ## Contents
 
@@ -38,6 +38,9 @@ to use Grpc and Kafka to microservices interactions from a new microservice call
 
 ### Create Shopping microservice
 
+This new microservice will be dedicated for all shopping services such as purchase, refund and cart; but for now only 
+the purchase feature will be implemented.
+
 ### Purchase service
 
 Purchase service needs to call customer, product and points services. And also send the proper email notification to 
@@ -68,8 +71,46 @@ public InvoiceResponse purchase(PurchaseRequest request) {
             .tax(request.tax())
             .datetime(request.datetime())
             .build();
+    
+    invoiceService.save(invoiceResponse, uuid);
 
     return invoiceResponse;
 }
 ```
 
+Once the purchase is processed we can persist it in the database based on the invoice response, just like this for 
+`InvoiceService`:
+
+```java
+public void save(InvoiceResponse invoiceResponse, String uuid) {
+  log.info("Save invoice {} in database", uuid);
+
+  Invoice invoice = invoiceRepository.save(Invoice.builder()
+          .uuid(uuid)
+          .fullname(invoiceResponse.fullname())
+          .email(invoiceResponse.email())
+          .type(InvoiceType.PURCHASE)
+          .subtotal(invoiceResponse.subtotal())
+          .tax(invoiceResponse.tax())
+          .total(invoiceResponse.total())
+          .datetime(invoiceResponse.datetime())
+          .build());
+
+  List<Product> products = invoiceResponse.products().stream()
+          .map(product -> Product.builder()
+                  .code(product.code())
+                  .price(product.price())
+                  .quantity(product.quantity())
+                  .invoice(invoice)
+                  .build())
+          .toList();
+
+  productRepository.saveAll(products);
+}
+```
+
+### Invoice UUIDs
+
+We can see how the UUID class is used for the purchase service. This UUID is used to track purchase logs and register 
+points movements for **Loyalty**. This is because t classic sequence ID (that we're still using as primary key) is 
+generated during persistence process; but we need a unique value before save the invoice.

@@ -1,9 +1,9 @@
-package com.microservice_level_up.service;
+package com.microservice_level_up.module.purchase;
 
 import com.microservice_level_up.dto.InvoiceResponse;
 import com.microservice_level_up.enums.MovementType;
+import com.microservice_level_up.module.invoice.IInvoiceService;
 import common.grpc.common.PointsResponse;
-import com.microservice_level_up.dto.PurchaseRequest;
 import common.grpc.common.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,8 @@ import java.util.UUID;
 public record PurchaseService (
         CustomerServiceGrpc.CustomerServiceBlockingStub customerServiceBlockingStub,
         ProductServiceGrpc.ProductServiceBlockingStub productServiceBlockingStub,
-        LoyaltyServiceGrpc.LoyaltyServiceBlockingStub loyaltyServiceBlockingStub) implements IPurchaseService{
+        LoyaltyServiceGrpc.LoyaltyServiceBlockingStub loyaltyServiceBlockingStub,
+        IInvoiceService invoiceService) implements IPurchaseService{
 
     @Override
     public InvoiceResponse purchase(PurchaseRequest request) {
@@ -27,9 +28,9 @@ public record PurchaseService (
         CustomerResponse customer = customerServiceBlockingStub.getById(CustomerRequest.newBuilder()
                 .setId(request.idCustomer())
                 .build());
-        PointsResponse redemptionPointsResponse = redeemPoints(request);
+        PointsResponse redemptionPointsResponse = redeemPoints(request, uuid);
         buyProducts(request.products());
-        PointsResponse accumulationPointsResponse = accumulatePoints(request);
+        PointsResponse accumulationPointsResponse = accumulatePoints(request, uuid);
 
         log.info("================== Purchase finished {} ==================", uuid);
 
@@ -44,24 +45,28 @@ public record PurchaseService (
                 .datetime(request.datetime())
                 .build();
 
+        invoiceService.save(invoiceResponse, uuid);
+
         return invoiceResponse;
     }
 
-    private PointsResponse redeemPoints(PurchaseRequest request){
+    private PointsResponse redeemPoints(PurchaseRequest request, String uuid){
         return loyaltyServiceBlockingStub
                 .redeemPoints(common.grpc.common.PurchaseRequest.newBuilder()
                         .setIdCustomer(request.idCustomer())
                         .setPoints(request.pointsRedemption())
                         .setMovementDate(request.datetime().toString())
+                        .setInvoiceUuid(uuid)
                         .build());
     }
 
-    private PointsResponse accumulatePoints(PurchaseRequest request){
+    private PointsResponse accumulatePoints(PurchaseRequest request, String uuid){
         return loyaltyServiceBlockingStub
                 .accumulatePoints(common.grpc.common.PurchaseRequest.newBuilder()
                         .setIdCustomer(request.idCustomer())
                         .setDollar(request.total())
                         .setMovementDate(request.datetime().toString())
+                        .setInvoiceUuid(uuid)
                         .build());
     }
 
@@ -87,15 +92,5 @@ public record PurchaseService (
                         accumulationPointsResponse.getDollar(),
                         MovementType.valueOf(accumulationPointsResponse.getType()))
         );
-    }
-
-    @Override
-    public void getAllPurchase() {
-
-    }
-
-    @Override
-    public void getPurchaseById(long id) {
-
     }
 }

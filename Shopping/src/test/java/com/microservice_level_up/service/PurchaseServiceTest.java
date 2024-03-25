@@ -1,17 +1,18 @@
 package com.microservice_level_up.service;
 
 import com.microservice_level_up.dto.InvoiceResponse;
-import com.microservice_level_up.dto.PurchaseRequest;
+import com.microservice_level_up.module.invoice.IInvoiceService;
+import com.microservice_level_up.module.purchase.PurchaseRequest;
 import com.microservice_level_up.enums.MovementType;
+import com.microservice_level_up.module.purchase.PurchaseService;
 import common.grpc.common.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -27,6 +28,8 @@ class PurchaseServiceTest {
     private ProductServiceGrpc.ProductServiceBlockingStub productServiceBlockingStub;
     @Mock
     private LoyaltyServiceGrpc.LoyaltyServiceBlockingStub loyaltyServiceBlockingStub;
+    @Mock
+    private IInvoiceService invoiceService;
 
     @BeforeEach
     void setUp() {
@@ -35,6 +38,7 @@ class PurchaseServiceTest {
 
     @Test
     void purchase() {
+        UUID uuid = UUID.randomUUID();
         PurchaseRequest request = PurchaseRequest.builder()
                 .idCustomer(1)
                 .pointsRedemption(10)
@@ -64,50 +68,58 @@ class PurchaseServiceTest {
                 .datetime(request.datetime())
                 .build();
 
-        when(customerServiceBlockingStub.getById(CustomerRequest.newBuilder().setId(request.idCustomer()).build()))
-                .thenReturn(customer);
-        when(loyaltyServiceBlockingStub.redeemPoints(common.grpc.common.PurchaseRequest.newBuilder()
-                .setIdCustomer(request.idCustomer())
-                .setPoints(request.pointsRedemption())
-                .setMovementDate(request.datetime().toString())
-                .build())).thenReturn(PointsResponse.newBuilder()
-                .setPoints(10)
-                .setDollar(2)
-                .setType(MovementType.REDEMPTION.toString())
-                .build());
-        when(loyaltyServiceBlockingStub.accumulatePoints(common.grpc.common.PurchaseRequest.newBuilder()
-                .setIdCustomer(request.idCustomer())
-                .setDollar(request.total())
-                .setMovementDate(request.datetime().toString())
-                .build())).thenReturn(PointsResponse.newBuilder()
-                .setPoints(30)
-                .setDollar(30)
-                .setType(MovementType.ACCUMULATION.toString())
-                .build());
+        try (MockedStatic<UUID> mockedUuid = Mockito.mockStatic(UUID.class)) {
+            mockedUuid.when(UUID::randomUUID).thenReturn(uuid);
+            when(customerServiceBlockingStub.getById(CustomerRequest.newBuilder().setId(request.idCustomer()).build()))
+                    .thenReturn(customer);
+            when(loyaltyServiceBlockingStub.redeemPoints(common.grpc.common.PurchaseRequest.newBuilder()
+                    .setIdCustomer(request.idCustomer())
+                    .setPoints(request.pointsRedemption())
+                    .setMovementDate(request.datetime().toString())
+                    .setInvoiceUuid(uuid.toString())
+                    .build())).thenReturn(PointsResponse.newBuilder()
+                    .setPoints(10)
+                    .setDollar(2)
+                    .setType(MovementType.REDEMPTION.toString())
+                    .build());
+            when(loyaltyServiceBlockingStub.accumulatePoints(common.grpc.common.PurchaseRequest.newBuilder()
+                    .setIdCustomer(request.idCustomer())
+                    .setDollar(request.total())
+                    .setMovementDate(request.datetime().toString())
+                    .setInvoiceUuid(uuid.toString())
+                    .build())).thenReturn(PointsResponse.newBuilder()
+                    .setPoints(30)
+                    .setDollar(30)
+                    .setType(MovementType.ACCUMULATION.toString())
+                    .build());
 
-        InvoiceResponse actualResponse = underTest.purchase(request);
+            InvoiceResponse actualResponse = underTest.purchase(request);
 
-        assertEquals(expectedResponse, actualResponse);
+            assertEquals(expectedResponse, actualResponse);
 
-        verify(customerServiceBlockingStub, times(1)).getById(CustomerRequest.newBuilder()
-                .setId(request.idCustomer())
-                .build());
-        verify(loyaltyServiceBlockingStub, times(1)).redeemPoints(common.grpc.common.PurchaseRequest.newBuilder()
-                .setIdCustomer(request.idCustomer())
-                .setPoints(request.pointsRedemption())
-                .setMovementDate(request.datetime().toString())
-                .build());
-        verify(productServiceBlockingStub, times(1)).buy(BuyProductRequest.newBuilder()
-                .addAllProducts(request.products()
-                        .stream()
-                        .map(product -> Product.newBuilder().setCode(product.code()).setQuantity(product.quantity()).build())
-                        .toList())
-                .build());
-        verify(loyaltyServiceBlockingStub, times(1)).accumulatePoints(common.grpc.common.PurchaseRequest.newBuilder()
-                        .setIdCustomer(request.idCustomer())
-                        .setDollar(request.total())
-                        .setMovementDate(request.datetime().toString())
-                        .build());
-        verifyNoMoreInteractions(customerServiceBlockingStub, loyaltyServiceBlockingStub, productServiceBlockingStub);
+            verify(customerServiceBlockingStub, times(1)).getById(CustomerRequest.newBuilder()
+                    .setId(request.idCustomer())
+                    .build());
+            verify(loyaltyServiceBlockingStub, times(1)).redeemPoints(common.grpc.common.PurchaseRequest.newBuilder()
+                    .setIdCustomer(request.idCustomer())
+                    .setPoints(request.pointsRedemption())
+                    .setMovementDate(request.datetime().toString())
+                    .setInvoiceUuid(uuid.toString())
+                    .build());
+            verify(productServiceBlockingStub, times(1)).buy(BuyProductRequest.newBuilder()
+                    .addAllProducts(request.products()
+                            .stream()
+                            .map(product -> Product.newBuilder().setCode(product.code()).setQuantity(product.quantity()).build())
+                            .toList())
+                    .build());
+            verify(loyaltyServiceBlockingStub, times(1)).accumulatePoints(common.grpc.common.PurchaseRequest.newBuilder()
+                    .setIdCustomer(request.idCustomer())
+                    .setDollar(request.total())
+                    .setMovementDate(request.datetime().toString())
+                    .setInvoiceUuid(uuid.toString())
+                    .build());
+            verify(invoiceService, times(1)).save(expectedResponse, uuid.toString());
+            verifyNoMoreInteractions(customerServiceBlockingStub, loyaltyServiceBlockingStub, productServiceBlockingStub);
+        }
     }
 }

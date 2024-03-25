@@ -24,6 +24,7 @@ public class LoyaltyServiceGrpc extends common.grpc.common.LoyaltyServiceGrpc.Lo
                 .dollar(request.getDollar())
                 .points(request.getPoints())
                 .movementDate(LocalDateTime.parse(request.getMovementDate()))
+                .invoiceUuid(request.getInvoiceUuid())
                 .build());
 
         responseObserver.onNext(PointsResponse.newBuilder()
@@ -41,6 +42,7 @@ public class LoyaltyServiceGrpc extends common.grpc.common.LoyaltyServiceGrpc.Lo
                 .dollar(request.getDollar())
                 .points(request.getPoints())
                 .movementDate(LocalDateTime.parse(request.getMovementDate()))
+                .invoiceUuid(request.getInvoiceUuid())
                 .build());
 
         responseObserver.onNext(PointsResponse.newBuilder()

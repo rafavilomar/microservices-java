@@ -36,4 +36,7 @@ public class PointsMovementHistory {
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_lot_points", nullable = false)
     private LotPoints lotPoints;
+
+    @Column(nullable = false)
+    private String invoiceUuid;
 }
