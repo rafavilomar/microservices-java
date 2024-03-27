@@ -1,9 +1,10 @@
 package com.microservice_level_up.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.microservice_level_up.dto.InvoiceResponse;
 import com.microservice_level_up.kafka.events.Event;
 import com.microservice_level_up.kafka.events.EventType;
-import com.microservice_level_up.notification.CustomerCreatedNotification;
+import com.microservice_level_up.notification.PurchaseNotification;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -15,10 +16,11 @@ import org.springframework.mail.javamail.JavaMailSender;
 import java.time.LocalDateTime;
 
 import static org.mockito.Mockito.*;
-class EmailNotificationServiceTest {
+
+class PurchaseEmailTest {
 
     @InjectMocks
-    private EmailNotificationService underTest;
+    private PurchaseEmail underTest;
 
     @Mock
     private JavaMailSender mailSender;
@@ -32,19 +34,19 @@ class EmailNotificationServiceTest {
 
     @Test
     void sendEmail() {
-        CustomerCreatedNotification customer = new CustomerCreatedNotification("David", "Trump", "david@gmail.com");
-        Event<CustomerCreatedNotification> event = new Event<>(
+        PurchaseNotification notification = new PurchaseNotification(InvoiceResponse.builder().email("david@gmail.com").build());
+        Event<PurchaseNotification> event = new Event<>(
                 "ID",
                 LocalDateTime.now(),
                 EventType.CREATED,
-                customer);
+                notification);
 
-        when(objectMapper.convertValue(event.data(), CustomerCreatedNotification.class)).thenReturn(customer);
+        when(objectMapper.convertValue(event.data(), PurchaseNotification.class)).thenReturn(notification);
 
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(customer.email());
-        message.setSubject("Registration");
-        message.setText("Welcome " + customer.firstName() + " " + customer.lastName());
+        message.setTo(notification.invoice().email());
+        message.setSubject("Invoice");
+        message.setText("Purchase's invoice");
 
         underTest.sendEmail(event);
 

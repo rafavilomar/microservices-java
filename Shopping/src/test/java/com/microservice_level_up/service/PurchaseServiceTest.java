@@ -1,6 +1,7 @@
 package com.microservice_level_up.service;
 
 import com.microservice_level_up.dto.InvoiceResponse;
+import com.microservice_level_up.kafka.events.Event;
 import com.microservice_level_up.module.invoice.IInvoiceService;
 import com.microservice_level_up.module.purchase.PurchaseRequest;
 import com.microservice_level_up.enums.MovementType;
@@ -9,6 +10,7 @@ import common.grpc.common.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
+import org.springframework.kafka.core.KafkaTemplate;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,6 +30,8 @@ class PurchaseServiceTest {
     private ProductServiceGrpc.ProductServiceBlockingStub productServiceBlockingStub;
     @Mock
     private LoyaltyServiceGrpc.LoyaltyServiceBlockingStub loyaltyServiceBlockingStub;
+    @Mock
+    private KafkaTemplate<String, Event<?>> producer;
     @Mock
     private IInvoiceService invoiceService;
 
@@ -70,7 +74,7 @@ class PurchaseServiceTest {
 
         try (MockedStatic<UUID> mockedUuid = Mockito.mockStatic(UUID.class)) {
             mockedUuid.when(UUID::randomUUID).thenReturn(uuid);
-            when(customerServiceBlockingStub.getById(CustomerRequest.newBuilder().setId(request.idCustomer()).build()))
+            when(customerServiceBlockingStub.getCustomerById(CustomerRequest.newBuilder().setId(request.idCustomer()).build()))
                     .thenReturn(customer);
             when(loyaltyServiceBlockingStub.redeemPoints(common.grpc.common.PurchaseRequest.newBuilder()
                     .setIdCustomer(request.idCustomer())
@@ -84,7 +88,7 @@ class PurchaseServiceTest {
                     .build());
             when(loyaltyServiceBlockingStub.accumulatePoints(common.grpc.common.PurchaseRequest.newBuilder()
                     .setIdCustomer(request.idCustomer())
-                    .setDollar(request.total())
+                    .setDollar(request.subtotal())
                     .setMovementDate(request.datetime().toString())
                     .setInvoiceUuid(uuid.toString())
                     .build())).thenReturn(PointsResponse.newBuilder()
@@ -97,7 +101,7 @@ class PurchaseServiceTest {
 
             assertEquals(expectedResponse, actualResponse);
 
-            verify(customerServiceBlockingStub, times(1)).getById(CustomerRequest.newBuilder()
+            verify(customerServiceBlockingStub, times(1)).getCustomerById(CustomerRequest.newBuilder()
                     .setId(request.idCustomer())
                     .build());
             verify(loyaltyServiceBlockingStub, times(1)).redeemPoints(common.grpc.common.PurchaseRequest.newBuilder()
@@ -106,7 +110,7 @@ class PurchaseServiceTest {
                     .setMovementDate(request.datetime().toString())
                     .setInvoiceUuid(uuid.toString())
                     .build());
-            verify(productServiceBlockingStub, times(1)).buy(BuyProductRequest.newBuilder()
+            verify(productServiceBlockingStub, times(1)).buyProduct(BuyProductRequest.newBuilder()
                     .addAllProducts(request.products()
                             .stream()
                             .map(product -> Product.newBuilder().setCode(product.code()).setQuantity(product.quantity()).build())
@@ -114,12 +118,17 @@ class PurchaseServiceTest {
                     .build());
             verify(loyaltyServiceBlockingStub, times(1)).accumulatePoints(common.grpc.common.PurchaseRequest.newBuilder()
                     .setIdCustomer(request.idCustomer())
-                    .setDollar(request.total())
+                    .setDollar(request.subtotal())
                     .setMovementDate(request.datetime().toString())
                     .setInvoiceUuid(uuid.toString())
                     .build());
             verify(invoiceService, times(1)).save(expectedResponse, uuid.toString());
-            verifyNoMoreInteractions(customerServiceBlockingStub, loyaltyServiceBlockingStub, productServiceBlockingStub);
+            verify(producer, times(1)).send(eq("purchase"), any(Event.class));
+            verifyNoMoreInteractions(
+                    customerServiceBlockingStub,
+                    loyaltyServiceBlockingStub,
+                    productServiceBlockingStub,
+                    producer);
         }
     }
 }
