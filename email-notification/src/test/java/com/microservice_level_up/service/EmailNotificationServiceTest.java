@@ -1,5 +1,6 @@
 package com.microservice_level_up.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microservice_level_up.kafka.events.Event;
 import com.microservice_level_up.kafka.events.EventType;
 import com.microservice_level_up.notification.CustomerCreatedNotification;
@@ -21,6 +22,8 @@ class EmailNotificationServiceTest {
 
     @Mock
     private JavaMailSender mailSender;
+    @Mock
+    private ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp() {
@@ -29,16 +32,19 @@ class EmailNotificationServiceTest {
 
     @Test
     void sendEmail() {
+        CustomerCreatedNotification customer = new CustomerCreatedNotification("David", "Trump", "david@gmail.com");
         Event<CustomerCreatedNotification> event = new Event<>(
                 "ID",
                 LocalDateTime.now(),
                 EventType.CREATED,
-                new CustomerCreatedNotification("David", "Trump", "david@gmail.com"));
+                customer);
+
+        when(objectMapper.convertValue(event.data(), CustomerCreatedNotification.class)).thenReturn(customer);
 
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(event.data().email());
+        message.setTo(customer.email());
         message.setSubject("Registration");
-        message.setText("Welcome " + event.data().firstName() + " " + event.data().lastName());
+        message.setText("Welcome " + customer.firstName() + " " + customer.lastName());
 
         underTest.sendEmail(event);
 

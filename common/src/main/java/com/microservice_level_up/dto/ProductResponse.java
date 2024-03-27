@@ -1,6 +1,5 @@
-package com.microservice_level_up.module.product.dto;
+package com.microservice_level_up.dto;
 
-import com.microservice_level_up.module.category.dto.CategoryResponse;
 import lombok.Builder;
 
 @Builder

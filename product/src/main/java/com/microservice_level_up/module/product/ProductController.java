@@ -1,9 +1,9 @@
 package com.microservice_level_up.module.product;
 
-import com.microservice_level_up.module.product.dto.BuyProductRequest;
+import com.microservice_level_up.dto.BuyProductRequest;
 import com.microservice_level_up.module.product.dto.FilterProductRequest;
 import com.microservice_level_up.module.product.dto.ProductRegistrationRequest;
-import com.microservice_level_up.module.product.dto.ProductResponse;
+import com.microservice_level_up.dto.ProductResponse;
 import com.microservice_level_up.response.BaseResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -52,7 +52,7 @@ public record ProductController(IProductService service) {
     }
 
     @PostMapping
-    public ResponseEntity<BaseResponse<Long>> add(@Valid @RequestBody ProductRegistrationRequest request) {
+    public ResponseEntity<BaseResponse<Long>> add(@RequestBody @Valid ProductRegistrationRequest request) {
         log.info("Add new product {}", request);
         long payload = service.add(request);
 

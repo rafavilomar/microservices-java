@@ -1,4 +1,4 @@
-package com.microservice_level_up.module.point;
+package com.microservice_level_up.enums;
 
 public enum MovementType {
     ACCUMULATION, REDEMPTION

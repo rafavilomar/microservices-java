@@ -3,11 +3,11 @@ package com.microservice_level_up.module.product;
 import com.microservice_level_up.error.not_enough_points.DuplicatedProductCodeException;
 import com.microservice_level_up.module.category.Category;
 import com.microservice_level_up.module.category.ICategoryService;
-import com.microservice_level_up.module.category.dto.CategoryResponse;
-import com.microservice_level_up.module.product.dto.BuyProductRequest;
+import com.microservice_level_up.dto.CategoryResponse;
+import com.microservice_level_up.dto.BuyProductRequest;
 import com.microservice_level_up.module.product.dto.FilterProductRequest;
 import com.microservice_level_up.module.product.dto.ProductRegistrationRequest;
-import com.microservice_level_up.module.product.dto.ProductResponse;
+import com.microservice_level_up.dto.ProductResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -84,6 +84,14 @@ public record ProductService(
                         request.categoryName(),
                         pageable)
                 .map(this::mapResponse);
+    }
+
+    @Override
+    public ProductResponse getByCode(String code) {
+        return repository.findByCode(code)
+                .map(this::mapResponse)
+                .orElseThrow(() -> new EntityNotFoundException("Product not found for this code: " + code));
+
     }
 
     private void validateCodeExistence(List<String> codes, List<Product> products) {

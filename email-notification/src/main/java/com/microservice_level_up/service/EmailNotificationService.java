@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public record EmailNotificationService(JavaMailSender mailSender) {
+public record EmailNotificationService(JavaMailSender mailSender, ObjectMapper objectMapper) {
 
     @KafkaListener(
             topics = "customer_created",
@@ -19,7 +19,6 @@ public record EmailNotificationService(JavaMailSender mailSender) {
             groupId = "grupo1"
     )
     public void sendEmail(Event<?> event) {
-        ObjectMapper objectMapper = new ObjectMapper();
         CustomerCreatedNotification customer = objectMapper.convertValue(event.data(), CustomerCreatedNotification.class);
         log.info("Send email {}", customer);
 

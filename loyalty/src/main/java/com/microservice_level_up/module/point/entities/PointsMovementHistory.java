@@ -1,6 +1,6 @@
 package com.microservice_level_up.module.point.entities;
 
-import com.microservice_level_up.module.point.MovementType;
+import com.microservice_level_up.enums.MovementType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -36,4 +36,7 @@ public class PointsMovementHistory {
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_lot_points", nullable = false)
     private LotPoints lotPoints;
+
+    @Column(nullable = false)
+    private String invoiceUuid;
 }

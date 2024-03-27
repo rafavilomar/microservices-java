@@ -1,5 +1,6 @@
 package com.microservice_level_up.module.point;
 
+import com.microservice_level_up.enums.MovementType;
 import com.microservice_level_up.error.not_active_points_redemption_rule.NotActivePointsRedemptionRuleException;
 import com.microservice_level_up.error.not_enough_points.NotEnoughPointsException;
 import com.microservice_level_up.module.accumulation_points_rule.AccumulationPointsRule;
@@ -46,7 +47,7 @@ class PointsServiceTest {
 
     @Test
     void accumulatePoints_NoLotPoints() {
-        PurchaseRequest purchaseRequest = new PurchaseRequest(1, 10, 10, LocalDateTime.now());
+        PurchaseRequest purchaseRequest = new PurchaseRequest(1, 10, 10, LocalDateTime.now(), "UUID");
         AccumulationPointsRule accumulationPointsRule = accumulationPointsRuleTemplate(1);
         LotPoints lotPoints = lotPointsTemplate(2);
         lotPoints.setPoints(0);
@@ -56,6 +57,7 @@ class PointsServiceTest {
                 .movementDate(purchaseRequest.movementDate())
                 .type(MovementType.ACCUMULATION)
                 .lotPoints(lotPoints)
+                .invoiceUuid(purchaseRequest.invoiceUuid())
                 .build();
 
         when(accumulationPointsRuleService.getActive()).thenReturn(Optional.of(accumulationPointsRule));
@@ -77,7 +79,7 @@ class PointsServiceTest {
 
     @Test
     void accumulatePoints_ActiveAccumulationRule() {
-        PurchaseRequest purchaseRequest = new PurchaseRequest(1, 10, 10, LocalDateTime.now());
+        PurchaseRequest purchaseRequest = new PurchaseRequest(1, 10, 10, LocalDateTime.now(), "UUID");
         AccumulationPointsRule accumulationPointsRule = accumulationPointsRuleTemplate(1);
         LotPoints lotPoints = lotPointsTemplate(1);
         PointsMovementHistory pointsMovement = PointsMovementHistory.builder()
@@ -86,6 +88,7 @@ class PointsServiceTest {
                 .movementDate(purchaseRequest.movementDate())
                 .type(MovementType.ACCUMULATION)
                 .lotPoints(lotPoints)
+                .invoiceUuid(purchaseRequest.invoiceUuid())
                 .build();
 
         when(accumulationPointsRuleService.getActive()).thenReturn(Optional.of(accumulationPointsRule));
@@ -106,7 +109,7 @@ class PointsServiceTest {
 
     @Test
     void accumulatePoints_NoActiveAccumulationRule() {
-        PurchaseRequest purchaseRequest = new PurchaseRequest(1, 10, 10, LocalDateTime.now());
+        PurchaseRequest purchaseRequest = new PurchaseRequest(1, 10, 10, LocalDateTime.now(), "UUID");
         LotPoints lotPoints = lotPointsTemplate(1);
         PointsMovementHistory pointsMovement = PointsMovementHistory.builder()
                 .points(0)
@@ -114,6 +117,7 @@ class PointsServiceTest {
                 .movementDate(purchaseRequest.movementDate())
                 .type(MovementType.ACCUMULATION)
                 .lotPoints(lotPoints)
+                .invoiceUuid(purchaseRequest.invoiceUuid())
                 .build();
 
         when(accumulationPointsRuleService.getActive()).thenReturn(Optional.empty());
@@ -131,7 +135,7 @@ class PointsServiceTest {
 
     @Test
     void redeemPoints_NotEnoughPoints() {
-        PurchaseRequest purchaseRequest = new PurchaseRequest(1, 10, 500, LocalDateTime.now());
+        PurchaseRequest purchaseRequest = new PurchaseRequest(1, 10, 500, LocalDateTime.now(), "UUID");
         PointsRedemptionRule pointsRedemptionRule = pointsRedemptionRuleTemplate(1);
         LotPoints lotPoints = lotPointsTemplate(1);
 
@@ -149,7 +153,7 @@ class PointsServiceTest {
 
     @Test
     void redeemPoints_NotActivePointsRedemptionRule() {
-        PurchaseRequest purchaseRequest = new PurchaseRequest(1, 10, 10, LocalDateTime.now());
+        PurchaseRequest purchaseRequest = new PurchaseRequest(1, 10, 10, LocalDateTime.now(), "UUID");
         LotPoints lotPoints = lotPointsTemplate(1);
 
         when(pointsRedemptionRuleService.getActive()).thenReturn(Optional.empty());
@@ -166,7 +170,7 @@ class PointsServiceTest {
 
     @Test
     void redeemPoints_ShouldBeOk() {
-        PurchaseRequest purchaseRequest = new PurchaseRequest(1, 10, 10, LocalDateTime.now());
+        PurchaseRequest purchaseRequest = new PurchaseRequest(1, 10, 10, LocalDateTime.now(), "UUID");
         PointsRedemptionRule pointsRedemptionRule = pointsRedemptionRuleTemplate(1);
         LotPoints lotPoints = lotPointsTemplate(1);
         PointsMovementHistory pointsMovement = PointsMovementHistory.builder()
@@ -175,6 +179,7 @@ class PointsServiceTest {
                 .movementDate(purchaseRequest.movementDate())
                 .type(MovementType.REDEMPTION)
                 .lotPoints(lotPoints)
+                .invoiceUuid(purchaseRequest.invoiceUuid())
                 .build();
 
         when(pointsRedemptionRuleService.getActive()).thenReturn(Optional.of(pointsRedemptionRule));

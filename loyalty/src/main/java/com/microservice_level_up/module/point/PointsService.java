@@ -1,5 +1,7 @@
 package com.microservice_level_up.module.point;
 
+import com.microservice_level_up.dto.PointsResponse;
+import com.microservice_level_up.enums.MovementType;
 import com.microservice_level_up.error.not_active_points_redemption_rule.NotActivePointsRedemptionRuleException;
 import com.microservice_level_up.error.not_enough_points.NotEnoughPointsException;
 import com.microservice_level_up.module.accumulation_points_rule.AccumulationPointsRule;
@@ -29,14 +31,15 @@ public record PointsService(
 ) implements IPointsService {
 
     @Override
-    public void accumulatePoints(PurchaseRequest purchaseRequest) {
+    public PointsResponse accumulatePoints(PurchaseRequest purchaseRequest) {
+        int pointsAccumulated = 0;
         Optional<AccumulationPointsRule> accumulationPointsRule = accumulationPointsRuleService.getActive();
         LotPoints lotPoints = getOrCreateActiveLotPointsByCustomer(purchaseRequest.idCustomer());
 
         if (accumulationPointsRule.isPresent()) {
 
             double dollarToEvaluate = purchaseRequest.dollar() / accumulationPointsRule.get().getDollar();
-            int pointsAccumulated = accumulationPointsRule.get().getPointsToEarn() * (int) dollarToEvaluate;
+            pointsAccumulated = accumulationPointsRule.get().getPointsToEarn() * (int) dollarToEvaluate;
 
             pointsMovementHistoryRepository.save(PointsMovementHistory.builder()
                     .points(pointsAccumulated)
@@ -44,6 +47,7 @@ public record PointsService(
                     .movementDate(purchaseRequest.movementDate())
                     .type(MovementType.ACCUMULATION)
                     .lotPoints(lotPoints)
+                    .invoiceUuid(purchaseRequest.invoiceUuid())
                     .build());
 
             lotPoints.setPoints(lotPoints.getPoints() + pointsAccumulated);
@@ -53,17 +57,20 @@ public record PointsService(
         } else {
             log.warn("No active accumulation points rule found");
             pointsMovementHistoryRepository.save(PointsMovementHistory.builder()
-                    .points(0)
+                    .points(pointsAccumulated)
                     .dollar(purchaseRequest.dollar())
                     .movementDate(purchaseRequest.movementDate())
                     .type(MovementType.ACCUMULATION)
                     .lotPoints(lotPoints)
+                    .invoiceUuid(purchaseRequest.invoiceUuid())
                     .build());
         }
+
+        return new PointsResponse(pointsAccumulated, purchaseRequest.dollar(), MovementType.ACCUMULATION);
     }
 
     @Override
-    public void redeemPoints(PurchaseRequest purchaseRequest) {
+    public PointsResponse redeemPoints(PurchaseRequest purchaseRequest) {
         Optional<PointsRedemptionRule> pointsRedemptionRule = pointsRedemptionRuleService.getActive();
         LotPoints lotPoints = getOrCreateActiveLotPointsByCustomer(purchaseRequest.idCustomer());
 
@@ -82,11 +89,14 @@ public record PointsService(
                 .movementDate(purchaseRequest.movementDate())
                 .type(MovementType.REDEMPTION)
                 .lotPoints(lotPoints)
+                .invoiceUuid(purchaseRequest.invoiceUuid())
                 .build());
 
         lotPoints.setPoints(lotPoints.getPoints() - purchaseRequest.points());
         lotPoints.setUpdatedAt(purchaseRequest.movementDate());
         lotPointsRepository.save(lotPoints);
+
+        return new PointsResponse(purchaseRequest.points(), dollarEquivalency, MovementType.REDEMPTION);
     }
 
     @Override

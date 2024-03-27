@@ -38,7 +38,7 @@ class CustomerServiceGrpcTest {
                 .setIdUser(1)
                 .build();
 
-        underTest.register(requestFromGrpc, responseObserver);
+        underTest.registerCustomer(requestFromGrpc, responseObserver);
 
         verify(responseObserver, times(1)).onNext(null);
         verify(responseObserver, times(1)).onCompleted();
