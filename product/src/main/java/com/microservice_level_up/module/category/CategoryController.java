@@ -4,6 +4,7 @@ import com.microservice_level_up.module.category.dto.CategoryRegistrationRequest
 import com.microservice_level_up.dto.CategoryResponse;
 import com.microservice_level_up.module.category.dto.UpdateCategoryRequest;
 import com.microservice_level_up.response.BaseResponse;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,7 @@ public record CategoryController(ICategoryService service) {
     }
 
     @PostMapping
-    public ResponseEntity<BaseResponse<Long>> addCategory(@RequestBody CategoryRegistrationRequest request) {
+    public ResponseEntity<BaseResponse<Long>> addCategory(@RequestBody @Valid CategoryRegistrationRequest request) {
         log.info("Add new category {}", request);
         long payload = service.addCategory(request);
 

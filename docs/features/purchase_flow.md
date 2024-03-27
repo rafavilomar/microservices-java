@@ -1,8 +1,8 @@
 # Purchase Flow
 
 Author: rafavilomar  
-Status: `Developing` *[Draft, Developing, In review, Finished]*  
-Last updated: 2024-03-24
+Status: `In review` *[Draft, Developing, In review, Finished]*  
+Last updated: 2024-03-27
 
 ## Contents
 
@@ -12,6 +12,10 @@ Last updated: 2024-03-24
 - Overview
 - Solution
   - Create Shopping microservice
+  - Purchase service
+  - Invoice UUIDs
+  - Purchase email notification
+- Considerations
 
 ## Objective
 
@@ -74,6 +78,8 @@ public InvoiceResponse purchase(PurchaseRequest request) {
     
     invoiceService.save(invoiceResponse, uuid);
 
+    sendEmailNotification(invoiceResponse);
+  
     return invoiceResponse;
 }
 ```
@@ -114,3 +120,40 @@ public void save(InvoiceResponse invoiceResponse, String uuid) {
 We can see how the UUID class is used for the purchase service. This UUID is used to track purchase logs and register 
 points movements for **Loyalty**. This is because t classic sequence ID (that we're still using as primary key) is 
 generated during persistence process; but we need a unique value before save the invoice.
+
+### Purchase email notification
+
+This `PurchaseEmail` service from the Email Notification microservice get the invoice with all necessary information 
+about the purchase and customer information to send it through email. For now, this notification consist of a simple 
+text message, but it will be replaced soon.
+
+```java
+@KafkaListener(
+        topics = "purchase",
+        containerFactory = "kafkaListenerContainerFactory",
+        groupId = "grupo1"
+)
+public void sendEmail(Event<?> event) {
+    PurchaseNotification purchase = objectMapper.convertValue(event.data(), PurchaseNotification.class);
+    log.info("Send purchase email {}", purchase);
+
+    SimpleMailMessage message = new SimpleMailMessage();
+    message.setTo(purchase.invoice().email());
+    message.setSubject("Invoice");
+    message.setText("Purchase's invoice");
+
+    mailSender.send(message);
+}
+```
+
+As we can see, all purchase notification will be listening on the kafka topic `purchase`, so customers don't need to wait 
+for this email to complete the purchase.
+
+## Considerations
+
+During this development was necessary to add some simple security configuration for some microservices. It seems that 
+every dependency from the Common module are being inherit by all the other modules.
+
+That's why the `spring-boot-starter-data-jpa` was replaced by `jakarta.persistence-api` to keep using jakarta annotations 
+for DTOs on that module without forcing other modules to use a database connection. In the future, the dependency 
+`spring-boot-starter-security` needs to be removed from Common module.

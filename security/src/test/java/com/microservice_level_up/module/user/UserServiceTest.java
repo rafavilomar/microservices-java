@@ -73,7 +73,7 @@ class UserServiceTest {
         verify(userRepository, times(1)).existsByEmail(newUser.email());
         verify(roleService, times(1)).findByName(roleName);
         verify(userRepository, times(1)).save(any(User.class));
-        verify(customerServiceBlockingStub, times(1)).register(CustomerRegistrationRequest.newBuilder()
+        verify(customerServiceBlockingStub, times(1)).registerCustomer(CustomerRegistrationRequest.newBuilder()
                 .setFirstName(newUser.firstName())
                 .setLastName(newUser.lastName())
                 .setEmail(newUser.email())

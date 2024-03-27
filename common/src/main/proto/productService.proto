@@ -8,9 +8,9 @@ option java_multiple_files = true;
 
 service ProductService {
 
-  rpc buy(BuyProductRequest) returns (google.protobuf.Empty);
-  rpc getById(ProductRequestById) returns (ProductResponse);
-  rpc getByCode(ProductRequestByCode) returns (ProductResponse);
+  rpc buyProduct(BuyProductRequest) returns (google.protobuf.Empty);
+  rpc getProductById(ProductRequestById) returns (ProductResponse);
+  rpc getProductByCode(ProductRequestByCode) returns (ProductResponse);
 
 }
 

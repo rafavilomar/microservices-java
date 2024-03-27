@@ -52,7 +52,7 @@ public record ProductController(IProductService service) {
     }
 
     @PostMapping
-    public ResponseEntity<BaseResponse<Long>> add(@Valid @RequestBody ProductRegistrationRequest request) {
+    public ResponseEntity<BaseResponse<Long>> add(@RequestBody @Valid ProductRegistrationRequest request) {
         log.info("Add new product {}", request);
         long payload = service.add(request);
 

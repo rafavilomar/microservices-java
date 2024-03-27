@@ -8,9 +8,9 @@ option java_multiple_files = true;
 
 service CustomerService {
 
-  rpc register(CustomerRegistrationRequest) returns (google.protobuf.Empty);
+  rpc registerCustomer(CustomerRegistrationRequest) returns (google.protobuf.Empty);
 
-  rpc getById(CustomerRequest) returns (CustomerResponse);
+  rpc getCustomerById(CustomerRequest) returns (CustomerResponse);
 
 }
 

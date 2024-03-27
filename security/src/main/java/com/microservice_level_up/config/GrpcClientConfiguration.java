@@ -11,7 +11,7 @@ public class GrpcClientConfiguration {
 
     @Bean
     CustomerServiceGrpc.CustomerServiceBlockingStub customerServiceBlockingStub() {
-        Channel channel = ManagedChannelBuilder.forAddress("localhost", 8081)
+        Channel channel = ManagedChannelBuilder.forAddress("localhost", 8082)
                 .usePlaintext()
                 .build();
 

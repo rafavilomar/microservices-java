@@ -18,7 +18,7 @@ public class CustomerServiceGrpc extends common.grpc.common.CustomerServiceGrpc.
     private final ICustomerService customerService;
 
     @Override
-    public void register(CustomerRegistrationRequest request, StreamObserver<Empty> responseObserver) {
+    public void registerCustomer(CustomerRegistrationRequest request, StreamObserver<Empty> responseObserver) {
         customerService.register(com.microservice_level_up.module.customer.dto.CustomerRegistrationRequest.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
@@ -33,7 +33,7 @@ public class CustomerServiceGrpc extends common.grpc.common.CustomerServiceGrpc.
     }
 
     @Override
-    public void getById(CustomerRequest request, StreamObserver<common.grpc.common.CustomerResponse> responseObserver) {
+    public void getCustomerById(CustomerRequest request, StreamObserver<common.grpc.common.CustomerResponse> responseObserver) {
         CustomerResponse customer = customerService.getById(request.getId());
         responseObserver.onNext(common.grpc.common.CustomerResponse.newBuilder()
                 .setId(customer.id())

@@ -21,7 +21,7 @@ public class ProductServiceGrpc extends common.grpc.common.ProductServiceGrpc.Pr
     private final IProductService productService;
 
     @Override
-    public void buy(common.grpc.common.BuyProductRequest request, StreamObserver<Empty> responseObserver){
+    public void buyProduct(common.grpc.common.BuyProductRequest request, StreamObserver<Empty> responseObserver){
         List<BuyProductRequest> products = request.getProductsList()
                 .stream()
                 .map(product -> new BuyProductRequest(product.getQuantity(), product.getCode(), 10))
@@ -34,7 +34,7 @@ public class ProductServiceGrpc extends common.grpc.common.ProductServiceGrpc.Pr
     }
 
     @Override
-    public void getById(ProductRequestById request, StreamObserver<ProductResponse> responseObserver) {
+    public void getProductById(ProductRequestById request, StreamObserver<ProductResponse> responseObserver) {
         com.microservice_level_up.dto.ProductResponse product = productService.getById(request.getId());
 
         responseObserver.onNext(ProductResponse.newBuilder()
@@ -46,7 +46,7 @@ public class ProductServiceGrpc extends common.grpc.common.ProductServiceGrpc.Pr
     }
 
     @Override
-    public void getByCode(ProductRequestByCode request, StreamObserver<ProductResponse> responseObserver) {
+    public void getProductByCode(ProductRequestByCode request, StreamObserver<ProductResponse> responseObserver) {
         com.microservice_level_up.dto.ProductResponse product = productService.getByCode(request.getCode());
 
         responseObserver.onNext(ProductResponse.newBuilder()

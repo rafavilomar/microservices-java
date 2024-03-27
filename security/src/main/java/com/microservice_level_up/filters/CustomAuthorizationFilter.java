@@ -95,12 +95,13 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
     private boolean isPublicPath(String path) {
         return path.contains("/login") ||
-                path.contains("/api/v1/auth/refrescarToken");
+                path.contains("/api/v1/auth/refrescarToken") ||
+                path.contains("/user/customer");
     }
 
     private ResponseEntity<ExceptionResponse> unauthorizedResponseInvalidToken() {
         ExceptionResponse response = new ExceptionResponse(
-                LocalDateTime.now(),
+//                LocalDateTime.now(),
                 HttpStatus.UNAUTHORIZED.value(),
                 HttpStatus.UNAUTHORIZED.getReasonPhrase(),
                 List.of("Invalid provided access token")
@@ -110,7 +111,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
     private ResponseEntity<ExceptionResponse> tokenExpiredResponse() {
         ExceptionResponse response = new ExceptionResponse(
-                LocalDateTime.now(),
+//                LocalDateTime.now(),
                 HttpStatus.UNAUTHORIZED.value(),
                 HttpStatus.UNAUTHORIZED.getReasonPhrase(),
                 List.of("The provided access token is already expired")

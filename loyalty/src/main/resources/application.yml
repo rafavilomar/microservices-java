@@ -1,5 +1,5 @@
 server:
-  port: 8095
+  port: 8120
 
 spring:
   application:
@@ -21,7 +21,7 @@ spring:
 
 grpc:
   server:
-    port: 8081
+    port: 8083
 
 #kafka:
 #  bootstrap-address: localhost:29092

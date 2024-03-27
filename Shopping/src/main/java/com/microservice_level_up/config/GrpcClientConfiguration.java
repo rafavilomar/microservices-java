@@ -13,7 +13,7 @@ public class GrpcClientConfiguration {
 
     @Bean
     CustomerServiceGrpc.CustomerServiceBlockingStub customerServiceBlockingStub() {
-        Channel channel = ManagedChannelBuilder.forAddress("localhost", 8081)
+        Channel channel = ManagedChannelBuilder.forAddress("localhost", 8082)
                 .usePlaintext()
                 .build();
 
@@ -22,7 +22,7 @@ public class GrpcClientConfiguration {
 
     @Bean
     ProductServiceGrpc.ProductServiceBlockingStub productServiceBlockingStub() {
-        Channel channel = ManagedChannelBuilder.forAddress("localhost", 8150)
+        Channel channel = ManagedChannelBuilder.forAddress("localhost", 8081)
                 .usePlaintext()
                 .build();
 
@@ -31,7 +31,7 @@ public class GrpcClientConfiguration {
 
     @Bean
     LoyaltyServiceGrpc.LoyaltyServiceBlockingStub loyaltyServiceBlockingStub() {
-        Channel channel = ManagedChannelBuilder.forAddress("localhost", 8095)
+        Channel channel = ManagedChannelBuilder.forAddress("localhost", 8083)
                 .usePlaintext()
                 .build();
 

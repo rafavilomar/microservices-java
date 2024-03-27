@@ -11,7 +11,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,7 +21,6 @@ public class ExceptionHandlerAdvice {
     public ResponseEntity<ExceptionResponse> handleError(EntityNotFoundException exception) {
 
         ExceptionResponse response = new ExceptionResponse(
-                LocalDateTime.now(),
                 HttpStatus.NOT_FOUND.value(),
                 HttpStatus.NOT_FOUND.getReasonPhrase(),
                 List.of(exception.getMessage())
@@ -40,7 +38,6 @@ public class ExceptionHandlerAdvice {
         );
 
         ExceptionResponse response = new ExceptionResponse(
-                LocalDateTime.now(),
                 HttpStatus.BAD_REQUEST.value(),
                 HttpStatus.BAD_REQUEST.getReasonPhrase(),
                 errors
@@ -58,7 +55,7 @@ public class ExceptionHandlerAdvice {
                 .toList();
 
         ExceptionResponse response = new ExceptionResponse(
-                LocalDateTime.now(),
+//                LocalDateTime.now(),
                 HttpStatus.BAD_REQUEST.value(),
                 HttpStatus.BAD_REQUEST.getReasonPhrase(),
                 errors
@@ -71,7 +68,6 @@ public class ExceptionHandlerAdvice {
     public ResponseEntity<ExceptionResponse> handleError(BadRequestException exception) {
 
         ExceptionResponse response = new ExceptionResponse(
-                LocalDateTime.now(),
                 HttpStatus.BAD_REQUEST.value(),
                 HttpStatus.BAD_REQUEST.getReasonPhrase(),
                 List.of(exception.getMessage())
@@ -84,7 +80,6 @@ public class ExceptionHandlerAdvice {
     public ResponseEntity<ExceptionResponse> handleError(UnauthorizedException exception) {
 
         ExceptionResponse response = new ExceptionResponse(
-                LocalDateTime.now(),
                 HttpStatus.UNAUTHORIZED.value(),
                 HttpStatus.UNAUTHORIZED.getReasonPhrase(),
                 List.of(exception.getMessage())
@@ -97,7 +92,6 @@ public class ExceptionHandlerAdvice {
     public ResponseEntity<ExceptionResponse> handleError(Exception exception) {
 
         ExceptionResponse response = new ExceptionResponse(
-                LocalDateTime.now(),
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
                 List.of(exception.getMessage())

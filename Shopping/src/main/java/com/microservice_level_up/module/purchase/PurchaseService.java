@@ -2,12 +2,17 @@ package com.microservice_level_up.module.purchase;
 
 import com.microservice_level_up.dto.InvoiceResponse;
 import com.microservice_level_up.enums.MovementType;
+import com.microservice_level_up.kafka.events.Event;
+import com.microservice_level_up.kafka.events.EventType;
 import com.microservice_level_up.module.invoice.IInvoiceService;
+import com.microservice_level_up.notification.PurchaseNotification;
 import common.grpc.common.PointsResponse;
 import common.grpc.common.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,6 +22,7 @@ public record PurchaseService (
         CustomerServiceGrpc.CustomerServiceBlockingStub customerServiceBlockingStub,
         ProductServiceGrpc.ProductServiceBlockingStub productServiceBlockingStub,
         LoyaltyServiceGrpc.LoyaltyServiceBlockingStub loyaltyServiceBlockingStub,
+        KafkaTemplate<String, Event<?>> producer,
         IInvoiceService invoiceService) implements IPurchaseService{
 
     @Override
@@ -25,7 +31,7 @@ public record PurchaseService (
         log.info("================== New purchase {} ==================", uuid);
         log.info("Purchase request for uuid {}: {}", uuid, request);
 
-        CustomerResponse customer = customerServiceBlockingStub.getById(CustomerRequest.newBuilder()
+        CustomerResponse customer = customerServiceBlockingStub.getCustomerById(CustomerRequest.newBuilder()
                 .setId(request.idCustomer())
                 .build());
         PointsResponse redemptionPointsResponse = redeemPoints(request, uuid);
@@ -47,6 +53,8 @@ public record PurchaseService (
 
         invoiceService.save(invoiceResponse, uuid);
 
+        sendEmailNotification(invoiceResponse);
+
         return invoiceResponse;
     }
 
@@ -64,7 +72,7 @@ public record PurchaseService (
         return loyaltyServiceBlockingStub
                 .accumulatePoints(common.grpc.common.PurchaseRequest.newBuilder()
                         .setIdCustomer(request.idCustomer())
-                        .setDollar(request.total())
+                        .setDollar(request.subtotal())
                         .setMovementDate(request.datetime().toString())
                         .setInvoiceUuid(uuid)
                         .build());
@@ -75,7 +83,7 @@ public record PurchaseService (
                 .stream()
                 .map(product -> Product.newBuilder().setCode(product.code()).setQuantity(product.quantity()).build())
                 .toList();
-        productServiceBlockingStub.buy(BuyProductRequest.newBuilder().addAllProducts(products).build());
+        productServiceBlockingStub.buyProduct(BuyProductRequest.newBuilder().addAllProducts(products).build());
     }
 
     private List<com.microservice_level_up.dto.PointsResponse> getPointsResponse(
@@ -92,5 +100,15 @@ public record PurchaseService (
                         accumulationPointsResponse.getDollar(),
                         MovementType.valueOf(accumulationPointsResponse.getType()))
         );
+    }
+
+    private void sendEmailNotification(InvoiceResponse invoice) {
+        Event<PurchaseNotification> event = new Event<>(
+                UUID.randomUUID().toString(),
+                LocalDateTime.now(),
+                EventType.CREATED,
+                new PurchaseNotification(invoice)
+        );
+        producer.send("purchase", event);
     }
 }

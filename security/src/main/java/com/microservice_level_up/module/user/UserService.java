@@ -42,7 +42,7 @@ public record UserService(
                 .password(newUser.password())
                 .build());
         try {
-            customerServiceBlockingStub.register(CustomerRegistrationRequest.newBuilder()
+            customerServiceBlockingStub.registerCustomer(CustomerRegistrationRequest.newBuilder()
                     .setFirstName(newUser.firstName())
                     .setLastName(newUser.lastName())
                     .setEmail(newUser.email())
