@@ -6,6 +6,8 @@ import com.microservice_level_up.dto.PointsResponse;
 import com.microservice_level_up.enums.MovementType;
 import com.microservice_level_up.kafka.events.Event;
 import com.microservice_level_up.notification.PurchaseNotification;
+import common.grpc.common.ProductRequestByCode;
+import common.grpc.common.ProductServiceGrpc;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -22,7 +24,10 @@ import java.util.Objects;
 
 @Slf4j
 @Service
-public record PurchaseEmailService(JavaMailSender mailSender, ObjectMapper objectMapper) {
+public record PurchaseEmailService(
+        JavaMailSender mailSender,
+        ObjectMapper objectMapper,
+        ProductServiceGrpc.ProductServiceBlockingStub productServiceBlockingStub) {
 
     @KafkaListener(
             topics = "purchase",
@@ -37,12 +42,18 @@ public record PurchaseEmailService(JavaMailSender mailSender, ObjectMapper objec
         message.setRecipients(Message.RecipientType.TO, purchase.invoice().email());
         message.setSubject("Invoice");
 
-        String template = Files.readString(Paths.get("/Users/rafavilomar/dev/personal/microservices-java/email-notification/src/main/resources/templates/purchase_invoice.html"));
+        String template = Files.readString(Paths.get(
+                Thread.currentThread()
+                        .getContextClassLoader()
+                        .getResource("templates/purchase_invoice.html")
+                        .getPath()
+        ));
         template = template
                 .replace("${id}", String.valueOf(purchase.invoice().id()))
                 .replace("${date}", purchase.invoice().datetime().toLocalDate().toString())
                 .replace("${fullname}", purchase.invoice().fullname())
                 .replace("${email}", purchase.invoice().email())
+                .replace("${paymentMethodName}", purchase.invoice().paymentMethod().name())
                 .replace("${pointMovements}", getTableRowsForPointsMovements(purchase.invoice().pointMovements()))
                 .replace("${products}", getTableRowsForProducts(purchase.invoice().products()))
                 .replace("${subtotal}", String.valueOf(purchase.invoice().subtotal()))
@@ -59,11 +70,11 @@ public record PurchaseEmailService(JavaMailSender mailSender, ObjectMapper objec
 
         for (PointsResponse pointMovement : pointMovements){
             if (Objects.requireNonNull(pointMovement.type()) == MovementType.REDEMPTION) {
-                tableRows.append("\n<tr class=\"details\"> <td>Redemption</td> <td>")
+                tableRows.append("\n<tr class=\"details\"> <td>Redemption</td> <td class=\"text-left\">")
                         .append(pointMovement.points())
                         .append("</td> </tr>");
             } else if (pointMovement.type() == MovementType.ACCUMULATION) {
-                tableRows.append("\n<tr class=\"details\"> <td>Accumulation</td> <td>")
+                tableRows.append("\n<tr class=\"details\"> <td>Accumulation</td> <td class=\"text-left\">")
                         .append(pointMovement.points())
                         .append("</td> </tr>");
             }
@@ -79,8 +90,10 @@ public record PurchaseEmailService(JavaMailSender mailSender, ObjectMapper objec
             tableRows.append("\n<tr class=\"item\"> <td>")
                     .append(product.quantity())
                     .append(" of: ")
-                    .append(product.code())
-                    .append("</td> <td>$")
+                    .append(productServiceBlockingStub
+                            .getProductByCode(ProductRequestByCode.newBuilder().setCode(product.code()).build())
+                            .getName())
+                    .append("</td> <td class=\"text-left\">$")
                     .append(product.price())
                     .append("</td> </tr>");
         }

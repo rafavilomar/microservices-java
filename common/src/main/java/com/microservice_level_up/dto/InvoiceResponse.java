@@ -10,6 +10,7 @@ public record InvoiceResponse(
         long id,
         String fullname,
         String email,
+        InvoicePaymentMethod paymentMethod,
         List<BuyProductRequest> products,
         List<PointsResponse> pointMovements,
         double subtotal,

@@ -28,7 +28,7 @@
                 vertical-align: top;
             }
 
-            .invoice-box table tr td:nth-child(2) {
+            .text-left {
                 text-align: right;
             }
 
@@ -116,7 +116,7 @@
                                             style="width: 100%; max-width: 300px"
                                     />
                                 </td>
-                                <td>
+                                <td class="text-left">
                                     Invoice #: ${id}<br />
                                     Date: ${date}
                                 </td>
@@ -130,7 +130,7 @@
                         <table>
                             <tr>
                                 <td>Company Inc.<br/> Company address</td>
-                                <td>${fullname}<br />${email}</td>
+                                <td class="text-left">${fullname}<br />${email}</td>
                             </tr>
                         </table>
                     </td>
@@ -138,37 +138,37 @@
 
                 <tr class="heading">
                     <td>Payment Method</td>
-                    <td>Check #</td>
+                    <td></td>
                 </tr>
 
                 <tr class="details">
-                    <td>Check</td>
-                    <td>1000</td>
+                    <td>${paymentMethodName}</td>
+                    <td></td>
                 </tr>
 
                 <tr class="heading">
                     <td>Points movements</td>
-                    <td>Amount</td>
+                    <td class="text-left">Amount</td>
                 </tr>
                 ${pointMovements}
 
                 <tr class="heading">
                     <td>Product</td>
-                    <td>Price</td>
+                    <td class="text-left">Price</td>
                 </tr>
                 ${products}
 
                 <tr class="subtotal">
                     <td></td>
-                    <td>Subtotal: $${subtotal}</td>
+                    <td class="text-left">Subtotal: $${subtotal}</td>
                 </tr>
                 <tr>
                     <td></td>
-                    <td>Tax: $${tax}</td>
+                    <td class="text-left">Tax: $${tax}</td>
                 </tr>
                 <tr class="total">
                     <td></td>
-                    <td>Total: $${total}</td>
+                    <td class="text-left">Total: $${total}</td>
                 </tr>
             </table>
         </div>
