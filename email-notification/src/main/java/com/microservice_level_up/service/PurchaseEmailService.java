@@ -35,11 +35,11 @@ public record PurchaseEmailService(
             groupId = "grupo1"
     )
     public void sendEmail(Event<?> event) throws IOException, MessagingException {
-        PurchaseNotification purchase = objectMapper.convertValue(event.data(), PurchaseNotification.class);
-        log.info("Send purchase email {}", purchase);
+        PurchaseNotification notification = objectMapper.convertValue(event.data(), PurchaseNotification.class);
+        log.info("Send purchase email {}", notification);
 
         MimeMessage message = mailSender.createMimeMessage();
-        message.setRecipients(Message.RecipientType.TO, purchase.invoice().email());
+        message.setRecipients(Message.RecipientType.TO, notification.invoice().email());
         message.setSubject("Invoice");
 
         String template = Files.readString(Paths.get(
@@ -49,16 +49,16 @@ public record PurchaseEmailService(
                         .getPath()
         ));
         template = template
-                .replace("${id}", String.valueOf(purchase.invoice().id()))
-                .replace("${date}", purchase.invoice().datetime().toLocalDate().toString())
-                .replace("${fullname}", purchase.invoice().fullname())
-                .replace("${email}", purchase.invoice().email())
-                .replace("${paymentMethodName}", purchase.invoice().paymentMethod().name())
-                .replace("${pointMovements}", getTableRowsForPointsMovements(purchase.invoice().pointMovements()))
-                .replace("${products}", getTableRowsForProducts(purchase.invoice().products()))
-                .replace("${subtotal}", String.valueOf(purchase.invoice().subtotal()))
-                .replace("${tax}", String.valueOf(purchase.invoice().tax()))
-                .replace("${total}", String.valueOf(purchase.invoice().total()));
+                .replace("${id}", String.valueOf(notification.invoice().id()))
+                .replace("${date}", notification.invoice().datetime().toLocalDate().toString())
+                .replace("${fullname}", notification.invoice().fullname())
+                .replace("${email}", notification.invoice().email())
+                .replace("${paymentMethodName}", notification.invoice().paymentMethod().name())
+                .replace("${pointMovements}", getTableRowsForPointsMovements(notification.invoice().pointMovements()))
+                .replace("${products}", getTableRowsForProducts(notification.invoice().products()))
+                .replace("${subtotal}", String.valueOf(notification.invoice().subtotal()))
+                .replace("${tax}", String.valueOf(notification.invoice().tax()))
+                .replace("${total}", String.valueOf(notification.invoice().total()));
 
         message.setContent(template, "text/html; charset=utf-8");
 
