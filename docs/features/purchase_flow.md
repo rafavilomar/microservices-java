@@ -123,7 +123,7 @@ generated during persistence process; but we need a unique value before save the
 
 ### Purchase email notification
 
-This `PurchaseEmail` service from the Email Notification microservice get the invoice with all necessary information 
+This `PurchaseEmailService` service from the Email Notification microservice get the invoice with all necessary information 
 about the purchase and customer information to send it through email. For now, this notification consist of a simple 
 text message, but it will be replaced soon.
 
