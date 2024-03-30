@@ -96,6 +96,7 @@ class PurchaseServiceTest {
                     .setDollar(30)
                     .setType(MovementType.ACCUMULATION.toString())
                     .build());
+            when(invoiceService.save(eq(customer), eq(uuid.toString()), eq(request), any())).thenReturn(expectedResponse);
 
             InvoiceResponse actualResponse = underTest.purchase(request);
 
@@ -122,7 +123,7 @@ class PurchaseServiceTest {
                     .setMovementDate(request.datetime().toString())
                     .setInvoiceUuid(uuid.toString())
                     .build());
-            verify(invoiceService, times(1)).save(expectedResponse, uuid.toString());
+            verify(invoiceService, times(1)).save(eq(customer), eq(uuid.toString()), eq(request), any());
             verify(producer, times(1)).send(eq("purchase"), any(Event.class));
             verifyNoMoreInteractions(
                     customerServiceBlockingStub,
