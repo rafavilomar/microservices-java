@@ -21,6 +21,57 @@ for the email notification.
 
 ### Validate payment method on `PurchaseService`
 
+Now there is a new Grpc service to get payment methods by ID. This service is being used by the `InvoiceService` before 
+save the invoice.
+
+```java
+public InvoiceResponse save(
+            CustomerResponse customer,
+            String uuid,
+            PurchaseRequest purchaseRequest,
+            List<PointsResponse> pointsMovements) {
+        log.info("Save invoice {} in database", uuid);
+
+        PaymentMethodResponse paymentMethod = customerServiceBlockingStub
+                .getPaymentMethodById(PaymentMethodRequest.newBuilder().setId(purchaseRequest.idPaymentMethod()).build());
+
+        Invoice invoice = invoiceRepository.save(Invoice.builder()
+                .uuid(uuid)
+                .fullname(customer.getFirstName() + " " + customer.getLastName())
+                .email(customer.getEmail())
+                .type(InvoiceType.PURCHASE)
+                .subtotal(purchaseRequest.subtotal())
+                .tax(purchaseRequest.tax())
+                .total(purchaseRequest.total())
+                .datetime(purchaseRequest.datetime())
+                .idPaymentMethod(paymentMethod.getId())
+                .build());
+
+        List<Product> products = purchaseRequest.products().stream()
+                .map(product -> Product.builder()
+                        .code(product.code())
+                        .price(product.price())
+                        .quantity(product.quantity())
+                        .invoice(invoice)
+                        .build())
+                .toList();
+        productRepository.saveAll(products);
+
+        return InvoiceResponse.builder()
+                .id(invoice.getId())
+                .fullname(customer.getFirstName() + " " + customer.getLastName())
+                .paymentMethod(new InvoicePaymentMethod(paymentMethod.getId(), paymentMethod.getMethodName()))
+                .email(customer.getEmail())
+                .products(purchaseRequest.products())
+                .pointMovements(pointsMovements)
+                .subtotal(purchaseRequest.subtotal())
+                .total(purchaseRequest.total())
+                .tax(purchaseRequest.tax())
+                .datetime(purchaseRequest.datetime())
+                .build();
+}
+```
+
 ### Add invoice ID for notification
 
 The `InvoiceResponse` was built before save the invoice and generate de ID, but now the `PurchaseService` got this 

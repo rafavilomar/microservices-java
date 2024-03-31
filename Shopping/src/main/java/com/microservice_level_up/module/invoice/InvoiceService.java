@@ -1,5 +1,6 @@
 package com.microservice_level_up.module.invoice;
 
+import com.microservice_level_up.dto.InvoicePaymentMethod;
 import com.microservice_level_up.dto.InvoiceResponse;
 import com.microservice_level_up.dto.PointsResponse;
 import com.microservice_level_up.module.invoice.entity.Invoice;
@@ -9,6 +10,9 @@ import com.microservice_level_up.module.invoice.repository.InvoiceRepository;
 import com.microservice_level_up.module.invoice.repository.ProductRepository;
 import com.microservice_level_up.module.purchase.PurchaseRequest;
 import common.grpc.common.CustomerResponse;
+import common.grpc.common.CustomerServiceGrpc;
+import common.grpc.common.PaymentMethodRequest;
+import common.grpc.common.PaymentMethodResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +22,8 @@ import java.util.List;
 @Service
 public record InvoiceService (
         InvoiceRepository invoiceRepository,
-        ProductRepository productRepository) implements IInvoiceService {
+        ProductRepository productRepository,
+        CustomerServiceGrpc.CustomerServiceBlockingStub customerServiceBlockingStub) implements IInvoiceService {
 
     @Override
     public InvoiceResponse save(
@@ -27,6 +32,9 @@ public record InvoiceService (
             PurchaseRequest purchaseRequest,
             List<PointsResponse> pointsMovements) {
         log.info("Save invoice {} in database", uuid);
+
+        PaymentMethodResponse paymentMethod = customerServiceBlockingStub
+                .getPaymentMethodById(PaymentMethodRequest.newBuilder().setId(purchaseRequest.idPaymentMethod()).build());
 
         Invoice invoice = invoiceRepository.save(Invoice.builder()
                 .uuid(uuid)
@@ -37,6 +45,7 @@ public record InvoiceService (
                 .tax(purchaseRequest.tax())
                 .total(purchaseRequest.total())
                 .datetime(purchaseRequest.datetime())
+                .idPaymentMethod(paymentMethod.getId())
                 .build());
 
         List<Product> products = purchaseRequest.products().stream()
@@ -52,6 +61,7 @@ public record InvoiceService (
         return InvoiceResponse.builder()
                 .id(invoice.getId())
                 .fullname(customer.getFirstName() + " " + customer.getLastName())
+                .paymentMethod(new InvoicePaymentMethod(paymentMethod.getId(), paymentMethod.getMethodName()))
                 .email(customer.getEmail())
                 .products(purchaseRequest.products())
                 .pointMovements(pointsMovements)

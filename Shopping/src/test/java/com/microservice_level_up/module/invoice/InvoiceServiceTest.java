@@ -1,6 +1,7 @@
 package com.microservice_level_up.module.invoice;
 
 import com.microservice_level_up.dto.BuyProductRequest;
+import com.microservice_level_up.dto.InvoicePaymentMethod;
 import com.microservice_level_up.dto.InvoiceResponse;
 import com.microservice_level_up.module.invoice.entity.Invoice;
 import com.microservice_level_up.module.invoice.entity.Product;
@@ -9,6 +10,9 @@ import com.microservice_level_up.module.invoice.repository.InvoiceRepository;
 import com.microservice_level_up.module.invoice.repository.ProductRepository;
 import com.microservice_level_up.module.purchase.PurchaseRequest;
 import common.grpc.common.CustomerResponse;
+import common.grpc.common.CustomerServiceGrpc;
+import common.grpc.common.PaymentMethodRequest;
+import common.grpc.common.PaymentMethodResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -32,6 +36,8 @@ class InvoiceServiceTest {
     private InvoiceRepository invoiceRepository;
     @Mock
     private ProductRepository productRepository;
+    @Mock
+    private CustomerServiceGrpc.CustomerServiceBlockingStub customerServiceBlockingStub;
 
     @BeforeEach
     void setUp() {
@@ -46,8 +52,16 @@ class InvoiceServiceTest {
                 .setLastName("Goodman")
                 .setEmail("saul@gmail.com")
                 .build();
+        PaymentMethodResponse paymentMethod = PaymentMethodResponse.newBuilder()
+                .setId(1)
+                .setMethodName("Credit card")
+                .build();
+        PaymentMethodRequest paymentMethodRequest = PaymentMethodRequest.newBuilder()
+                .setId(paymentMethod.getId())
+                .build();
         PurchaseRequest purchaseRequest = PurchaseRequest.builder()
                 .products(List.of(new BuyProductRequest(2, "CODE", 15)))
+                .idPaymentMethod(paymentMethod.getId())
                 .subtotal(30)
                 .tax(3)
                 .total(33)
@@ -67,12 +81,14 @@ class InvoiceServiceTest {
                 .build();
 
         when(invoiceRepository.save(any())).thenReturn(invoice);
+        when(customerServiceBlockingStub.getPaymentMethodById(paymentMethodRequest)).thenReturn(paymentMethod);
 
         InvoiceResponse actualResponse = underTest.save(customer, uuid.toString(), purchaseRequest, new ArrayList<>());
         InvoiceResponse expectedResponse = InvoiceResponse.builder()
                 .id(invoice.getId())
                 .fullname(customer.getFirstName() + " " + customer.getLastName())
                 .email(customer.getEmail())
+                .paymentMethod(new InvoicePaymentMethod(paymentMethod.getId(), paymentMethod.getMethodName()))
                 .products(purchaseRequest.products())
                 .pointMovements(new ArrayList<>())
                 .subtotal(purchaseRequest.subtotal())
@@ -92,6 +108,7 @@ class InvoiceServiceTest {
                         .quantity(expectedResponse.products().get(0).quantity())
                         .build()
         ));
-        verifyNoMoreInteractions(invoiceRepository, productRepository);
+        verify(customerServiceBlockingStub, times(1)).getPaymentMethodById(paymentMethodRequest);
+        verifyNoMoreInteractions(invoiceRepository, productRepository, customerServiceBlockingStub);
     }
 }
