@@ -1,5 +1,6 @@
 package com.microservice_level_up.module.product;
 
+import com.microservice_level_up.error.http_exeption.BadRequestException;
 import com.microservice_level_up.error.not_enough_points.DuplicatedProductCodeException;
 import com.microservice_level_up.module.category.Category;
 import com.microservice_level_up.module.category.ICategoryService;
@@ -69,6 +70,8 @@ public record ProductService(
         int index = 0;
         for (Product product : products) {
             int quantityToSubtract = buyProducts.get(index).quantity();
+            if (quantityToSubtract > product.getStock())
+                throw new BadRequestException("Not enough "+product.getCode()+" products in stock to subtract "+quantityToSubtract);
             product.setStock(product.getStock() - quantityToSubtract);
         }
 

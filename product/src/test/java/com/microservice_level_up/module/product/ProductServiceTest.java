@@ -1,5 +1,6 @@
 package com.microservice_level_up.module.product;
 
+import com.microservice_level_up.error.http_exeption.BadRequestException;
 import com.microservice_level_up.error.not_enough_points.DuplicatedProductCodeException;
 import com.microservice_level_up.module.category.Category;
 import com.microservice_level_up.module.category.ICategoryService;
@@ -265,6 +266,24 @@ class ProductServiceTest {
         List<String> codes = buyProducts.stream().map(BuyProductRequest::code).toList();
 
         assertEquals("Products " + codes + " do not exist", exception.getMessage());
+
+        verify(repository, times(1)).findByCodeIn(codes);
+        verifyNoMoreInteractions(repository);
+        verifyNoInteractions(categoryService);
+    }
+
+    @Test
+    void buy_NotEnoughStock() {
+        List<BuyProductRequest> buyProducts = List.of(new BuyProductRequest(10, "test", 10));
+        List<Product> products = List.of(productTemplate(1L));
+
+        when(repository.findByCodeIn(buyProducts.stream().map(BuyProductRequest::code).toList())).thenReturn(products);
+
+        assertThrows(BadRequestException.class, () -> service.buy(buyProducts));
+
+        List<String> codes = buyProducts.stream()
+                .map(BuyProductRequest::code)
+                .collect(Collectors.toList());
 
         verify(repository, times(1)).findByCodeIn(codes);
         verifyNoMoreInteractions(repository);

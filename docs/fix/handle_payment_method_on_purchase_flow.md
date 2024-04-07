@@ -1,8 +1,8 @@
 # Handle Payment Method on Purchase Flow
 
 Author: rafavilomar  
-Status: `Developing` *[Draft, Developing, In review, Finished]*  
-Last updated: 2024-03-30
+Status: `In review` *[Draft, Developing, In review, Finished]*  
+Last updated: 2024-04-06
 
 ## Contents
 
