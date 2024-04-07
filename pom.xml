@@ -26,6 +26,7 @@
         <module>customer</module>
         <module>security</module>
         <module>Shopping</module>
+        <module>api-gateway</module>
     </modules>
 
     <properties>
