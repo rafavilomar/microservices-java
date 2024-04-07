@@ -1,7 +1,7 @@
 # Handle Payment Method on Purchase Flow
 
 Author: rafavilomar  
-Status: `In review` *[Draft, Developing, In review, Finished]*  
+Status: `Finished` *[Draft, Developing, In review, Finished]*  
 Last updated: 2024-04-06
 
 ## Contents
@@ -103,3 +103,7 @@ public InvoiceResponse purchase(PurchaseRequest request) {
         return invoiceResponse;
 }
 ```
+
+## Considerations
+
+This fix comes from feature [Purchase Flow](../features/purchase_flow.md)
