@@ -12,6 +12,8 @@ service CustomerService {
 
   rpc getCustomerById(CustomerRequest) returns (CustomerResponse);
 
+  rpc getPaymentMethodById(PaymentMethodRequest) returns (PaymentMethodResponse);
+
 }
 
 message CustomerRegistrationRequest {
@@ -32,4 +34,19 @@ message CustomerResponse {
   string firstName = 2;
   string lastName = 3;
   string email = 4;
+}
+
+message PaymentMethodRequest {
+  uint64 id = 1;
+}
+
+message PaymentMethodResponse {
+  uint64 id = 1;
+  uint64 customerId = 2;
+  string methodName = 3;
+  string cardNumber = 4;
+  string alias = 5;
+  uint32 expirationMonth = 6;
+  uint32 expirationYear = 7;
+  uint32 cvv = 8;
 }

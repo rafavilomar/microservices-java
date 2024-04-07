@@ -40,18 +40,11 @@ public record PurchaseService (
 
         log.info("================== Purchase finished {} ==================", uuid);
 
-        InvoiceResponse invoiceResponse = InvoiceResponse.builder()
-                .fullname(customer.getFirstName() + " " + customer.getLastName())
-                .email(customer.getEmail())
-                .products(request.products())
-                .pointMovements(getPointsResponse(redemptionPointsResponse, accumulationPointsResponse))
-                .subtotal(request.subtotal())
-                .total(request.total())
-                .tax(request.tax())
-                .datetime(request.datetime())
-                .build();
-
-        invoiceService.save(invoiceResponse, uuid);
+        InvoiceResponse invoiceResponse = invoiceService.save(
+                customer,
+                uuid,
+                request,
+                getPointsResponse(redemptionPointsResponse, accumulationPointsResponse));
 
         sendEmailNotification(invoiceResponse);
 

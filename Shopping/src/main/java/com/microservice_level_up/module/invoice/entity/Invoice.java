@@ -50,4 +50,7 @@ public class Invoice {
     @Builder.Default
     @OneToMany(mappedBy = "invoice")
     private List<Product> products = new ArrayList<>();
+
+    @Column(nullable = false)
+    private long idPaymentMethod;
 }

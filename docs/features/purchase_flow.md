@@ -157,3 +157,5 @@ every dependency from the Common module are being inherit by all the other modul
 That's why the `spring-boot-starter-data-jpa` was replaced by `jakarta.persistence-api` to keep using jakarta annotations 
 for DTOs on that module without forcing other modules to use a database connection. In the future, the dependency 
 `spring-boot-starter-security` needs to be removed from Common module.
+
+Also, please see this necessary fix: [Handle Payment Method on Purchase Flow](../fix/handle_payment_method_on_purchase_flow.md)

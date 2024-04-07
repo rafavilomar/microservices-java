@@ -9,6 +9,7 @@ import java.util.List;
 @Builder
 public record PurchaseRequest(
         long idCustomer,
+        long idPaymentMethod,
         int pointsRedemption,
         List<BuyProductRequest> products,
         double subtotal,
