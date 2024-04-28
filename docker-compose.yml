@@ -77,6 +77,7 @@ services:
 networks:
   postgres:
     driver: bridge
+    external: true
   apps:
     driver: bridge
 

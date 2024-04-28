@@ -1,8 +1,8 @@
-package com.microservice_level_up.error.invalid_expiration_date;
+package com.microservice_level_up.error.http_exeption;
 
 import java.time.YearMonth;
 
-public class InvalidCardExpirationDateException extends RuntimeException {
+public class InvalidCardExpirationDateException extends BadRequestException {
 
     private final int month;
     private final int year;

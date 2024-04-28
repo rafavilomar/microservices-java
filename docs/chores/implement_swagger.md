@@ -51,4 +51,22 @@ Also, all controllers have these following annotations for documentation and imp
 - `@Operation`: to describe the endpoint purpose.
 - `@SecurityRequirement`: to set the authorization method to access endpoints.
 
+On the other hand, all `@RestControllerAdvice` have been documented using the annotation `@ResponseStatus` just like 
+this:
+
+```java
+@ExceptionHandler(EntityNotFoundException.class)
+@ResponseStatus(HttpStatus.NOT_FOUND)
+public ResponseEntity<ExceptionResponse> handleError(EntityNotFoundException exception) {
+
+    ExceptionResponse response = new ExceptionResponse(
+            HttpStatus.NOT_FOUND.value(),
+            HttpStatus.NOT_FOUND.getReasonPhrase(),
+            List.of(exception.getMessage())
+    );
+
+    return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+}
+```
+
 ### Unify Swagger-UI from all microservices into API Gateway
