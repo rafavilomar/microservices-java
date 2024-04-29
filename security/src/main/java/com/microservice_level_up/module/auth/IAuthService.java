@@ -54,4 +54,6 @@ public interface IAuthService {
      * @see com.microservice_level_up.module.user.IUserService#getByEmail(String)
      */
     LoginResponseDTO login(org.springframework.security.core.userdetails.User user);
+
+    String getJwtSecretKey();
 }

@@ -9,6 +9,7 @@ import com.microservice_level_up.module.auth.dtos.TokensResponseDTO;
 import com.microservice_level_up.module.role.entity.Permission;
 import com.microservice_level_up.module.user.IUserService;
 import com.microservice_level_up.module.user.User;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +27,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AuthService implements UserDetailsService, IAuthService {
 
+    @Getter
     @Value("${jwt.secret-key}")
     private String jwtSecretKey;
 
@@ -148,6 +150,7 @@ public class AuthService implements UserDetailsService, IAuthService {
                 .refreshToken(generateRefreshToken(user))
                 .email(userFromDb.getEmail())
                 .roleName(userFromDb.getRole().getName())
+                .permissions(userFromDb.getRole().getPermissions().stream().map(Permission::getCode).toList())
                 .build();
     }
 }

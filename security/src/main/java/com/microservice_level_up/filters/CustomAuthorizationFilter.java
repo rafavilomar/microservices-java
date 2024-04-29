@@ -4,13 +4,13 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microservice_level_up.auth.TokenValidationService;
 import com.microservice_level_up.error.ExceptionResponse;
+import com.microservice_level_up.module.auth.IAuthService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,15 +20,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
-    @Value("${jwt.secret-key}")
-    private String jwtSecretKey;
+    private final IAuthService authService;
 
     @Override
     protected void doFilterInternal(
@@ -68,11 +66,11 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
              * and go ahead with the original request
              */
             String token = authorizationHeader.substring("Bearer ".length());
-            String email = TokenValidationService.getEmail(token, jwtSecretKey);
+            String email = TokenValidationService.getEmail(token, authService.getJwtSecretKey());
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                     email,
                     null,
-                    TokenValidationService.getPermissions(token, jwtSecretKey));
+                    TokenValidationService.getPermissions(token, authService.getJwtSecretKey()));
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             log.info("Logged user {} trying to access: {}", email, request.getServletPath());
             filterChain.doFilter(request, response);
@@ -101,7 +99,6 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
     private ResponseEntity<ExceptionResponse> unauthorizedResponseInvalidToken() {
         ExceptionResponse response = new ExceptionResponse(
-//                LocalDateTime.now(),
                 HttpStatus.UNAUTHORIZED.value(),
                 HttpStatus.UNAUTHORIZED.getReasonPhrase(),
                 List.of("Invalid provided access token")
@@ -111,7 +108,6 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
     private ResponseEntity<ExceptionResponse> tokenExpiredResponse() {
         ExceptionResponse response = new ExceptionResponse(
-//                LocalDateTime.now(),
                 HttpStatus.UNAUTHORIZED.value(),
                 HttpStatus.UNAUTHORIZED.getReasonPhrase(),
                 List.of("The provided access token is already expired")

@@ -49,7 +49,7 @@ public class SecurityConfiguration {
                 .authenticationProvider(authenticationProvider())
                 .addFilter(new CustomAuthenticationFilter(authenticationManager(authConfiguration), authService))
                 .addFilterBefore(
-                        new CustomAuthorizationFilter(),
+                        new CustomAuthorizationFilter(authService),
                         UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
