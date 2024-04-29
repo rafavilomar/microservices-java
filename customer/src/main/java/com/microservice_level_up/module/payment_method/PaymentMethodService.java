@@ -1,6 +1,6 @@
 package com.microservice_level_up.module.payment_method;
 
-import com.microservice_level_up.error.invalid_expiration_date.InvalidCardExpirationDateException;
+import com.microservice_level_up.error.http_exeption.InvalidCardExpirationDateException;
 import com.microservice_level_up.module.customer.Customer;
 import com.microservice_level_up.module.customer.ICustomerService;
 import com.microservice_level_up.module.payment_method.dto.PaymentMethodRegistration;

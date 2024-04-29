@@ -4,6 +4,9 @@ import com.microservice_level_up.module.points_redemption_rule.dto.NewPointsRede
 import com.microservice_level_up.module.points_redemption_rule.dto.PointsRedemptionRuleResponse;
 import com.microservice_level_up.module.points_redemption_rule.dto.UpdatePointsRedemptionRule;
 import com.microservice_level_up.response.BaseResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -12,11 +15,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@SecurityRequirement(name = "bearerAuth")
+@Tag(name = "Redemption Points Rule")
 @RestController
 @RequestMapping("/api/v1/pointsRedemptionRule")
 public record PointsRedemptionRuleController(IPointsRedemptionRuleService service) {
 
     @GetMapping
+    @Operation(summary = "Get all rules paged")
     public ResponseEntity<BaseResponse<Page<PointsRedemptionRuleResponse>>> getAll(
             @RequestParam("page") int page,
             @RequestParam("size") int size
@@ -34,6 +40,7 @@ public record PointsRedemptionRuleController(IPointsRedemptionRuleService servic
     }
 
     @PostMapping
+    @Operation(summary = "Create a new rule")
     public ResponseEntity<BaseResponse<Long>> create(@RequestBody NewPointsRedemptionRule request) {
         long payload = service.create(request);
 
@@ -46,6 +53,7 @@ public record PointsRedemptionRuleController(IPointsRedemptionRuleService servic
     }
 
     @PutMapping
+    @Operation(summary = "Update an existing rule")
     public ResponseEntity<BaseResponse<Long>> update(@RequestBody UpdatePointsRedemptionRule request) {
         long payload = service.update(request);
 
@@ -58,6 +66,7 @@ public record PointsRedemptionRuleController(IPointsRedemptionRuleService servic
     }
 
     @PutMapping("/activate/{idAccumulationPointsRule}")
+    @Operation(summary = "Activate a specific rule")
     public ResponseEntity<BaseResponse<Void>> activate(@PathVariable long idAccumulationPointsRule) {
         service.activate(idAccumulationPointsRule);
 
