@@ -7,21 +7,27 @@ import com.microservice_level_up.response.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @SecurityRequirement(name = "bearerAuth")
 @Tag(name = "Redemption Points Rule")
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/pointsRedemptionRule")
-public record PointsRedemptionRuleController(IPointsRedemptionRuleService service) {
+public class PointsRedemptionRuleController {
+
+    private final IPointsRedemptionRuleService service;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('GET_REDEMPTION_POINTS_RULE')")
     @Operation(summary = "Get all rules paged")
     public ResponseEntity<BaseResponse<Page<PointsRedemptionRuleResponse>>> getAll(
             @RequestParam("page") int page,
@@ -40,6 +46,7 @@ public record PointsRedemptionRuleController(IPointsRedemptionRuleService servic
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('CREATE_REDEMPTION_POINTS_RULE')")
     @Operation(summary = "Create a new rule")
     public ResponseEntity<BaseResponse<Long>> create(@RequestBody NewPointsRedemptionRule request) {
         long payload = service.create(request);
@@ -53,6 +60,7 @@ public record PointsRedemptionRuleController(IPointsRedemptionRuleService servic
     }
 
     @PutMapping
+    @PreAuthorize("hasAuthority('UPDATE_REDEMPTION_POINTS_RULE')")
     @Operation(summary = "Update an existing rule")
     public ResponseEntity<BaseResponse<Long>> update(@RequestBody UpdatePointsRedemptionRule request) {
         long payload = service.update(request);
@@ -66,6 +74,7 @@ public record PointsRedemptionRuleController(IPointsRedemptionRuleService servic
     }
 
     @PutMapping("/activate/{idAccumulationPointsRule}")
+    @PreAuthorize("hasAuthority('UPDATE_REDEMPTION_POINTS_RULE')")
     @Operation(summary = "Activate a specific rule")
     public ResponseEntity<BaseResponse<Void>> activate(@PathVariable long idAccumulationPointsRule) {
         service.activate(idAccumulationPointsRule);
