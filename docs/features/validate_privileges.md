@@ -1,7 +1,7 @@
 # Validate Privileges
 
 Author: rafavilomar  
-Status: `In review` *[Draft, Developing, In review, Finished]*  
+Status: `Finished` *[Draft, Developing, In review, Finished]*  
 Last updated: 2024-05-01
 
 ## Contents
@@ -20,7 +20,40 @@ http services that must be protected by privileges using the implemented classes
 
 ### Use annotations to validate privileges with Security module
 
-Each microservice must have the Spring Security dependency to validate every necessary request, so the following 
+All controllers are using the following annotation to validate specific privilege before bring access to the service. In
+this example, the user must have the privilege `GET_CUSTOMER` to access to `Get customer by ID` service.
+
+```java
+@SecurityRequirement(name = "bearerAuth")
+@Tag(name = "Customer")
+@Slf4j
+@RestController
+@RequestMapping("/api/v1/customer")
+@RequiredArgsConstructor
+public class CustomerController {
+
+    private final ICustomerService service;
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('GET_CUSTOMER')")
+    @Operation(summary = "Get customer by ID")
+    public ResponseEntity<BaseResponse<CustomerResponse>> getById(@PathVariable("id") long id) {
+        log.info("Get customer by id {}", id);
+        CustomerResponse customer = service.getById(id);
+
+        BaseResponse<CustomerResponse> response = new BaseResponse<>();
+        return response.buildResponseEntity(
+                customer,
+                HttpStatus.OK,
+                "Customer found"
+        );
+    }
+    
+    // other services here...
+}
+```
+
+To accomplish that each microservice must have the Spring Security dependency to validate every necessary request, so the following 
 dependency to each missing pom.xml:
 
 ```xml
@@ -127,3 +160,9 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 ```
 
 ## Considerations
+
+These privileges, or permissions, come from `Permission` entity on Security module. The also are loaded to each access 
+token on the `AuthService` class as claims. To learn more see:
+
+- [Implement JWT](implement_jwt.md)
+- [How tokens are validated from `Common` module](token_validation_from_common_module.md)
