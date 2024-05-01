@@ -1,10 +1,9 @@
-package com.microservice_level_up.filters;
+package com.microservice_level_up.security;
 
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microservice_level_up.auth.TokenValidationService;
 import com.microservice_level_up.error.ExceptionResponse;
-import com.microservice_level_up.module.auth.IAuthService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,7 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
-    private final IAuthService authService;
+    private final String jwtSecretKey;
 
     @Override
     protected void doFilterInternal(
@@ -36,15 +35,6 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
         ResponseEntity<ExceptionResponse> responseBody;
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-
-        /*
-         * If any request is trying to access any public it should avoid all the filter validation and go ahead with
-         * the original request
-         */
-        if (isPublicPath(request.getServletPath())) {
-            filterChain.doFilter(request, response);
-            return;
-        }
 
         /*
          * If the original request doesn't have the authorization header, or it isn't a Bearer token,
@@ -66,11 +56,11 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
              * and go ahead with the original request
              */
             String token = authorizationHeader.substring("Bearer ".length());
-            String email = TokenValidationService.getEmail(token, authService.getJwtSecretKey());
+            String email = TokenValidationService.getEmail(token, jwtSecretKey);
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                     email,
                     null,
-                    TokenValidationService.getPermissions(token, authService.getJwtSecretKey()));
+                    TokenValidationService.getPermissions(token, jwtSecretKey));
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             log.info("Logged user {} trying to access: {}", email, request.getServletPath());
             filterChain.doFilter(request, response);
@@ -89,12 +79,6 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), responseBody);
-    }
-
-    private boolean isPublicPath(String path) {
-        return path.contains("/login") ||
-                path.contains("/api/v1/auth/refrescarToken") ||
-                path.contains("/user/customer");
     }
 
     private ResponseEntity<ExceptionResponse> unauthorizedResponseInvalidToken() {

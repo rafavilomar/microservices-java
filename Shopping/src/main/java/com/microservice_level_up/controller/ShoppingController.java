@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 public record ShoppingController (IPurchaseService purchaseService) {
 
     @PostMapping("/purchase")
+    @PreAuthorize("hasAuthority('PURCHASE')")
     @Operation(summary = "Make a purchase")
     public ResponseEntity<BaseResponse<InvoiceResponse>> purchase(@RequestBody PurchaseRequest request) {
         BaseResponse<InvoiceResponse> response = new BaseResponse<>();

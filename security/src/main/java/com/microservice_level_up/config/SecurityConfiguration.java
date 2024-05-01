@@ -45,11 +45,11 @@ public class SecurityConfiguration {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+                .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
                 .authenticationProvider(authenticationProvider())
                 .addFilter(new CustomAuthenticationFilter(authenticationManager(authConfiguration), authService))
                 .addFilterBefore(
-                        new CustomAuthorizationFilter(),
+                        new CustomAuthorizationFilter(authService),
                         UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
