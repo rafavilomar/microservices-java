@@ -1,7 +1,7 @@
 # Basic missing configuration
 Author: rafavilomar  
 Status: `Developing` *[Draft, Developing, In review, Finished]*  
-Last updated: 2024-05-01
+Last updated: 2024-05-03
 
 ## Contents
 - Objective
@@ -37,3 +37,8 @@ JWT_SECRET_KEY
 DB_USERNAME
 DB_PASSWORD
 ```
+
+### Add principal Readme.md
+
+Now there is a new `Readme.md` explaining the projects modules and all prerequisites to run all microservices.
+
