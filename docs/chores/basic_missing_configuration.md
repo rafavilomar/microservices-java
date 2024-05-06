@@ -1,6 +1,6 @@
 # Basic missing configuration
 Author: rafavilomar  
-Status: `In review` *[Draft, Developing, In review, Finished]*  
+Status: `Finished` *[Draft, Developing, In review, Finished]*  
 Last updated: 2024-05-06
 
 ## Contents
