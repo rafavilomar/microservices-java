@@ -1,0 +1,30 @@
+server:
+  port: 8095
+
+spring:
+  application:
+    name: email-notification
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${SMTP_EMAIL_USERNAME}
+    password: ${SMTP_EMAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+#  zipkin:
+#    base-url: ${ZIPKIN_URL}
+
+kafka:
+  bootstrap-address: ${KAFKA_URL}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_DEFAULT_ZONE}
+    fetch-registry: true
+    register-with-eureka: true
+    enabled: true

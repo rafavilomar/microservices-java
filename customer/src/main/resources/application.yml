@@ -1,13 +1,14 @@
 server:
   port: 8080
+  contextPath: /swagger2-demo
 
 spring:
   application:
     name: customer
   datasource:
-    username: rafavilomar
-    url: jdbc:postgresql://localhost:5432/fraud
-    password: rafavilomar
+    username: ${DB_USERNAME}
+    url: jdbc:postgresql://${DB_HOST}/customer
+    password: ${DB_PASSWORD}
   jpa:
     properties:
       hibernate:
@@ -16,13 +17,22 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-  zipkin:
-    base-url: http://localhost:9411
+
+springdoc:
+  api-docs:
+    path: /v2/api-docs
+
+grpc:
+  server:
+    port: 8082
 
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: ${EUREKA_DEFAULT_ZONE}
     fetch-registry: true
     register-with-eureka: true
     enabled: true
+
+jwt:
+  secret-key: ${JWT_SECRET_KEY}

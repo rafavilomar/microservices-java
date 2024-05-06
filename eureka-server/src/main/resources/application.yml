@@ -1,6 +1,12 @@
 spring:
   application:
     name: eureka-server
+  freemarker:
+    template-loader-path: classpath:/templates/
+    prefer-file-system-access: false
+  cloud:
+    config:
+      enabled: false
 
 server:
   port: 8761

@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package common.grpc.common;
+
+option java_multiple_files = true;
+
+service ProductService {
+
+  rpc buyProduct(BuyProductRequest) returns (google.protobuf.Empty);
+  rpc getProductById(ProductRequestById) returns (ProductResponse);
+  rpc getProductByCode(ProductRequestByCode) returns (ProductResponse);
+
+}
+
+message ProductRequestById {
+    uint64 id = 1;
+}
+
+message ProductRequestByCode {
+  string code = 1;
+}
+
+message BuyProductRequest {
+  repeated Product products = 1;
+}
+
+message Product {
+  uint32 quantity = 1;
+  string code = 2;
+}
+
+message ProductResponse {
+  string code = 1;
+  double price = 2;
+  string name = 3;
+}

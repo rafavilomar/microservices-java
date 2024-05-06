@@ -1,0 +1,22 @@
+services:
+  customer:
+    container_name: customer
+    build:
+      context: .
+      dockerfile: Dockerfile
+    platform: linux/amd64
+    env_file: ../.env
+    networks:
+      - postgres
+      - apps
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+networks:
+  postgres:
+    driver: bridge
+    external: true
+  apps:
+    driver: bridge
+    external: true

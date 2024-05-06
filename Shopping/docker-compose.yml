@@ -1,0 +1,22 @@
+services:
+  shopping:
+    container_name: shopping
+    build:
+      context: .
+      dockerfile: Dockerfile
+    platform: linux/amd64
+    env_file: ../.env
+    networks:
+      - postgres
+      - apps
+    ports:
+      - "8150:8150"
+    restart: unless-stopped
+
+networks:
+  postgres:
+    driver: bridge
+    external: true
+  apps:
+    driver: bridge
+    external: true
