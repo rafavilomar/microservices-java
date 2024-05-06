@@ -6,9 +6,9 @@ spring:
   application:
     name: customer
   datasource:
-    username: rafavilomar
-    url: jdbc:postgresql://localhost:5432/customer
-    password: rafavilomar
+    username: ${DB_USERNAME}
+    url: jdbc:postgresql://${DB_HOST}/customer
+    password: ${DB_PASSWORD}
   jpa:
     properties:
       hibernate:
@@ -29,10 +29,10 @@ grpc:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: ${EUREKA_DEFAULT_ZONE}
     fetch-registry: true
     register-with-eureka: true
     enabled: true
 
 jwt:
-  secret-key: jwt
+  secret-key: ${JWT_SECRET_KEY}

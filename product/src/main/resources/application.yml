@@ -6,9 +6,9 @@ spring:
   application:
     name: product
   datasource:
-    username: rafavilomar
-    url: jdbc:postgresql://localhost:5432/product
-    password: rafavilomar
+    username: ${DB_USERNAME}
+    url: jdbc:postgresql://${DB_HOST}/product
+    password: ${DB_PASSWORD}
   jpa:
     properties:
       hibernate:
@@ -17,7 +17,7 @@ spring:
       ddl-auto: update
     show-sql: true
   zipkin:
-    base-url: http://localhost:9411
+    base-url: ${ZIPKIN_URL}
 
 springdoc:
   api-docs:
@@ -30,10 +30,10 @@ grpc:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: ${EUREKA_DEFAULT_ZONE}
     fetch-registry: true
     register-with-eureka: true
     enabled: true
 
 jwt:
-  secret-key: jwt
+  secret-key: ${JWT_SECRET_KEY}
