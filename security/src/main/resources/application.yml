@@ -7,7 +7,7 @@ spring:
     name: security
   datasource:
     username: ${DB_USERNAME}
-    url: jdbc:postgresql://localhost:5432/security
+    url: jdbc:postgresql://${DB_HOST}/security
     password: ${DB_PASSWORD}
   jpa:
     properties:

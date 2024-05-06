@@ -5,6 +5,7 @@
 - [About](#about)
 - [Running the Project](#running-the-project)
 - [Author](#author)
+- [Documentation](#documentation)
 
 ## Technologies
 ![TypeScript](https://img.shields.io/badge/-Java-FF160B?style=flat&logo=Java&logoColor=ffffff)
@@ -46,15 +47,20 @@ It's necessary to create a new `.env` file in the root project to define all nec
 a `.env.example` file with variable list. 
 
 ## Running the Project
-It is advisable to use docker to run docker-compose and avoid installing all the technologies and running the services 
-one by one. Install `Docker` depending on the operative system, go to project root and then execute the following 
-commands in console:
 
-```shell
-docker-compose up -d
-```
+Follow these steps to start all microservices using Docker:
 
-### Author
+1. Install Docker in your system following this [LINK](https://docs.docker.com/engine/install/) or any other method based on your OS.
+2. Install Maven in your system following this [LINK](https://maven.apache.org/install.html) or any other method based on your OS. 
+3. Run the executable file `start_service.sh` to start all microservices using Docker and Docker Compose.
+
+You can also execute file `shutdown_services.sh` to stop all microservices.
+
+## Author
 - Author: Rafael Vilomar
 - LinkedIn: https://www.linkedin.com/in/rafavilomar/
 - Email: rafavilomar@gmail.com
+
+## Documentation
+
+There are many Design Docs about features and fixes for this project, please see `./docs` directory.

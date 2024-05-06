@@ -1,0 +1,17 @@
+services:
+  eureka-server:
+    container_name: eureka-server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    platform: linux/amd64
+    ports:
+      - "8761:8761"
+    restart: unless-stopped
+    networks:
+      - apps
+
+networks:
+  apps:
+    driver: bridge
+    external: true

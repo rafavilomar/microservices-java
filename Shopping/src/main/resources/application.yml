@@ -7,7 +7,7 @@ spring:
     name: shopping
   datasource:
     username: ${DB_USERNAME}
-    url: jdbc:postgresql://localhost:5432/shopping
+    url: jdbc:postgresql://${DB_HOST}/shopping
     password: ${DB_PASSWORD}
   jpa:
     properties:

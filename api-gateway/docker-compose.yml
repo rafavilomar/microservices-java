@@ -1,0 +1,16 @@
+services:
+  api-gateway:
+    container_name: api-gateway
+    build:
+      context: .
+      dockerfile: Dockerfile
+    platform: linux/amd64
+    env_file: ../.env
+    ports:
+      - "8765:8765"
+    restart: unless-stopped
+
+networks:
+  apps:
+    driver: bridge
+    external: true

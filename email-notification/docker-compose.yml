@@ -1,0 +1,18 @@
+services:
+  email-notification:
+    container_name: email-notification
+    build:
+      context: .
+      dockerfile: Dockerfile
+    platform: linux/amd64
+    env_file: ../.env
+    networks:
+      - apps
+    ports:
+      - "8095:8095"
+    restart: unless-stopped
+
+networks:
+  apps:
+    driver: bridge
+    external: true
